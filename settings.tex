@@ -1,10 +1,17 @@
 \PassOptionsToPackage{table,svgnames,dvipsnames}{xcolor}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[sc]{mathpazo}
-\usepackage[ngerman,american]{babel}
-\usepackage[autostyle]{csquotes}
+\usepackage{fontspec}           % Main package for using system fonts with Lua/XeTeX
+\usepackage[american]{babel}      % Still good for hyphenation rules, etc.
+\usepackage{csquotes}             % No changes needed here
+
+
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}
+\setmonofont{TeX Gyre Cursor}
+
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+
 \usepackage[%
   backend=biber,
   url=false,
