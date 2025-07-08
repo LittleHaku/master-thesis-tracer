@@ -7,31 +7,58 @@
   \textwidth=\dimexpr\paperwidth-2\evensidemargin-2in\relax
   \hsize=\textwidth\relax
 
-  \centering
+  % --- 1. Logo ---
+  \begin{flushleft}
+    \includegraphics[width=90mm]{\getLogo}
+  \end{flushleft}
 
-  \IfFileExists{logos/tum-\fg.pdf}{%
-    \includegraphics[height=20mm]{logos/tum-\fg.pdf}
-  }{%
-    \vspace*{20mm}
-  }
+  \vfill % Replaced fixed vspace with vfill for better vertical distribution
 
-  \vspace{5mm}
-  {\huge\MakeUppercase{School of \getSchool{} --- \getFaculty{}} \par}
+  % --- 2. Document Type ---
+  \begin{center}
+    {\Large\bfseries\MakeUppercase{MASTER'S THESIS}} \par
+  \end{center}
 
-  \vspace{5mm}
-  {\large\MakeUppercase{\getUniversity{}} \par}
+  \vspace{2cm}
 
-  \vspace{15mm}
-  {\Large \getDoctype{} in \getDegree{} \par}
+  % --- 3. Thesis Title ---
+  \begin{center}
+    \begin{minipage}{0.8\textwidth}
+      \centering
+      {\huge\bfseries \getTitle{} \par}
+    \end{minipage}
+  \end{center}
 
-  \vspace{10mm}
-  {\huge\bfseries \getTitle{} \par}
+  \vspace{2cm}
 
-  \vspace{10mm}
-  {\LARGE \getAuthor{}}
+  % --- 4. Master's Program ---
+  \begin{center}
+    {\Large\bfseries Master's in \getDegree{}}
+  \end{center}
 
-  \IfFileExists{logos/faculty-\fg.pdf}{%
-    \vfill{}
-    \includegraphics[height=20mm]{logos/faculty-\fg.pdf}
-  }{}
+  \vfill % Replaced fixed vspace with vfill to push content apart
+
+  % --- 5. Author, Supervisor, and Date Block ---
+  \begin{center}
+    \begin{tabular}{r @{\hspace{1.5cm}} l}
+      \bfseries Author: & \large\getAuthor{} \\[12pt]
+      \bfseries Supervisor: & \large\getSupervisor{} \\[12pt]
+      \bfseries Co-supervisor: & \large\getCoSupervisor{} \\[12pt]
+      \bfseries Department: & \large\getDepartment{} \\[24pt] % Extra space before date
+      \bfseries DATE: & \large\getSubmissionDate{} \\
+    \end{tabular}
+  \end{center}
+
+  \vfill % This is the main \vfill that pushes the footer to the bottom
+
+  % --- 6. Footer ---
+  \noindent % Prevents indentation
+  \begin{flushleft}
+    % The footer text is now colored and the page number is removed
+    \textcolor{UAMBlue}{%
+      \small \getUniversity{} \\
+      \small \getFaculty{}%
+    }
+  \end{flushleft}
+
 \end{titlepage}
