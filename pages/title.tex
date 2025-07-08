@@ -1,35 +1,46 @@
 \begin{titlepage}
   \centering
 
-
+  % Logo with better spacing
   \includegraphics[width=100mm]{\getLogo}
+  \vspace{15mm}
 
-
-  \vspace{20mm}
+  % Document type with improved styling
   \begin{center}
     {\Large\bfseries\MakeUppercase{\getDoctype{}}} \par
+    \vspace{2mm}
+    {\color{gray}\rule{0.3\textwidth}{0.5pt}} % Decorative line
   \end{center}
 
+  \vspace{12mm}
 
-  \vspace{15mm}
+  % Title with enhanced typography
   {\huge\bfseries \getTitle{} \par}
 
-  \vspace{30mm}
-  {\Large \getDoctype{} in \getDegree{} \par}
+  \vspace{15mm}
 
-  \vspace{30mm}
-  \begin{tabular}{r @{\hspace{5mm}} l}
-    \bfseries Author:          & \getAuthor{}         \\
-    \bfseries Supervisor:      & \getSupervisor{}     \\
-    \bfseries Co-supervisor:   & \getCoSupervisor{}   \\
-    \bfseries Department:      & \getDepartment{}     \\
-    \bfseries Submission Date: & \getSubmissionDate{} \\
+  % Subtitle with better spacing
+  {\Large\itshape \getDoctype{} in \getDegree{} \par}
+
+  \vspace{20mm}
+
+  % Information table with improved formatting
+  \begin{tabular}{@{}r @{\hspace{8mm}} l@{}}
+    \textbf{Author:}          & \getAuthor{}         \\[2mm]
+    \textbf{Supervisor:}      & \getSupervisor{}     \\[2mm]
+    \textbf{Co-supervisor:}   & \getCoSupervisor{}   \\[2mm]
+    \textbf{Department:}      & \getDepartment{}     \\[2mm]
+    \textbf{Submission Date:} & \getSubmissionDate{} \\
   \end{tabular}
 
-\vfill{}
-\textcolor{UAMBlue}{
-    \small \getUniversity{} \\
-    \small \getFaculty{}
-}
+  \vfill
+
+  % University information with enhanced styling
+  \textcolor{UAMBlue}{
+    \begin{center}
+      {\large\bfseries \getUniversity{}} \\[1mm]
+      {\normalsize \getFaculty{}}
+    \end{center}
+  }
 
 \end{titlepage}
