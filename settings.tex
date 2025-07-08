@@ -31,7 +31,45 @@
 \usepackage{booktabs}
 \usepackage[final]{microtype}
 \usepackage{caption}
-\usepackage[hidelinks]{hyperref} % hidelinks removes colored boxes around references and links
+\usepackage[printonlyused]{acronym}
+\usepackage{ifthen}
+
+
+\hypersetup{hidelinks} % removes colored boxes around references and links
+
+% for fachschaft_print.pdf
+\makeatletter
+\if@twoside
+	\typeout{TUM-Dev LaTeX-Thesis-Template: twoside}
+\else
+	\typeout{TUM-Dev LaTeX-Thesis-Template: oneside}
+\fi
+\makeatother
+
+\addto\extrasamerican{
+	\def\lstnumberautorefname{Line}
+	\def\chapterautorefname{Chapter}
+	\def\sectionautorefname{Section}
+	\def\subsectionautorefname{Subsection}
+	\def\subsubsectionautorefname{Subsubsection}
+}
+
+\addto\extrasngerman{
+	\def\lstnumberautorefname{Zeile}
+}
+
+% Themes
+\ifthenelse{\equal{\detokenize{dark}}{\jobname}}{%
+  % Dark theme
+  \newcommand{\bg}{black} % background
+  \newcommand{\fg}{white} % foreground
+  \usepackage[pagecolor=\bg]{pagecolor}
+  \color{\fg}
+}{%
+  % Light theme
+  \newcommand{\bg}{white} % background
+  \newcommand{\fg}{black} % foreground
+}
 
 \bibliography{bibliography}
 
@@ -70,5 +108,6 @@
   columns=fullflexible,
   autogobble,
   keywordstyle=\bfseries\color{TUMBlue},
-  stringstyle=\color{TUMAccentGreen}
+  stringstyle=\color{TUMAccentGreen},
+  captionpos=b
 }

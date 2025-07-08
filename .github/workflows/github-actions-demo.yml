@@ -17,5 +17,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: thesis
-        path: build/main.pdf
+        path: build/*.pdf
+        if-no-files-found: error
         retention-days: 14

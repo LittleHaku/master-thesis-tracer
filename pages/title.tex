@@ -1,20 +1,20 @@
 \begin{titlepage}
   \centering
 
-  \IfFileExists{logos/tum.pdf}{%
-    \includegraphics[height=20mm]{logos/tum.pdf}
+  \IfFileExists{logos/tum-\fg.pdf}{%
+    \includegraphics[height=20mm]{logos/tum-\fg.pdf}
   }{%
     \vspace*{20mm}
   }
 
   \vspace{5mm}
-  {\huge\MakeUppercase{\getFaculty{}}}\\
+  {\huge\MakeUppercase{School of \getSchool{} --- \getFaculty{}} \par}
 
   \vspace{5mm}
-  {\large\MakeUppercase{\getUniversity{}}}\\
+  {\large\MakeUppercase{\getUniversity{}} \par}
 
   \vspace{20mm}
-  {\Large \getDoctype{}}
+  {\Large \getDoctype{} in \getDegree{} \par}
 
   \vspace{15mm}
   {\huge\bfseries \getTitle{} \par}
@@ -24,14 +24,14 @@
 
   \vspace{15mm}
   \begin{tabular}{l l}
-    Author:          & \getAuthor{} \\
-    Supervisor:      & \getSupervisor{} \\
-    Advisor:         & \getAdvisor{} \\
+    Author:          & \getAuthor{}         \\
+    Examiner:      & \getSupervisor{}     \\
+    Supervisor:         & \getAdvisor{}        \\
     Submission Date: & \getSubmissionDate{} \\
   \end{tabular}
 
-  \IfFileExists{logos/faculty.pdf}{%
+  \IfFileExists{logos/faculty-\fg.pdf}{%
     \vfill{}
-    \includegraphics[height=20mm]{logos/faculty.pdf}
+    \includegraphics[height=20mm]{logos/faculty-\fg.pdf}
   }{}
 \end{titlepage}

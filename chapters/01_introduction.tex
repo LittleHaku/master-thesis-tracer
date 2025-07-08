@@ -6,6 +6,11 @@
 \section{Section}
 Citation test~\parencite{latex}.
 
+Acronyms must be added in \texttt{main.tex} and are referenced using macros. The first occurrence is automatically replaced with the long version of the acronym, while all subsequent usages use the abbreviation.
+
+E.g. \texttt{\textbackslash ac\{TUM\}, \textbackslash ac\{TUM\}} $\Rightarrow$ \ac{TUM}, \ac{TUM}
+
+For more details, see the documentation of the \texttt{acronym} package\footnote{\url{https://ctan.org/pkg/acronym}}.
 \subsection{Subsection}
 
 See~\autoref{tab:sample}, \autoref{fig:sample-drawing}, \autoref{fig:sample-plot}, \autoref{fig:sample-listing}.
@@ -71,9 +76,9 @@ See~\autoref{tab:sample}, \autoref{fig:sample-drawing}, \autoref{fig:sample-plot
         xlabel=X
       ]
       \addplot table[x=a, y=b]{\exampleA};
-      \addlegendentry{Example A};
+      \addlegendentry{Example A}
       \addplot table[x=a, y=b]{\exampleB};
-      \addlegendentry{Example B};
+      \addlegendentry{Example B}
     \end{axis}
   \end{tikzpicture}
   \caption[Example plot]{An example for a simple plot.}\label{fig:sample-plot}
