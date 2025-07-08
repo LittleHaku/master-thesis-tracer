@@ -49,16 +49,15 @@
     \end{tabular}
   \end{center}
 
-  \vfill % This is the main \vfill that pushes the footer to the bottom
+  \vfill
 
   % --- 6. Footer ---
-  \noindent % Prevents indentation
-  \begin{flushleft}
-    % The footer text is now colored and the page number is removed
-    \textcolor{UAMBlue}{%
+  \begin{textblock}{15}(1,28.2) % exact values for positioning the footer
+    \noindent
+    \textcolor{UAMBlue}{
       \small \getUniversity{} \\
-      \small \getFaculty{}%
+      \small \getFaculty{}
     }
-  \end{flushleft}
+  \end{textblock}
 
 \end{titlepage}
