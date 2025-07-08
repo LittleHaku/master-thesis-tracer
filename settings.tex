@@ -33,9 +33,10 @@
 \usepackage{caption}
 \usepackage[printonlyused]{acronym}
 \usepackage{ifthen}
+\usepackage{hyperref} % Added for autoref support
 
 
-\hypersetup{hidelinks} % removes colored boxes around references and links
+%\hypersetup{hidelinks} % removes colored boxes around references and links
 
 % for fachschaft_print.pdf
 \makeatletter
@@ -52,10 +53,6 @@
 	\def\sectionautorefname{Section}
 	\def\subsectionautorefname{Subsection}
 	\def\subsubsectionautorefname{Subsubsection}
-}
-
-\addto\extrasngerman{
-	\def\lstnumberautorefname{Zeile}
 }
 
 % Themes
@@ -77,7 +74,7 @@
 \linespread{1.05} % adjust line spread for mathpazo font
 
 % Add table of contents to PDF bookmarks
-\BeforeTOCHead[toc]{{\cleardoublepage\pdfbookmark[0]{\contentsname}{toc}}}
+%\BeforeTOCHead[toc]{{\cleardoublepage\pdfbookmark[0]{\contentsname}{toc}}}
 
 % Define TUM corporate design colors
 % Taken from http://portal.mytum.de/corporatedesign/index_print/vorlagen/index_farben
