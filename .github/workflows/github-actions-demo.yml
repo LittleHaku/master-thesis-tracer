@@ -1,6 +1,12 @@
-name: CI
+name: Build Thesis
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main, master, develop ]
+    tags: [ 'v*' ]  # Trigger on version tags
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -8,15 +14,71 @@ jobs:
     container: texlive/texlive:latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    - name: Build pdf
+    - name: Install additional packages
+      run: |
+        apt-get update
+        apt-get install -y make
+
+    - name: Build PDF
       run: make pdf
 
-    - name: Upload pdf
+    - name: Get current date
+      id: date
+      run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+    - name: Upload artifacts (for development)
       uses: actions/upload-artifact@v4
       with:
-        name: thesis
+        name: thesis-${{ steps.date.outputs.date }}-${{ github.sha }}
         path: build/*.pdf
         if-no-files-found: error
-        retention-days: 14
+
+    # Create release for version tags
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: build/*.pdf
+        name: "Thesis ${{ github.ref_name }}"
+        body: |
+          📄 **Thesis Release ${{ github.ref_name }}**
+
+          Built automatically from commit ${{ github.sha }}
+
+          **Files:**
+          - `main.pdf` - Complete thesis document
+
+          **Changes in this version:**
+          See commit history for details.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Auto-release for main branch (latest version)
+    - name: Create/Update Latest Release
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: latest
+        name: "Latest Thesis Build"
+        body: |
+          📄 **Latest Thesis Build**
+
+          This is the most recent version of the thesis from the main branch.
+
+          **Built:** ${{ steps.date.outputs.date }}
+          **Commit:** ${{ github.sha }}
+
+          **Files:**
+          - `main.pdf` - Complete thesis document
+
+          > ⚠️ This is automatically updated on every push to main
+        files: build/*.pdf
+        draft: false
+        prerelease: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
