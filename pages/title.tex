@@ -1,37 +1,36 @@
 \begin{titlepage}
   \centering
 
-  \IfFileExists{logos/tum-\fg.pdf}{%
-    \includegraphics[height=20mm]{logos/tum-\fg.pdf}
-  }{%
-    \vspace*{20mm}
-  }
 
-  \vspace{5mm}
-  {\huge\MakeUppercase{School of \getSchool{} --- \getFaculty{}} \par}
+  \includegraphics[width=100mm]{\getLogo}
 
-  \vspace{5mm}
-  {\large\MakeUppercase{\getUniversity{}} \par}
 
   \vspace{20mm}
-  {\Large \getDoctype{} in \getDegree{} \par}
+  \begin{center}
+    {\Large\bfseries\MakeUppercase{\getDoctype{}}} \par
+  \end{center}
+
 
   \vspace{15mm}
   {\huge\bfseries \getTitle{} \par}
 
-  \vspace{10mm}
-  {\huge\bfseries \foreignlanguage{ngerman}{\getTitleGer{}} \par}
+  \vspace{30mm}
+  {\Large \getDoctype{} in \getDegree{} \par}
 
-  \vspace{15mm}
-  \begin{tabular}{l l}
-    Author:          & \getAuthor{}         \\
-    Examiner:      & \getSupervisor{}     \\
-    Supervisor:         & \getAdvisor{}        \\
-    Submission Date: & \getSubmissionDate{} \\
+  \vspace{30mm}
+  \begin{tabular}{r @{\hspace{5mm}} l}
+    \bfseries Author:          & \getAuthor{}         \\
+    \bfseries Supervisor:      & \getSupervisor{}     \\
+    \bfseries Co-supervisor:   & \getCoSupervisor{}   \\
+    \bfseries Department:      & \getDepartment{}     \\
+    \bfseries Advisor:         & \getAdvisor{}        \\
+    \bfseries Submission Date: & \getSubmissionDate{} \\
   \end{tabular}
 
-  \IfFileExists{logos/faculty-\fg.pdf}{%
-    \vfill{}
-    \includegraphics[height=20mm]{logos/faculty-\fg.pdf}
-  }{}
+\vfill{}
+\textcolor{UAMBlue}{
+    \small \getUniversity{} \\
+    \small \getFaculty{}
+}
+
 \end{titlepage}
