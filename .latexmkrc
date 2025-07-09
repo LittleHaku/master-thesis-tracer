@@ -1,4 +1,9 @@
-# From https://tex.stackexchange.com/questions/58963/latexmk-with-makeglossaries-and-auxdir-and-outdir#59098
+$pdf_mode = 1;
+$bibtex_use = 2;  # Use Biber instead of BibTeX
+$pdflatex = 'lualatex %O -interaction=nonstopmode -halt-on-error -file-line-error %S';
+$bibtex = 'biber %O %B';
+$out_dir = 'build';
+
 add_cus_dep('glo', 'gls', 0, 'makeglossaries');
 sub makeglossaries {
   my ($base_name, $path) = fileparse($_[0]);
@@ -7,5 +12,3 @@ sub makeglossaries {
   popd;
   return $return;
 }
-
-$success_cmd = 'make _fachschaft-print'
