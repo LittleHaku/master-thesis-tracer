@@ -6,19 +6,19 @@
 
 The proliferation of conversational agents, commonly refered to as chatbots, has fundamentally transformed the landscape of human-computer interaction accross diverse domains.
 From general-purpose assistants such as OpenAI's ChatGPT \autocite{ChatGPT} or Google's Gemini \autocite{GoogleGemini}
-to task-oriented agents that assist users in specific tasks like shopping, contracting services, or customer support.
-These intelligent systems allow for natural language interaction with services ranging from customer support and e-commerce platforms to municipal services and educational resources.
-The proliferation of these agents has been further accelerated by recent advances in generative \ac{AI},
-particularly the advance in \acp{LLM},
-which have significantly enhanced the capabilities of these chatbots, allowing them to both create and understand natural language without explicitly programmed rules.
+to task-oriented agents that assist users in specific tasks like shopping or customer support.
+These systems allow for natural language interaction with services ranging from customer support and e-commerce platforms to educational resources.
+The proliferation of these agents has been further accelerated by advances in generative \ac{AI},
+particularly \acp{LLM},
+which have significantly enhanced chatbot capabilities, allowing them to both create and understand natural language without explicitly programmed rules.
 
-The presence of these conversational agents in so many applications has elevated the concerns regarding their reliability, correctness, and overall quality assurance.
-As these systems appear in domains, such as healthcare or finances, which require high levels of trust, the need for rigorous testing and validation becomes paramount.
+The presence of these agents in so many applications has elevated concerns regarding their reliability, correctness, and quality assurance.
+As these systems appear in domains such as healthcare or finances, which require high levels of trust, the need for rigorous testing and validation becomes paramount.
 However, the heterogeneous nature of chatbot development,
 with intent-based frameworks like Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020},
 multi-agent programming environments built upon LLMs such as LangGraph \autocite{LangGraph} and Microsoft's AutoGen \autocite{AutoGen},
 and \acp{DSL} like Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024},
-present significant challenges for finding a comprehensive methodology to test these systems.
+presents significant challenges for finding a comprehensive methodology to test these systems.
 
 Traditional software testing techniques are very limited when applied to chatbot systems.
 The complexity of \ac{NLP}, the non-deterministic nature of \acp{LLM} and the dynamic flow of a real conversation make traditional testing inadequate for conversational agents.
@@ -27,17 +27,17 @@ they often target specific chatbot technologies \autocite{RasaTest2025},
 require substantial manual effort including the provision of test conversations \autocite{CyaraBotium, RasaTest2025}
 or synchronous human interaction \autocite{renEvaluationTechniquesChatbot2019},
 depend on existing conversation corpus \autocite{vasconcelosBottesterTestingConversational2017},
-or need access to the cahtbot's source code \autocite{canizaresCoveragebasedStrategiesAutomated2024, gomez-abajoMutationTestingTaskOriented2024, urricoMutaBotMutationTesting2024},
+or need access to the chatbot's source code \autocite{canizaresCoveragebasedStrategiesAutomated2024, gomez-abajoMutationTestingTaskOriented2024, urricoMutaBotMutationTesting2024},
 thereby limiting their applicability to deployed systems treated as black boxes.
 
 The research presented in this thesis aims to solve these problems through the development of \ac{TRACER},
 a tool for extracting comprehensive models from deployed conversational agents,
-and then with this model, create user profiles which will serve as test cases
+and then, with this model, create user profiles which serve as test cases
 for a user simulator called Sensei \autocite{delaraSensei}.
 \ac{TRACER} employs an \ac{LLM} agent to systematically explore the chatbot's capabilities via natural language interactions,
 eliminating the need for manual test case creation or access to the chatbot's source code.
 This black-box approach enables the automated generation of detailed chatbot models that encapsulate
-the system's supported languages, fallback mechanisms, functional capabilities, input parameters, admissible parameter values, output data structures, and conversational flow patterns.
+supported languages, fallback mechanisms, functional capabilities, input parameters, admissible parameter values, output data structures, and conversational flow patterns.
 
 The extracted chatbot model serves as the foundation for the automated synthesis of test cases.
 Specifically, \ac{TRACER} generates user profiles that represent diverse users that interact with the chatbot using Sensei \autocite{delaraSensei},
@@ -53,7 +53,6 @@ The full source code is hosted on GitHub \href{https://github.com/Chatbot-TRACER
 and a dedicated web application %TODO: Add the link when we deploy it
 has been developed to provide a user-friendly experience for the entire testing pipeline,
 from model extraction and user profiles generation with \ac{TRACER} to test execution with Sensei.
-This ecosystem provides a robust and practical testing methodology that requires only a connector for the chatbot's API.
 
 To guide this investigation, we have defined the following research questions:
 \begin{itemize}
@@ -63,7 +62,7 @@ To guide this investigation, we have defined the following research questions:
   This question evaluates the precision of our approach by using mutation testing \autocite{gomez-abajoMutationTestingTaskOriented2024}
   to measure the ability of the generated profiles to identify specific, injected faults.
 \item \textbf{RQ3: How effective is the approach at identifying real-world bugs and ensuring task completion in deployed chatbots?}
-  This question addresses the practical, real-world applicability of our framework
+  This addresses the practical, real-world applicability of our framework
   by measuring the \ac{BDR} and \ac{TCR} of the generated profiles against real-world chatbots.
 \end{itemize}
 
