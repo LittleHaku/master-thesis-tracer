@@ -1,6 +1,10 @@
-name: CI
+name: Build Thesis
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
   build:
@@ -10,13 +14,29 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Build pdf
+    - name: Build PDF
       run: make pdf
 
-    - name: Upload pdf
+    - name: Upload PDF artifact
       uses: actions/upload-artifact@v4
       with:
-        name: thesis
+        name: thesis-pdf
         path: build/*.pdf
         if-no-files-found: error
-        retention-days: 14
+        retention-days: 30
+
+    - name: Create Release
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: latest-${{ github.sha }}
+        name: Latest Thesis Build
+        body: |
+          Automatically generated PDF from commit ${{ github.sha }}
+
+          **Download the PDF directly from the assets below.**
+        files: build/*.pdf
+        prerelease: true
+        make_latest: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
