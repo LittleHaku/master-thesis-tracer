@@ -9,7 +9,9 @@ The PDF is automatically compiled on every push to the main branch. You can acce
 - **Direct download**: Go to the [Releases](../../releases) page and download the PDF
 - **Build artifacts**: Check the [Actions](../../actions) tab for build artifacts
 
-## Requirements (Arch Linux)
+## Requirements
+
+### Arch Linux
 
 ```bash
 sudo pacman -S texlive-basic \
@@ -17,7 +19,21 @@ sudo pacman -S texlive-basic \
   texlive-fontsrecommended \
   texlive-fontsextra \
   texlive-latexextra
-````
+```
+
+### Ubuntu/Debian
+
+```bash
+sudo apt update
+sudo apt install \
+  texlive-base \
+  texlive-luatex \
+  texlive-fonts-recommended \
+  texlive-fonts-extra \
+  texlive-latex-extra
+```
+
+### General
 
 Then
 
