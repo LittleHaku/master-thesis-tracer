@@ -3,17 +3,84 @@
 
 \chapter{Introduction}\label{chapter:introduction}
 
-\section{Section}
 
-The proliferation of conversational agents, commonly refered to as chatbots, has fundamentally transformed the landscape of human-computer interaction accross diverse domains. From general-purpose assistants such as OpenAI's ChatGPT \autocite{ChatGPT} to specialized systems like Google's Gemini \autocite{GoogleGemini}, these agents have become integral to our daily lives, providing users with instant access to information and services through natural language interfaces. The rise of these agents is driven by the increasing demand for efficient and user-friendly interactions, as well as the advancements in artificial intelligence that enable more sophisticated and context-aware responses.
+The proliferation of conversational agents, commonly refered to as chatbots, has fundamentally transformed the landscape of human-computer interaction accross diverse domains.
+From general-purpose assistants such as OpenAI's ChatGPT \autocite{ChatGPT} or Google's Gemini \autocite{GoogleGemini}
+to task-oriented agents that assist users in specific tasks like shopping, contracting services, or customer support.
 These intelligent systems allow for natural language interaction with services ranging from customer support and e-commerce platforms to municipal services and educational resources.
-The proliferation of these agents has been further accelerated by recent advances in generative \ac{AI}, particurly the advance in \acp{LLM}, which have significantly enhanced the capabilities of these chatbots, allowing them to both create and understand natural language without explicitly programmed rules.
+The proliferation of these agents has been further accelerated by recent advances in generative \ac{AI},
+particularly the advance in \acp{LLM},
+which have significantly enhanced the capabilities of these chatbots, allowing them to both create and understand natural language without explicitly programmed rules.
 
-The presence of these conversational agents in so many applications has elevated the concerns regarding their reliability, correctness, and overall quality assurance. As these systems appear in domains, such as healthcare or finances, which require high levels of trust, the need for rigorous testing and validation becomes paramount. However, traditional testing is inadequate for these systems, as they often rely on rules that cannot be applied to the complexity of natural language.
+The presence of these conversational agents in so many applications has elevated the concerns regarding their reliability, correctness, and overall quality assurance.
+As these systems appear in domains, such as healthcare or finances, which require high levels of trust, the need for rigorous testing and validation becomes paramount.
+However, the heterogeneous nature of chatbot development,
+with intent-based frameworks like Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020},
+multi-agent programming environments built upon LLMs such as LangGraph \autocite{LangGraph} and Microsoft's AutoGen \autocite{AutoGen},
+and \acp{DSL} like Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024},
+present significant challenges for finding a comprehensive methodology to test these systems.
 
+Traditional software testing techniques are very limited when applied to chatbot systems.
+The complexity of \ac{NLP}, the non-deterministic nature of \acp{LLM} and the dynamic flow of a real conversation make traditional testing inadequate for conversational agents.
+While there have been some approaches for developing testing techniques for chatbots \cite{cuadradoIntegratingStaticQuality2024, canizaresMeasuringClusteringHeterogeneous2024},
+they often target specific chatbot technologies \autocite{RasaTest2025},
+require substantial manual effort including the provision of test conversations \autocite{CyaraBotium, RasaTest2025}
+or synchronous human interaction \autocite{renEvaluationTechniquesChatbot2019},
+depend on existing conversation corpus \autocite{vasconcelosBottesterTestingConversational2017},
+or need access to the cahtbot's source code \autocite{canizaresCoveragebasedStrategiesAutomated2024, gomez-abajoMutationTestingTaskOriented2024, urricoMutaBotMutationTesting2024},
+thereby limiting their applicability to deployed systems treated as black boxes.
+
+The research presented in this thesis aims to solve these problems through the development of \ac{TRACER},
+a tool for extracting comprehensive models from deployed conversational agents,
+and then with this model, create user profiles which will serve as test cases
+for a user simulator called Sensei \autocite{delaraSensei}.
+\ac{TRACER} employs an \ac{LLM} agent to systematically explore the chatbot's capabilities via natural language interactions,
+eliminating the need for manual test case creation or access to the chatbot's source code.
+This black-box approach enables the automated generation of detailed chatbot models that encapsulate
+the system's supported languages, fallback mechanisms, functional capabilities, input parameters, admissible parameter values, output data structures, and conversational flow patterns.
+
+The extracted chatbot model serves as the foundation for the automated synthesis of test cases.
+Specifically, \ac{TRACER} generates user profiles that represent diverse users that interact with the chatbot using Sensei \autocite{delaraSensei},
+but different implementations of \ac{TRACER} could be made to generate different types of test cases based on the extracted model.
+The integration of \ac{TRACER} with Sensei yields a testing methodology that only requires a connector for the chatbot's API.
+
+
+To ensure the accessibility and reproducibility of this research,
+\ac{TRACER} has been developed as a complete, open-source tool.
+It is publicly available as a \ac{PyPI} package \autocite{sotillodelhornoChatbottracerToolModel}
+and can be installed via \texttt{pip install chatbot-tracer}.
+The full source code is hosted on GitHub \href{https://github.com/Chatbot-TRACER/TRACER}{https://github.com/Chatbot-TRACER/TRACER},
+and a dedicated web application %TODO: Add the link when we deploy it
+has been developed to provide a user-friendly experience for the entire testing pipeline,
+from model extraction and user profiles generation with \ac{TRACER} to test execution with Sensei.
+This ecosystem provides a robust and practical testing methodology that requires only a connector for the chatbot's API.
+
+To guide this investigation, we have defined the following research questions:
+\begin{itemize}
+\item \textbf{RQ1: How effective is TRACER in modeling chatbot functionality?}
+  This question assesses the ability of our model exploration technique to achieve high functional coverage in a controlled setting where the ground truth is known.
+\item \textbf{RQ2: How effective are the synthesized profiles at detecting faults in controlled environments?}
+  This question evaluates the precision of our approach by using mutation testing \autocite{gomez-abajoMutationTestingTaskOriented2024}
+  to measure the ability of the generated profiles to identify specific, injected faults.
+\item \textbf{RQ3: How effective is the approach at identifying real-world bugs and ensuring task completion in deployed chatbots?}
+  This question addresses the practical, real-world applicability of our framework
+  by measuring the \ac{BDR} and \ac{TCR} of the generated profiles against real-world chatbots.
+\end{itemize}
+
+\textit{Thesis structure.}
+\autoref{chapter:state_of_the_art} establishes the background and state of the art in chatbot test.
+\autoref{chapter:tracer} presents the core methodoly of how \ac{TRACER} extracts models from chatbots.
+\autoref{chapter:user_profiles} describes the structure of the user profiles, and how \ac{TRACER} generates them.
+\autoref{chapter:tool_support} shows \ac{TRACER} \ac{CLI} and the web application to use both \ac{TRACER} and Sensei.
+\autoref{chapter:evaluation} presents the evaluation of \ac{TRACER} against the research questions.
+\autoref{chapter:conclusion} concludes the thesis and discusses future work.
+
+
+
+
+% Im just keeping this from the template to have it as a reference of how some things work
 \subsection{Subsection}
 
-See~\autoref{tab:sample}, \autoref{fig:sample-drawing}, \autoref{fig:sample-plot}, \autoref{fig:sample-listing}.
 
 \begin{table}[htpb]
   \caption[Example table]{An example for a simple table.}\label{tab:sample}
