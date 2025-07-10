@@ -1,8 +1,8 @@
 \PassOptionsToPackage{table,svgnames,dvipsnames}{xcolor}
 
 \usepackage{fontspec}           % Main package for using system fonts with Lua/XeTeX
-\usepackage[american]{babel}      % Still good for hyphenation rules, etc.
-\usepackage{csquotes}             % No changes needed here
+\usepackage[english]{babel}      % Language support for hyphenation rules, etc.
+\usepackage{csquotes}             % Context-sensitive quotation marks
 
 
 \setmainfont{TeX Gyre Pagella}
@@ -14,13 +14,15 @@
 
 \usepackage[%
   backend=biber,
-  url=false,
-  style=alphabetic,
-  maxnames=4,
-  minnames=3,
+  style=ieee,
+  citestyle=numeric-comp,
+  bibstyle=ieee,
+  sorting=none,
+  maxnames=3,
+  minnames=1,
   maxbibnames=99,
-  giveninits,
-  uniquename=init]{biblatex} % TODO: adapt citation style
+  giveninits=true,
+  uniquename=init]{biblatex} % IEEE style for citations
 \usepackage{graphicx}
 \usepackage{scrhack} % necessary for listings package
 \usepackage{listings}
@@ -49,7 +51,7 @@
 \fi
 \makeatother
 
-\addto\extrasamerican{
+\addto\extrasenglish{
 	\def\lstnumberautorefname{Line}
 	\def\chapterautorefname{Chapter}
 	\def\sectionautorefname{Section}
@@ -70,7 +72,8 @@
   \newcommand{\fg}{black} % foreground
 }
 
-\bibliography{bibliography}
+%\bibliography{bibliography}
+\addbibresource{bibliography.bib}
 
 \setkomafont{disposition}{\normalfont\bfseries} % use serif font for headings
 \linespread{1.05} % adjust line spread for mathpazo font

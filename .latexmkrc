@@ -1,7 +1,7 @@
-$pdf_mode = 1;
+$pdf_mode = 4;  # Use LuaLaTeX
 $bibtex_use = 2;  # Use Biber instead of BibTeX
-$pdflatex = 'lualatex %O -interaction=nonstopmode -halt-on-error -file-line-error %S';
-$bibtex = 'biber %O %B';
+$lualatex = 'lualatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=build %O %S';
+$biber = 'biber --input-directory build --output-directory build %O %B';
 $out_dir = 'build';
 
 add_cus_dep('glo', 'gls', 0, 'makeglossaries');
