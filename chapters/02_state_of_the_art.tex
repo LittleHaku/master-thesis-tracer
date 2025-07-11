@@ -3,4 +3,52 @@
 
 \chapter{Background and State of the Art}\label{chapter:state_of_the_art}
 
+%TODO: Hacer una intruducción al capítulo
+
+\section{Background}
+
+\subsection{Conversational Agents}
+
+Conversational agents, commonly referred to as chatbots,
+are software systems designed to interact with users through natural language dialogue.
+These systems have evolved from simple rule-based programs that followed predefined conversation flows
+to sophisticated AI-powered agents capable of understanding context, maintaining conversational state, and generating human-like responses.
+
+Modern conversational agents can be categorized into two main types
+given the domain and range of their capabilities.
+\begin{itemize}
+  \item \textbf{Task-oriented:} on one hand we have the task-oriented chatbots,
+  these are designed to assist users in completing specific tasks, such as booking appointments, processing orders, or providing customer support.
+  These systems typically follow structured conversation flows
+and maintain explicit state management to track task progress.
+  Examples of these chatbots are Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024} or UAM's assistant Ada \autocite{AdaUAM}.
+
+  \item \textbf{Open-domain:}
+  on the other hand, open-domain chatbots
+  engage in general conversation without specific task constraints,
+  aiming to provide informative, helpful, or entertaining interactions across a wide range of topics.
+  These are chatbots like ChatGPT \autocite{ChatGPT} or Gemini \autocite{GoogleGemini}.
+\end{itemize}
+
+The development of these conversational agents
+has beeen facilitated by various frameworks and platforms.
+\begin{itemize}
+  \item \textbf{Intent-based frameworks:}
+    these frameworks such as Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020}
+    enable developers to define conversation flow through intents, utterances, and responses.
+    These platforms have low latency and deterministic behavior
+    but are very rigid, struggle to scale,
+    and to work properly require a big corpus to be trained on.
+
+  \item \textbf{Multi-agent programming environments:}
+    these systems like LangGraph \autocite{LangGraph} or Microsoft's AutoGen \autocite{AutoGen},
+    allow for the creating of complex conversational systems
+    where multiple \ac{AI} agents collaborate to process the user's request.
+    These frameworks make use of the capabilities of \acp{LLM}.
+    While they are less rigid than the previous ones,
+    they can suffer from hallucinations, 
+    higher latency, and since they are not deterministic,
+    getting out of the scope, and thus, making it harder to test it.
+\end{itemize}
+
 
