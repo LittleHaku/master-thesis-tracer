@@ -79,3 +79,32 @@ This unpredictability necessitates new approaches to testing
 that can systematically explore the space of possible interactions
 and validate system behavior across diverse scenarios.
 
+\subsection{Black-box Testing}
+
+Black-box testing is a software testing methodology
+where the internal structure, implementation details, and source code of the system under test
+are unknown or inaccessible to the tester.
+This approach focuses on validating system behavior based solely on inputs and outputs,
+treating the system as an opaque "black box."
+
+In the context of conversational agents,
+black-box testing presents an interesting opportunity.
+The accessibility advantage of black-box testing
+is particularly relevant for deployed chatbots,
+where users and testers typically interact with systems
+through APIs or web interfaces without access to underlying code or configuration.
+This mirrors real-world usage scenarios
+and enables testing of production systems
+without requiring special access privileges or development environment setup.
+
+
+However, black-box testing of conversational agents faces unique challenges.
+The exploration problem involves
+systematically discovering the full range of functionalities
+and conversation paths supported by the chatbot.
+Unlike traditional software systems with well-defined APIs,
+conversational agents accept natural language input,
+making the input space virtually infinite.
+The validation challenge requires determining
+whether chatbot responses are correct, appropriate, and helpful
+without access to specifications or expected behavior definitions.
