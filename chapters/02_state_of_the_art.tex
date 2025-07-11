@@ -108,3 +108,31 @@ making the input space virtually infinite.
 The validation challenge requires determining
 whether chatbot responses are correct, appropriate, and helpful
 without access to specifications or expected behavior definitions.
+
+% no se si esta seccion es un poco repetitiva
+\subsection{\aclp{DSL} and Development Frameworks}
+
+The heterogeneous nature of chatbot development
+has led to the emergence of various \aclp{DSL} and frameworks
+tailored for conversational agent creation.
+Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024} represents one such DSL specifically designed for task-oriented chatbot development,
+providing abstractions that simplify the specification of
+conversation flows, state management, and integration with external services.
+
+LangGraph \autocite{LangGraph} exemplifies the multi-agent approach
+to conversational system development,
+enabling the creation of complex workflows
+where multiple \ac{LLM}-powered agents collaborate to handle user requests.
+This framework provides graph-based orchestration of agent interactions,
+allowing for sophisticated conversation patterns
+that can involve multiple reasoning steps, external tool usage, and dynamic response generation.
+
+The diversity of these development approaches
+creates significant challenges for testing methodologies.
+Each framework imposes different constraints on
+conversation structure, state management, and response generation.
+A comprehensive testing approach must be framework-agnostic,
+capable of validating chatbots 
+regardless of their underlying implementation technology.
+
+\section{State of the Art}
