@@ -51,4 +51,31 @@ has beeen facilitated by various frameworks and platforms.
     getting out of the scope, and thus, making it harder to test it.
 \end{itemize}
 
+\subsection{\aclp{LLM}}
+
+\aclp{LLM} represent a significant advancement in \acl{NLP},
+enable conversational agents to understand and generate human-like text
+without explit programming of conversational rules like in intent-based frameworks.
+These models, trained on a vast ammount of text data,
+have demonstrated remarkable capabilities in
+language understanding \autocite{liEnhancingNaturalLanguage2024}, generation, and reasoning across diverse domains.
+
+The integration of \acp{LLM} into conversational agents
+has transformed the way humans interacts with computers.
+Unlike traditional rules-based systems that rely on predefined patterns and responses,
+\ac{LLM}-powered chatbots can engage in natural conversations,
+even keeping context about what the user said before.
+However, this flexibility comes with challenges,
+specially for testing and validation.
+The non-deterministic natura of \acp{LLM} means that
+identical inputs may produce different outputs across multiple interactions,
+making traditional testing approaches inadequate for testing and validating them.
+
+The just mentioned behavior exhibited by \ac{LLM}-powered systems
+further complicates testing efforts.
+These systems can demonstrate capabilities that were not explicitly programmed,
+making it difficult to predict all possible conversation paths and outcomes.
+This unpredictability necessitates new approaches to testing
+that can systematically explore the space of possible interactions
+and validate system behavior across diverse scenarios.
 
