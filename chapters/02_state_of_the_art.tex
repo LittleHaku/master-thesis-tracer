@@ -218,3 +218,60 @@ no prior work has successfully adapted these principles
 to automatically generate comprehensive, functional models of chatbots
 for the purpose of synthesizing test conversation profiles
 in a pure black-box setting.
+
+\subsection{Methodologies for Chatbot Testing}
+
+The field of chatbot testing has evolved along several distinct paths,
+each addressing different aspects of the validation challenge.
+A comprehensive survey by Ren et al. \autocite{renEvaluationTechniquesChatbot2019} highlights the difficulties
+in defining appropriate metrics and methodologies for these complex systems.
+
+\subsubsection{Manual and Corpus-Based Testing}
+
+The earliest and most direct approaches to chatbot testing
+rely on manual effort and existing conversation corpora.
+Manual testing, while essential for assessing usability,
+is resource-intensive and difficult to scale.
+A recent example of manual testing in chatbot development is GastroBot,
+a \ac{RAG} chatbot fine-tuned
+to answer gastrointestinal disease questions,
+that during their evaluation, manual assesment was employed \autocite{zhouGastroBotChineseGastrointestinal2024},
+highlighting the persistence of manual methods.
+
+To introduce automation, frameworks like Bottester
+\autocite{vasconcelosBottesterTestingConversational2017}
+use existing Q\&A corpora.
+While this provides a structured testing capability,
+it is fundamentally dependent
+on the availability and quality of a pre-existing dataset.
+Similarly, commercial platforms like Cyara \autocite{CyaraBotium}
+and Rasa's testing framework \autocite{RasaTest2025}
+require the manual specification of test conversations and expected outcomes.
+These approaches are primarily confirmatory,
+designed to verify known behaviors rather than explore the unknown,
+and they struggle to scale to the dynamic nature of modern agents.
+
+\subsubsection{Static Analysis and White-Box Testing}
+
+For scenarios where source code is available,
+white-box techniques offer more rigorous validation.
+Cuadrado et al. \autocite{cuadradoIntegratingStaticQuality2024}
+propose static quality analysis techniques
+that inspect the structural properties of a chatbot's implementation.
+To assess test adequacy, Cañizares et al.
+\autocite{canizaresCoveragebasedStrategiesAutomated2024}
+develop coverage-based strategies that
+require access to the chatbot's internal structure to compute metrics.
+
+Mutation testing, a powerful technique for assessing test suite quality,
+has also been adapted for chatbots.
+Gómez-Abajo et al. \autocite{gomez-abajoMutationTestingTaskOriented2024}
+propose mutation operators specifically for task-oriented chatbots like Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024},
+while Urrico et al. \autocite{urricoMutaBotMutationTesting2024} introduce MutaBot,
+a dedicated mutation testing framework for platforms like Dialogflow \autocite{Dialogflow},
+While these approaches provide rigorous validation,
+their requirement for source code access
+fundamentally limits their applicability to deployed systems
+that must be treated as black boxes.
+
+
