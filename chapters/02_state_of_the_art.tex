@@ -172,31 +172,49 @@ from structured \acp{DSL} to flexible multi-agent frameworks.
 This context, combined with the necessity of treating many deployed systems as black boxes,
 defines the complex landscape in which any modern testing methodology must operate.
 The following section will review the state of the art in testing approaches designed to address these challenges.
-% \subsection{\aclp{DSL} and Development Frameworks}
-%
-% The heterogeneous nature of chatbot development
-% has led to the emergence of various \aclp{DSL} and frameworks
-% tailored for conversational agent creation.
-% Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024} represents one such DSL specifically designed for task-oriented chatbot development,
-% providing abstractions that simplify the specification of
-% conversation flows, state management, and integration with external services.
-%
-% LangGraph \autocite{LangGraph} exemplifies the multi-agent approach
-% to conversational system development,
-% enabling the creation of complex workflows
-% where multiple \ac{LLM}-powered agents collaborate to handle user requests.
-% This framework provides graph-based orchestration of agent interactions,
-% allowing for sophisticated conversation patterns
-% that can involve multiple reasoning steps, external tool usage, and dynamic response generation.
-%
-% The diversity of these development approaches
-% creates significant challenges for testing methodologies.
-% Each framework imposes different constraints on
-% conversation structure, state management, and response generation.
-% A comprehensive testing approach must be framework-agnostic,
-% capable of validating chatbots 
-% regardless of their underlying implementation technology.
-% Eventhough both of these frameworks works with \acp{LLM},
-% they can still be tested as a black-box as long as an \ac{API} is provided.
 
-\section{State of the Art}
+\section{State of the Art}\label{sec:sota}
+
+The testing of conversational agents presents unique challenges
+that have attracted significant research attention in recent years.
+This section reviews the current state of the art in
+chatbot testing methodologies, model learning approaches, and user simulation techniques.
+
+The analysis is structured into three key areas.
+First, we examine the foundational field of model learning
+and black-box modeling to provide context for TRACER's core approach.
+Second, we survey the existing methodologies for chatbot testing,
+categorizing them based on their required artifacts and level of automation.
+Finally, we delve into the specific techniques for user simulation,
+a critical component of automated testing.
+Through this analysis, we identify the research gaps that this thesis aims to address.
+
+\subsection{Model Learning and Black-Box Reverse Engineering}
+
+Inferring a model of a software system by observing its external behaviour,
+without acces to its internal structure,
+is a well-established dicipline known by various terms including
+model learning, automated model inference, black-box modeling, or dynamic reverse engineering.
+This approach has been successfully applied in diverse areas of software engineering,
+such as general software testing \autocite{aichernigModelLearningModelBased2018},
+system reverse engineering \autocite{hajipourIReEnReverseEngineeringBlackBox2021, menguyBlackboxCodeAnalysis2023},
+and network protocol inference \autocite{luoDynPREProtocolReverse}.
+
+Traditional model learning techniques,
+such as those demonstrated by Muzammil et al. \autocite{shahbazAnalysisTestingBlackbox2014},
+often focus on automatically inferring finite state machines.
+Similarly, the reverse engineering techniques applied by Walkinshaw et al. \autocite{walkinshawReverseEngineeringSoftwareBehavior2013}
+extract behavioral models through dynamic analysis.
+These methods have proven effective for systems with discrete and well-defined input/output alphabets.
+
+However, these classical approaches
+face significant limitations when applied to modern conversational agents.
+The infinite input space of natural language,
+the non-deterministic nature of \ac{LLM}-powered systems,
+and the complex, context-dependent state of a conversation
+make traditional model learning techniques inadequate.
+To our knowledge,
+no prior work has successfully adapted these principles
+to automatically generate comprehensive, functional models of chatbots
+for the purpose of synthesizing test conversation profiles
+in a pure black-box setting.
