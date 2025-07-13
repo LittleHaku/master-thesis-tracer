@@ -274,4 +274,117 @@ their requirement for source code access
 fundamentally limits their applicability to deployed systems
 that must be treated as black boxes.
 
+\subsection{User Simulation for Automated Testing}
 
+User simulation has emerged as a key strategy to
+address the scalability challenges of chatbot testing
+by automatically generating realistic user interactions.
+The most recent approaches employ generative \acl{AI},
+especially \acp {LLM}.
+
+\subsubsection{Traditional and Corpus-Driven Simulation}
+
+Early user simulation approaches
+relied on statistical models and existing corpora.
+Griol et al. \autocite{griolAutomaticDialogSimulation2013}
+employed neural networks trained on dialogue corpora
+to suggest user utterances.
+The user simulation capabilities within Bottester
+\autocite{vasconcelosBottesterTestingConversational2017}
+are also configured with Q\&A corpora
+and compute metrics on satisfaction and correctness.
+The primary limitation of these methods is
+their dependency on large, relevant datasets,
+which may not be available or cover all necessary scenarios.
+
+\subsubsection{LLM-Based User Simulation}
+
+The arrival of \acp{LLM} has enabled a new generation
+of highly flexible and realistic user simulators.
+Researchers have demonstrated the ability
+to simulate users with specific personality traits and behaviors.
+For example, Ferreira et al. \autocite{ferreiraMultitraitUserSimulation2024}
+generate profiles with traits like engagement and verbosity,
+while Sekulic et al. \autocite{sekulicSimulatingConversationalSearch2024}
+simulate users with varying levels of patience and politeness for conversational search.
+Frameworks like CoSearcher \autocite{salleStudyingEffectivenessConversational2021}
+also allow for tuning user cooperativeness.
+These works prove the principle of creating diverse, persona-driven simulated users.
+
+Other approaches focus on specific conversational behaviors.
+Kiesel et al. \autocite{kieselSimulatingFollowUpQuestions2024}
+simulate follow-up questions,
+and the followQG framework \autocite{bImprovingAsynchronousInterview2021}
+uses trained models to generate contextually relevant continuations.
+More advanced frameworks leverage \acp{LLM} for even more complex tasks.
+The Kaucus simulator \autocite{dholeKAUCUSKnowledgeAugmented2024}
+incorporates external knowledge via retrieval augmentation,
+and Terragni et al. \autocite{terragniInContextLearningUser2023}
+generate user utterances directly from high-level goal descriptions.
+Bandlamudi et al. \autocite{bandlamudiFrameworkEnableTest2024}
+employ a dual-\ac{LLM} approach where
+one \ac{LLM} simulates the user and
+another judges the chatbot's response.
+Finally, Wit \autocite{dewitLeveragingLargeLanguage2024}
+demonstrates the practicality of using commercial APIs like ChatGPT
+for low-cost testing of rule-based agents.
+
+\subsubsection{The Profile Generation Bottleneck}
+Despite the remarkable progress in creating sophisticated user simulators,
+a critical challenge remains: the profile generation bottleneck.
+The SENSEI simulator \autocite{delaraSensei},
+used in this research, exemplifies this issue.
+It is a powerful tool capable of executing highly detailed test profiles,
+but its effectiveness is entirely dependent on the quality of those profiles.
+Across the state of the art,
+these essential input profiles are either created manually,
+a process that is time consuming and does not scale,
+or generated from generic descriptions
+that lack grounding in the specific functionalities of the chatbot under test.
+This creates a significant research gap
+for a method that can automatically synthesize
+rich, detailed, and targeted user profiles
+based on a discovered model of the chatbot's actual capabilities.
+
+\subsection{Summary and Identified Research Gaps}
+Our review of the state of the art
+reveals that while many valuable contributions have been made,
+significant limitations persist.
+Current approaches often require extensive manual effort,
+are designed for specific technologies,
+or necessitate access to source code,
+restricting their generalizability.
+The dependency on pre-existing corpora
+further limits the applicability
+of many simulation and testing techniques.
+
+This analysis identifies three primary research gaps in the current literature:
+\begin{enumerate}
+    \item \textbf{A Lack of Fully Automated, Framework-Agnostic Black-Box Testing:}
+      There is a pressing need for a testing methodology
+      that can operate on any deployed chatbot in a fully automated manner,
+      without requiring source code, manually written test scripts or pre-existing corpora.
+
+    \item \textbf{An Unsolved Profile Generation Bottleneck:}
+      The potential of advanced user simulators
+      is currently constrained by the lack of an automated method
+      to generate detailed, realistic test profiles
+      that are specifically tailored to the discovered functionalities
+      of the chatbot being tested.
+
+    \item \textbf{The Absence of Applied Model Inference for Chatbot Testing:}
+      The established principles of black-box model learning
+      have not yet been effectively adapted and applied
+      to the unique challenges of conversational \ac{AI}
+      to automatically infer functional models
+      for the purpose of test case generation.
+\end{enumerate}
+
+This thesis directly addresses these interconnected gaps.
+We propose \ac{TRACER}, a novel framework
+that provides a fully automated black-box method
+for chatbot model learning and test profile generation.
+By requiring only \ac{API} access to a deployed chatbot,
+\ac{TRACER} overcomes the limitations of existing approaches
+and provides a comprehensive, end-to-end solution
+for the automated testing of modern conversational agents.
