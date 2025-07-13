@@ -36,7 +36,7 @@ Modern conversational agents can be categorized into two main types
 given the domain and range of their capabilities.
 \begin{itemize}
   \item \textbf{Task-oriented:}
-    are designed to assist users in completing specific tasks,
+    Task-oriented agents are designed to assist users in completing specific tasks,
     such as booking appointments, processing orders, or providing customer support.
   These systems typically follow structured conversation flows
 and maintain explicit state management to track task progress.
@@ -102,11 +102,10 @@ These systems can demonstrate capabilities that were not explicitly programmed,
 making it difficult to predict all possible conversation paths and outcomes.
 This phenomenon means that the functional scope of the agent is not fully known,
 even to its developers.
-Combining these unknown capabilities that can arise,
-with the virtually infinite ways that a user can introduce the same intent,
+When these mergent capabilities are combined
+with the virtually infinite ways that a user can introduce the same intent
 or introduce new topics,
-we end up with an impossible to manually script test cases situtation.
-
+it becomes impossible to achieve adequate test coverage through manual scripting.
 
 This unpredictability necessitates new approaches to testing
 that can systematically explore the space of possible interactions
@@ -154,7 +153,7 @@ focusing on the 'what' rather than the 'how'.
 The Taskyto framework \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024} is a prime example of this approach,
 utilizing a YAML-based \ac{DSL} for creating task-oriented chatbots.
 This design allows developers to specify
-different modules and in a structured and human readable format.
+different modules in a structured and human-readable format.
 
 Within Taskyto's \ac{DSL}, developers define a chatbot using a series of modules,
 and actions with Python to execute business logic.
