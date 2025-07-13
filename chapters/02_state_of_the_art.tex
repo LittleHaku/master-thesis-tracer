@@ -87,29 +87,31 @@ even keeping context about what the user said before.
 However, this flexibility comes with challenges,
 specially for testing and validation.
 The non-deterministic nature of \acp{LLM} means that
-identical inputs may produce different outputs across multiple interactions,
-This invalidates traditional assertion-based testing,
-where a test case is expected to pass or fail based on a fixed, predictable outcome.
+identical inputs may produce different outputs across multiple interactions.
+This complicates traditional assertion-based testing,
+which relies on fixed, predictable outcomes.
+While assertions can still be used
+to check for high-level properties or the presence of key information,
+they cannot easily validate the exact phrasing of a response.
 Furthermore, the ability of \ac{LLM}-powered agents
 to maintain context across multiple turns
-means that the system's response depends not just on the immediate input,
-but on the entire preceding conversation history,
-exponentially increasing the number of states that need to be validated.
+means that the system's state space increases dramatically with conversation length,
+as the response depends not just on the immediate input
+but on the entire preceding dialogue history.
 
-The aforementioned behavior exhibited by \ac{LLM}-powered systems
-further complicates testing efforts.
-These systems can demonstrate capabilities that were not explicitly programmed,
-making it difficult to predict all possible conversation paths and outcomes.
-This phenomenon means that the functional scope of the agent is not fully known,
-even to its developers.
-When these emergent capabilities are combined
-with the virtually infinite ways that a user can introduce the same intent
-or introduce new topics,
+The emergent behavior of \ac{LLM}-powered systems further complicates testing efforts.
+These systems can demonstrate capabilities
+that were not explicitly programmed by their developers,
+making it difficult to define the complete functional scope of the agent.
+A particularly problematic form of this emergent behavior is hallucination,
+where the model generates responses that are
+factually incorrect, nonsensical, or ungrounded in the provided context.
+Such behavior is especially dangerous in high-stakes domains
+where misinformation can have severe consequences.
+When these unpredictable behaviors are combined
+with the virtually infinite ways a user can
+phrase an intent or introduce unexpected topics,
 it becomes impossible to achieve adequate test coverage through manual scripting.
-
-This unpredictability necessitates new approaches to testing
-that can systematically explore the space of possible interactions
-and validate system behavior across diverse scenarios.
 
 \subsection{Black-box Testing}
 
@@ -118,28 +120,34 @@ where the internal structure, implementation details, and source code of the sys
 are unknown or inaccessible to the tester.
 This approach focuses on validating system behavior based solely on inputs and outputs,
 treating the system as an opaque "black box."
+In practice, this involves interacing with the chatbot as a real user would:
+asking questions about capabilities
+(e.g., "What are you business hours?"),
+attempting to complete a task
+(e.g., "I'd like to order a pizza"),
+or providing unexpected inputs to check its error handling
+(e.g., "Can you book me a flight to the moon?").
 
-In the context of conversational agents,
-black-box testing presents an interesting opportunity.
 The accessibility advantage of black-box testing
 is particularly relevant for deployed chatbots,
-where users and testers typically interact with systems
-through \acp{API} or web interfaces without access to underlying code or configuration.
-This mirrors real-world usage scenarios
-and enables testing of production systems
-without requiring special access privileges or development environment setup.
+which are typically accessed via public \acp{API} or web interfaces.
+This mirrors real-world usage
+and enables testing of production systems without special access.
 
 
-However, black-box testing of conversational agents faces unique challenges.
+However, this approach involves significant trade-offs.
+By not having access to the source code,
+testers lose the ability to use powerful white-box techniques
+such as measuring code coverage to assess test suite thoroughness
+or using debuggers to pinpoint the exact source of a fault.
+The challenge, therefore, is
+to maximize the effectiveness of testing
+despite these limitations.
 The exploration problem involves
-systematically discovering the full range of functionalities
-and conversation paths supported by the chatbot.
-Unlike traditional software systems with well-defined \acp{API},
-conversational agents accept natural language input,
-making the input space virtually infinite.
-The validation challenge requires determining
-whether chatbot responses are correct, appropriate, and helpful
-without access to specifications or expected behavior definitions.
+systematically discovering the full range of functionalities,
+while the validation challenge requires
+determining if responses are correct
+without access to internal specifications.
 
 \subsection{\aclp{DSL} for Chatbot Development}
 
@@ -149,35 +157,56 @@ In the context of conversational AI,
 \acp{DSL} provide high-level abstractions
 that allow developers to define chatbot behavior declaratively,
 focusing on the 'what' rather than the 'how'.
+While a deep understanding of any single framework
+is not essential for this thesis's work,
+a brief overview of the Taskyto framework
+\autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}
+is valuable context for the evaluation
+detailed in Chapter \ref{chapter:evaluation}.
 
-The Taskyto framework \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024} is a prime example of this approach,
-utilizing a YAML-based \ac{DSL} for creating task-oriented chatbots.
-This design allows developers to specify
-different modules in a structured and human-readable format.
+Taskyto utilizes a YAML-based \ac{DSL}
+to define the structure and logic of task-oriented chatbots.
+A chatbot's definition is composed of a collection of modules which,
+can be broadly categorized into two types:
 
-Within Taskyto's \ac{DSL}, developers define a chatbot using a series of modules,
-and actions with Python to execute business logic.
-This modular, declarative structure
-will be relevant when discussing the white-box evaluation and mutation testing of \ac{TRACER} in Chapter \ref{chapter:evaluation}.
 
-\subsection{Multi-Agent Programming Environments}
+\begin{itemize}
+    \item \textbf{Functional Modules:}
+      These modules define the interactive,
+      task-oriented workflows of the chatbot.
+      The Taskyto DSL provides several types of functional modules
+      to construct complex conversations, including:
+      `menu` modules for offering conversational alternatives to the user;
+      `sequence` modules for defining multi-step processes;
+      `data gathering` modules for requesting specific user input (slots);
+      and `action` modules for executing business logic, often written in Python.
 
-An alternative paradigm for building complex conversational systems
-involves the use of multi-agent environments,
-where multiple specialized \ac{AI} agents collaborate to fulfill a user's request.
-This approach employs the power of \acp{LLM}
-by breaking down a complex problem into smaller tasks handled by different agents.
+    \item \textbf{Question-Answering (QA) Modules:}
+      These modules are designed to handle informational, FAQ-style queries.
+      Each QA module contains
+      a list of predefined user questions
+      and their corresponding answers.
+      This allows the chatbot to respond
+      to common informational requests
+      outside of its primary task-oriented flows.
+\end{itemize}
 
-LangGraph \autocite{LangGraph} is a prominent library for implementing such systems.
-It allows developers to define the collaborative workflow as a state graph,
-where nodes represent individual agents (or tools)
-and edges control the flow of information and execution between them.
-
-This graph-based orchestration enables the creation of
-sophisticated and flexible conversational patterns
-that can involve complex reasoning and dynamic decision-making.
-These agents present a different set of characteristics
-compared to the more structured \ac{DSL}-based approach.
+This modular and declarative architecture
+is what makes the Taskyto framework particularly well-suited
+for the experimental validation of TRACER,
+as detailed in Chapter \ref{chapter:evaluation}.
+The separation of the chatbot's capabilities into discrete modules
+allows us to track which modules
+(and fields of these modules)
+were activated during a conversation,
+that way, we can precisely measure the coverage
+achieved by \ac{TRACER}.
+Furthermore, the declarative YAML structure
+simplifies the systematic introduction of faults,
+facilitating the creation of a large set of mutants
+for our mutation testing analysis,
+which is essential for evaluating
+the fault-detection effectiveness of the generated profiles
 
 \indent
 
@@ -230,11 +259,10 @@ The infinite input space of natural language,
 the non-deterministic nature of \ac{LLM}-powered systems,
 and the complex, context-dependent state of a conversation
 make traditional model learning techniques inadequate.
-To our knowledge,
-no prior work has successfully adapted these principles
-to automatically generate comprehensive, functional models of chatbots
-for the purpose of synthesizing test conversation profiles
-in a pure black-box setting.
+Consequently,
+adapting these principles to automatically generate
+comprehensive, functional models of chatbots for test synthesis
+remains a significant and largely unaddressed challenge in the literature.
 
 \subsection{Methodologies for Chatbot Testing}
 
@@ -249,18 +277,21 @@ The earliest and most direct approaches to chatbot testing
 rely on manual effort and existing conversation corpora.
 Manual testing, while essential for assessing usability,
 is resource-intensive and difficult to scale.
-A recent example of manual testing in chatbot development is GastroBot,
-a \ac{RAG} chatbot fine-tuned
-to answer gastrointestinal disease questions,
-that during their evaluation, manual assesment was employed \autocite{zhouGastroBotChineseGastrointestinal2024},
-highlighting the persistence of manual methods.
+A recent example is GastroBot,
+a \ac{RAG} chatbot where manual assessment by medical experts
+was a key part of its evaluation \autocite{zhouGastroBotChineseGastrointestinal2024}. 
+While this provides expert-level validation,
+it highlights the persistence of manual methods
+that are inherently subjective, resource-intensive,
+and unscalable for comprehensive regression testing.
 
 To introduce automation, frameworks like Bottester
 \autocite{vasconcelosBottesterTestingConversational2017}
 use existing Q\&A corpora.
-While this provides a structured testing capability,
-it is fundamentally dependent
-on the availability and quality of a pre-existing dataset.
+The significant limitation of this approach
+is its complete dependence on
+the quality and comprehensiveness of the pre-existing dataset;
+if a conversational path is not in the corpus, it cannot be tested.
 Similarly, commercial platforms like Cyara \autocite{CyaraBotium}
 and Rasa's testing framework \autocite{RasaTest2025}
 require the manual specification of test conversations and expected outcomes.
@@ -286,10 +317,13 @@ Gómez-Abajo et al. \autocite{gomez-abajoMutationTestingTaskOriented2024}
 propose mutation operators specifically for task-oriented chatbots like Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024},
 while Urrico et al. \autocite{urricoMutaBotMutationTesting2024} introduce MutaBot,
 a dedicated mutation testing framework for platforms like Dialogflow \autocite{Dialogflow},
-While these approaches provide rigorous validation,
-their requirement for source code access
-fundamentally limits their applicability to deployed systems
-that must be treated as black boxes.
+While these white-box approaches provide rigorous validation
+and deep insights into the system's internals,
+their reliance on source code access
+is their primary limitation.
+They cannot be applied to the vast number of
+proprietary or third-party chatbots
+that must be treated as opaque black boxes.
 
 \subsection{User Simulation for Automated Testing}
 
@@ -342,6 +376,10 @@ Bandlamudi et al. \autocite{bandlamudiFrameworkEnableTest2024}
 employ a dual-\ac{LLM} approach where
 one \ac{LLM} simulates the user and
 another judges the chatbot's response.
+While this cleverly addresses the automated evaluation challenge,
+it introduces the potential for biases from the judging LLM
+and may not scale cost-effectively due to the computational overhead
+of running two models for every interaction.
 Finally, Wit \autocite{dewitLeveragingLargeLanguage2024}
 demonstrates the practicality of using commercial APIs like ChatGPT
 for low-cost testing of rule-based agents.
@@ -358,43 +396,76 @@ these essential input profiles are either created manually,
 a process that is time-consuming and does not scale,
 or generated from generic descriptions
 that lack grounding in the specific functionalities of the chatbot under test.
+For example, manually writing even a dozen comprehensive test profiles,
+complete with varied user personalities, goals, and parameter combinations,
+could take a skilled engineer several hours or even days of effort,
+making it impractical for large-scale or continuous testing.
 This creates a significant research gap
 for a method that can automatically synthesize
 rich, detailed, and targeted user profiles
 based on a discovered model of the chatbot's actual capabilities.
 
 \subsection{Summary and Identified Research Gaps}
+
+To visually summarize the landscape,
+Table \ref{tab:sota_comparison}
+compares the testing paradigms discussed.
+
+\begin{table}[h!]
+\centering
+\caption{Comparison of State-of-the-Art Chatbot Testing Paradigms}
+\label{tab:sota_comparison}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Paradigm} & \textbf{Requires Source Code?} & \textbf{Requires Corpus/Scripts?} & \textbf{Automation Level} & \textbf{Key Limitation} \\ \midrule
+Manual Testing & No & No & Low & Unscalable, not reproducible \\
+Scripted Testing & No & Yes (Manual Scripts) & Medium & High manual effort, brittle \\
+Corpus-Based & No & Yes (Existing Corpus) & Medium & Dependent on corpus quality \\
+White-Box Testing & Yes & No & High & Requires source code access \\
+\textbf{TRACER} & \textbf{No} & \textbf{No} & \textbf{High} & \textbf{Addresses prior limitations}
+\\ \bottomrule
+\end{tabular}
+}
+\end{table}
+
 Our review of the state of the art
 reveals that while many valuable contributions have been made,
 significant limitations persist.
-Current approaches often require extensive manual effort,
-are designed for specific technologies,
-or necessitate access to source code,
-restricting their generalizability.
-The dependency on pre-existing corpora
-further limits the applicability
-of many simulation and testing techniques.
+The rapid evolution of conversational AI
+has outpaced the development of
+correspondingly advanced testing methodologies,
+creating critical gaps in quality assurance capabilities.
 
 This analysis identifies three primary research gaps in the current literature:
 \begin{enumerate}
     \item \textbf{A Lack of Fully Automated, Framework-Agnostic Black-Box Testing:}
       There is a pressing need for a testing methodology
-      that can operate on any deployed chatbot in a fully automated manner,
-      without requiring source code, manually written test scripts or pre-existing corpora.
+      that is framework-agnostic, that is,
+      capable of operating on any deployed chatbot
+      regardless of its underlying implementation
+      (e.g., Rasa, Dialogflow, Taskyto, LangGraph, etc.).
+      Existing methods are often tied to a specific technology
+      or require manual artifacts like scripts or corpora,
+      preventing a universal, automated approach.
 
     \item \textbf{An Unsolved Profile Generation Bottleneck:}
       The potential of advanced user simulators
       is currently constrained by the lack of an automated method
-      to generate detailed, realistic test profiles
-      that are specifically tailored to the discovered functionalities
-      of the chatbot being tested.
+      to generate detailed, realistic test profiles.
+      The high manual effort required to create such profiles
+      constitutes a major barrier
+      to the adoption of automated, simulation-based testing at scale.
 
     \item \textbf{The Absence of Applied Model Inference for Chatbot Testing:}
       The established principles of black-box model learning
       have not yet been effectively adapted and applied
-      to the unique challenges of conversational \ac{AI}
-      to automatically infer functional models
-      for the purpose of test case generation.
+      to the unique challenges of conversational \ac{AI}.
+      There is a clear need for a technique
+      that can automatically infer a rich, functional model of a chatbot
+      through natural language interaction alone,
+      for the express purpose of generating comprehensive test cases.
+
 \end{enumerate}
 
 This thesis directly addresses these interconnected gaps.
