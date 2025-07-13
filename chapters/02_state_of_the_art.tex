@@ -3,7 +3,7 @@
 
 \chapter{Background and State of the Art}\label{chapter:state_of_the_art}
 
-%TODO: Hacer una intruducción al capítulo
+%TODO: Hacer una intruducción al capítulo bg and sota
 
 \section{Background}
 
@@ -17,14 +17,15 @@ to sophisticated AI-powered agents capable of understanding context, maintaining
 Modern conversational agents can be categorized into two main types
 given the domain and range of their capabilities.
 \begin{itemize}
-  \item \textbf{Task-oriented:} on one hand we have the task-oriented chatbots,
-  these are designed to assist users in completing specific tasks, such as booking appointments, processing orders, or providing customer support.
+  \item \textbf{Task-oriented:}
+    are designed to assist users in completing specific tasks,
+    such as booking appointments, processing orders, or providing customer support.
   These systems typically follow structured conversation flows
 and maintain explicit state management to track task progress.
   Examples of these chatbots are Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024} or UAM's assistant Ada \autocite{AdaUAM}.
 
   \item \textbf{Open-domain:}
-  on the other hand, open-domain chatbots
+  in contrast, open-domain chatbots
   engage in general conversation without specific task constraints,
   aiming to provide informative, helpful, or entertaining interactions across a wide range of topics.
   These are chatbots like ChatGPT \autocite{ChatGPT} or Gemini \autocite{GoogleGemini}.
@@ -69,12 +70,26 @@ However, this flexibility comes with challenges,
 specially for testing and validation.
 The non-deterministic natura of \acp{LLM} means that
 identical inputs may produce different outputs across multiple interactions,
-making traditional testing approaches inadequate for testing and validating them.
+This invalidates traditional assertion-based testing,
+where a test case is expected to pass or fail based on a fixed, predictable outcome.
+Furthermore, the ability of \ac{LLM}-powered agents
+to maintain context across multiple turns
+means that the system's response depends not just on the immediate input,
+but on the entire preceding conversation history,
+exponentially increasing the number of states that need to be validated.
 
 The just mentioned behavior exhibited by \ac{LLM}-powered systems
 further complicates testing efforts.
 These systems can demonstrate capabilities that were not explicitly programmed,
 making it difficult to predict all possible conversation paths and outcomes.
+This phenomenom means that the functional scope of the agent is not fully known,
+even to its developers.
+Combining these unknown capabilities that can arise,
+with the virtually infinite ways that a user can introduce the same intent,
+or introduce new topics,
+we end up with an impossible to manually script test cases situtation.
+
+
 This unpredictability necessitates new approaches to testing
 that can systematically explore the space of possible interactions
 and validate system behavior across diverse scenarios.
@@ -92,7 +107,7 @@ black-box testing presents an interesting opportunity.
 The accessibility advantage of black-box testing
 is particularly relevant for deployed chatbots,
 where users and testers typically interact with systems
-through APIs or web interfaces without access to underlying code or configuration.
+through \acp{API} or web interfaces without access to underlying code or configuration.
 This mirrors real-world usage scenarios
 and enables testing of production systems
 without requiring special access privileges or development environment setup.
@@ -102,37 +117,86 @@ However, black-box testing of conversational agents faces unique challenges.
 The exploration problem involves
 systematically discovering the full range of functionalities
 and conversation paths supported by the chatbot.
-Unlike traditional software systems with well-defined APIs,
+Unlike traditional software systems with well-defined \acp{API},
 conversational agents accept natural language input,
 making the input space virtually infinite.
 The validation challenge requires determining
 whether chatbot responses are correct, appropriate, and helpful
 without access to specifications or expected behavior definitions.
 
-% no se si esta seccion es un poco repetitiva
-\subsection{\aclp{DSL} and Development Frameworks}
+\subsection{\aclp{DSL} for Chatbot Development}
 
-The heterogeneous nature of chatbot development
-has led to the emergence of various \aclp{DSL} and frameworks
-tailored for conversational agent creation.
-Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024} represents one such DSL specifically designed for task-oriented chatbot development,
-providing abstractions that simplify the specification of
-conversation flows, state management, and integration with external services.
+A \acl{DSL} is a computer language
+specialized for a particular application domain.
+In the context of conversational AI,
+\acp{DSL} provide high-level abstractions
+that allow developers to define chatbot behavior declaratively,
+focusing on the 'what' rather than the 'how'.
 
-LangGraph \autocite{LangGraph} exemplifies the multi-agent approach
-to conversational system development,
-enabling the creation of complex workflows
-where multiple \ac{LLM}-powered agents collaborate to handle user requests.
-This framework provides graph-based orchestration of agent interactions,
-allowing for sophisticated conversation patterns
-that can involve multiple reasoning steps, external tool usage, and dynamic response generation.
+The Taskyto framework \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024} is a prime example of this approach,
+utilizing a YAML-based \ac{DSL} for creating task-oriented chatbots.
+This design allows developers to specify
+different modules and in a structured and human readable format.
 
-The diversity of these development approaches
-creates significant challenges for testing methodologies.
-Each framework imposes different constraints on
-conversation structure, state management, and response generation.
-A comprehensive testing approach must be framework-agnostic,
-capable of validating chatbots 
-regardless of their underlying implementation technology.
+Within Taskyto's \ac{DSL}, developers define a chatbot using a series of modules,
+and actions with Python to execute business logic.
+This modular, declarative structure
+will be relevant when discussing the white-box evaluation and mutation testing of \ac{TRACER} in Chapter \ref{chapter:evaluation}.
+
+\subsection{Multi-Agent Programming Environments}
+
+An alternative paradigm for building complex conversational systems
+involves the use of multi-agent environments,
+where multiple specialized \ac{AI} agents collaborate to fulfill a user's request.
+This approach employs the power of \acp{LLM}
+by breaking down a complex problem into smaller tasks handled by different agents.
+
+LangGraph \autocite{LangGraph} is a prominent library for implementing such systems.
+It allows developers to define the collaborative workflow as a state graph,
+where nodes represent individual agents (or tools)
+and edges control the flow of information and execution between them.
+
+This graph-based orchestration enables the creation of
+sophisticated and flexible conversational patterns
+that can involve complex reasoning and dynamic decision-making.
+These agents present a different set of characteristics
+compared to the more structured \ac{DSL}-based approach.
+
+\indent
+
+In summary,
+the field of conversational \ac{AI} is characterized by diverse agent types,
+powered by advancements in \acp{LLM},
+and built using heterogeneous development paradigms,
+from structured \acp{DSL} to flexible multi-agent frameworks.
+This context, combined with the necessity of treating many deployed systems as black boxes,
+defines the complex landscape in which any modern testing methodology must operate.
+The following section will review the state of the art in testing approaches designed to address these challenges.
+% \subsection{\aclp{DSL} and Development Frameworks}
+%
+% The heterogeneous nature of chatbot development
+% has led to the emergence of various \aclp{DSL} and frameworks
+% tailored for conversational agent creation.
+% Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024} represents one such DSL specifically designed for task-oriented chatbot development,
+% providing abstractions that simplify the specification of
+% conversation flows, state management, and integration with external services.
+%
+% LangGraph \autocite{LangGraph} exemplifies the multi-agent approach
+% to conversational system development,
+% enabling the creation of complex workflows
+% where multiple \ac{LLM}-powered agents collaborate to handle user requests.
+% This framework provides graph-based orchestration of agent interactions,
+% allowing for sophisticated conversation patterns
+% that can involve multiple reasoning steps, external tool usage, and dynamic response generation.
+%
+% The diversity of these development approaches
+% creates significant challenges for testing methodologies.
+% Each framework imposes different constraints on
+% conversation structure, state management, and response generation.
+% A comprehensive testing approach must be framework-agnostic,
+% capable of validating chatbots 
+% regardless of their underlying implementation technology.
+% Eventhough both of these frameworks works with \acp{LLM},
+% they can still be tested as a black-box as long as an \ac{API} is provided.
 
 \section{State of the Art}
