@@ -11,26 +11,25 @@ The first, the \textbf{Background},
 introduces the core concepts essential to this work,
 including conversational agents, \aclp{LLM}, black-box testing,
 and the diverse development frameworks used to build them.
-The subsequent section, the \textbf{State of the Art},
-provides a critical review of this literature,
+The next section, the \textbf{State of the Art},
+provides a review of this literature,
 focusing on chatbot testing methodologies,
 user simulation techniques, and black-box model inference.
-This analysis serves to identify the specific research gaps
-that motivate the contributions of this work.
 
 \section{Background}\label{sec:background}
 
 This section defines the core concepts and technologies used for this research.
-It details the nature of conversational agents,
-the function of \aclp{LLM}, the principles of black-box testing,
-and the key development paradigms relevant to this work.
+It covers conversational agents,
+\aclp{LLM}, the principles of black-box testing,
+and the main development frameworks for conversational agents relevant to this work.
 
 \subsection{Conversational Agents}
 
 Conversational agents, commonly referred to as chatbots,
 are software systems designed to interact with users through natural language dialogue.
 These systems have evolved from simple rule-based programs that followed predefined conversation flows
-to sophisticated AI-powered agents capable of understanding context, maintaining conversational state, and generating human-like responses.
+to sophisticated AI-powered agents capable of understanding context,
+maintaining conversational state, and generating diverse human-like responses.
 
 Modern conversational agents can be categorized into two main types
 given the domain and range of their capabilities.
@@ -38,15 +37,16 @@ given the domain and range of their capabilities.
   \item \textbf{Task-oriented:}
     Task-oriented agents are designed to assist users in completing specific tasks,
     such as booking appointments, processing orders, or providing customer support.
-  These systems typically follow structured conversation flows
-and maintain explicit state management to track task progress.
-  Examples of these chatbots are Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024} or UAM's assistant Ada \autocite{AdaUAM}.
+    These systems typically follow structured conversation flows
+    and maintain explicit state management to track task progress.
+    Examples of these chatbots are Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}
+    or UAM's assistant Ada \autocite{AdaUAM}.
 
   \item \textbf{Open-domain:}
-  in contrast, open-domain chatbots
-  engage in general conversation without specific task constraints,
-  aiming to provide informative, helpful, or entertaining interactions across a wide range of topics.
-  These are chatbots like ChatGPT \autocite{ChatGPT} or Gemini \autocite{GoogleGemini}.
+    in contrast, open-domain chatbots
+    engage in general conversation without specific task constraints,
+    aiming to provide informative, helpful, or entertaining interactions across a wide range of topics.
+    These are chatbots like ChatGPT \autocite{ChatGPT} or Gemini \autocite{GoogleGemini}.
 \end{itemize}
 
 The development of these conversational agents
@@ -73,7 +73,7 @@ has been facilitated by various frameworks and platforms.
 \subsection{\aclp{LLM}}
 
 \aclp{LLM} represent an important advancement in \acl{NLP},
-enable conversational agents to understand and generate human-like text
+enabling conversational agents to understand and generate human-like text
 without explicit programming of conversational rules like in intent-based frameworks.
 These models, trained on a vast amount of text data,
 have demonstrated remarkable capabilities in
@@ -135,7 +135,7 @@ This mirrors real-world usage
 and enables testing of production systems without special access.
 
 
-However, this approach involves significant trade-offs.
+However, this approach involves trade-offs.
 By not having access to the source code,
 testers lose the ability to use powerful white-box techniques
 such as measuring code coverage to assess test suite thoroughness
@@ -222,7 +222,7 @@ The following section will review the state of the art in testing approaches des
 \section{State of the Art}\label{sec:sota}
 
 The testing of conversational agents presents unique challenges
-that have attracted significant research attention in recent years.
+that have attracted research attention in recent years.
 This section reviews the current state of the art in
 chatbot testing methodologies, model learning approaches, and user simulation techniques.
 
@@ -254,7 +254,7 @@ extract behavioral models through dynamic analysis.
 These methods have proven effective for systems with discrete and well-defined input/output alphabets.
 
 However, these classical approaches
-face significant limitations when applied to modern conversational agents.
+face limitations when applied to modern conversational agents.
 The infinite input space of natural language,
 the non-deterministic nature of \ac{LLM}-powered systems,
 and the complex, context-dependent state of a conversation
@@ -262,7 +262,7 @@ make traditional model learning techniques inadequate.
 Consequently,
 adapting these principles to automatically generate
 comprehensive, functional models of chatbots for test synthesis
-remains a significant and largely unaddressed challenge in the literature.
+remains a largely unaddressed challenge in the literature.
 
 \subsection{Methodologies for Chatbot Testing}
 
@@ -288,7 +288,7 @@ and unscalable for comprehensive regression testing.
 To introduce automation, frameworks like Bottester
 \autocite{vasconcelosBottesterTestingConversational2017}
 use existing Q\&A corpora.
-The significant limitation of this approach
+The main limitation of this approach
 is its complete dependence on
 the quality and comprehensiveness of the pre-existing dataset;
 if a conversational path is not in the corpus, it cannot be tested.
@@ -400,7 +400,7 @@ For example, manually writing even a dozen comprehensive test profiles,
 complete with varied user personalities, goals, and parameter combinations,
 could take a skilled engineer several hours or even days of effort,
 making it impractical for large-scale or continuous testing.
-This creates a significant research gap
+This creates a research gap
 for a method that can automatically synthesize
 rich, detailed, and targeted user profiles
 based on a discovered model of the chatbot's actual capabilities.
@@ -431,7 +431,7 @@ White-Box Testing & Yes & No & High & Requires source code access \\
 
 Our review of the state of the art
 reveals that while many valuable contributions have been made,
-significant limitations persist.
+limitations persist.
 The rapid evolution of conversational AI
 has outpaced the development of
 correspondingly advanced testing methodologies,
