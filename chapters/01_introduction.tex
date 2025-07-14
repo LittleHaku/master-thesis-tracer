@@ -4,77 +4,54 @@
 \chapter{Introduction}\label{chapter:introduction}
 
 
-The proliferation of conversational agents, commonly refered to as chatbots,
-has fundamentally transformed human-computer interaction
-across a diverse landscape of domains.
-From general-purpose assistants such as OpenAI's ChatGPT \autocite{ChatGPT} or Google's Gemini \autocite{GoogleGemini}
-to task-oriented agents that assist users in specific tasks like shopping or customer support.
-These systems allow for natural language interaction with services ranging from customer support and e-commerce platforms to educational resources.
-The proliferation of these agents has been further accelerated by advances in generative \ac{AI},
-particularly \acp{LLM},
-which have significantly enhanced chatbot capabilities, allowing them to both create and understand natural language without explicitly programmed rules.
 
-The presence of these agents in so many applications has elevated concerns regarding their reliability, correctness, and quality assurance.
-As these systems appear in domains such as healthcare or finances, which require high levels of trust, the need for rigorous testing and validation becomes paramount.
-However, the heterogeneous nature of chatbot development,
-with intent-based frameworks like Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020},
-multi-agent programming environments built upon LLMs such as LangGraph \autocite{LangGraph} and Microsoft's AutoGen \autocite{AutoGen},
-and \acp{DSL} like Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024},
-presents significant challenges for finding a comprehensive methodology to test these systems.
+The growth of conversational agents, popularly known as chatbots,
+has changed the way humans interact with computers across a range of domains.
+From general-purpose assistants like OpenAI's ChatGPT \autocite{ChatGPT} or Google's Gemini \autocite{GoogleGemini} to task-oriented agents that help users in particular tasks such as shopping or customer service.
+Such systems provide natural language interaction with services from customer service and e-commerce websites to educational materials.
+The spread of these agents has also been boosted by developments in generative \ac{AI}, particularly \acp{LLM}, which have dramatically improved chatbot functionality, enabling them to both generate and comprehend natural language without explicitly programmed rules.
 
-Traditional software testing techniques are very limited when applied to chatbot systems.
-The complexity of \ac{NLP}, the non-deterministic nature of \acp{LLM} and the dynamic flow of a real conversation make traditional testing inadequate for conversational agents.
-While there have been some approaches for developing testing techniques for chatbots \cite{cuadradoIntegratingStaticQuality2024, canizaresMeasuringClusteringHeterogeneous2024},
-they often target specific chatbot technologies \autocite{RasaTest2025},
-require substantial manual effort including the provision of test conversations \autocite{CyaraBotium, RasaTest2025}
-or synchronous human interaction \autocite{renEvaluationTechniquesChatbot2019},
-depend on existing conversation corpus \autocite{vasconcelosBottesterTestingConversational2017},
-or need access to the chatbot's source code \autocite{canizaresCoveragebasedStrategiesAutomated2024, gomez-abajoMutationTestingTaskOriented2024, urricoMutaBotMutationTesting2024},
-thereby limiting their applicability to deployed systems treated as black boxes.
+The fact that they appear in so many uses has increased the concern about their correctness, reliability, and quality assurance.
+As these systems become ubiquitous in areas like healthcare or finance, which demand levels of trust that are high, the requirement for validation and testing becomes paramount.
+Nevertheless, the heterogeneousness of chatbot building, with intent-based platforms such as Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020}, multi-agent programming environments based on \acp{LLM} like LangGraph \autocite{LangGraph} and Microsoft's AutoGen \autocite{AutoGen}, and \acp{DSL} such as Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}, imposes great difficulties in seeking an overarching methodology to test these systems.
 
-The research presented in this thesis aims to solve these problems through the development of \ac{TRACER},
-a tool for extracting comprehensive models from deployed conversational agents,
-and then, with this model, create user profiles which serve as test cases
-for a user simulator called Sensei \autocite{delaraSensei}.
-\ac{TRACER} employs an \ac{LLM} agent to systematically explore the chatbot's capabilities via natural language interactions,
-eliminating the need for manual test case creation or access to the chatbot's source code.
-This black-box approach enables the automated generation of detailed chatbot models that encapsulate
-supported languages, fallback mechanisms, functional capabilities, input parameters, admissible parameter values, output data structures, and conversational flow patterns.
+
+Conventional software testing methods are hardly applicable to chatbot systems.
+The intricacy of \ac{NLP}, the non-deterministic nature of \acp{LLM} and the dynamic flow of a real conversation make traditional testing insufficient for dialogue agents.
+Although there have been some methods for developing testing methods for chatbots \cite{cuadradoIntegratingStaticQuality2024, canizaresMeasuringClusteringHeterogeneous2024}, they often focus on particular chatbot technologies \autocite{RasaTest2025}, require substantial manual effort including the provision of test conversations \autocite{CyaraBotium, RasaTest2025} or synchronous human interaction \autocite{renEvaluationTechniquesChatbot2019}, rely on available conversation corpus \autocite{vasconcelosBottesterTestingConversational2017}, or require access to the source code of the chatbot \autocite{canizaresCoveragebasedStrategiesAutomated2024, gomez-abajoMutationTestingTaskOriented2024, urricoMutaBotMutationTesting2024}, thus restricting their applicability to deployed systems as black boxes.
+
+
+The work in this thesis seeks to address these issues by the development of Task Recognition And Chatbot ExploreR (\ac{TRACER}), a tool for extracting comprehensive models from deployed conversational agents, and then, with this model, generate user profiles that are test cases for a user simulator named Sensei \autocite{delaraSensei}.
+\ac{TRACER} uses an \ac{LLM} agent to systematically investigate the chatbot's abilities through natural language interactions, without requiring manual test case writing or access to the source code of the chatbot.
+This black-box strategy facilitates automated generation of comprehensive chatbot models that capture supported languages, fallback mechanisms, functional capabilities, input parameters, acceptable parameter values, output data structures, and conversational flow patterns.
+
 
 The extracted chatbot model serves as the foundation for the automated synthesis of test cases.
-Specifically, \ac{TRACER} generates user profiles that represent diverse users that interact with the chatbot using Sensei \autocite{delaraSensei},
-but different implementations of \ac{TRACER} could be made to generate different types of test cases based on the extracted model.
-The integration of \ac{TRACER} with Sensei yields a testing methodology that only requires a connector for the chatbot's API.
+In particular, \ac{TRACER} produces user profiles that model varied users that interacts with the chatbot through Sensei \autocite{delaraSensei}, yet alternate implementations of \ac{TRACER} could be used to produce various kinds of test cases from the extracted model.
+The combination of \ac{TRACER} and Sensei results in a test approach that requires just a connector for the chatbot’s API.
+
+In order to make this research accessible and reproducible, \ac{TRACER} has been developed as a full, open-source tool.
+It is available publicly as a \ac{PyPI} package \autocite{sotillodelhornoChatbottracerToolModel} and can be installed using \texttt{pip install chatbot-tracer}.
+The complete source code is available on GitHub \url{https://github.com/Chatbot-TRACER/TRACER}, and a special web application has been created to offer an easy experience for the whole test pipeline, ranging from model extraction and user profiles generation with \ac{TRACER} to test execution with Sensei.
 
 
-To ensure the accessibility and reproducibility of this research,
-\ac{TRACER} has been developed as a complete, open-source tool.
-It is publicly available as a \ac{PyPI} package \autocite{sotillodelhornoChatbottracerToolModel}
-and can be installed via \texttt{pip install chatbot-tracer}.
-The full source code is hosted on GitHub \url{https://github.com/Chatbot-TRACER/TRACER},
-and a dedicated web application %TODO: Add the link when we deploy it
-has been developed to provide a user-friendly experience for the entire testing pipeline,
-from model extraction and user profiles generation with \ac{TRACER} to test execution with Sensei.
-
-To guide this investigation, we have defined the following research questions:
+To direct this inquiry, we have established the following research questions:
 \begin{itemize}
 \item \textbf{RQ1: How effective is TRACER in modeling chatbot functionality?}
-  This question assesses the ability of our model exploration technique to achieve high functional coverage in a controlled setting where the ground truth is known.
+  This question evaluates the capability of our model discovery method to attain high functional coverage in a controlled environment where the ground truth is available.
 \item \textbf{RQ2: How effective are the synthesized profiles at detecting faults in controlled environments?}
-  This question evaluates the precision of our approach by using mutation testing \autocite{gomez-abajoMutationTestingTaskOriented2024}
-  to measure the ability of the generated profiles to identify specific, injected faults.
+  This question tests the accuracy of our method by applying mutation testing \autocite{gomez-abajoMutationTestingTaskOriented2024} to estimate the capacity of the created profiles to detect specific, injected faults.
 \item \textbf{RQ3: How effective is the approach at identifying real-world bugs and ensuring task completion in deployed chatbots?}
-  This addresses the practical, real-world applicability of our framework
-  by measuring the \ac{BDR} and \ac{TCR} of the generated profiles against real-world chatbots.
+  This is the practical, real-world applicability of our framework by calculating the Bug Detection Rate (\ac{BDR}) and Task Completion Rate (\ac{TCR}) of the generated profiles against real-world chatbots.
 \end{itemize}
 
-\textit{Thesis structure.}
-\autoref{chapter:state_of_the_art} establishes the background and state of the art in chatbot test.
-\autoref{chapter:tracer} presents the core methodoly of how \ac{TRACER} extracts models from chatbots.
-\autoref{chapter:user_profiles} describes the structure of the user profiles, and how \ac{TRACER} generates them.
-\autoref{chapter:tool_support} shows \ac{TRACER} \ac{CLI} and the web application to use both \ac{TRACER} and Sensei.
-\autoref{chapter:evaluation} presents the evaluation of \ac{TRACER} against the research questions.
-\autoref{chapter:conclusion} concludes the thesis and discusses future work.
+\textit{Thesis organisation.}
+\autoref{chapter:state_of_the_art} sets up the context and state of the art of chatbot testing.
+\autoref{chapter:tracer} lays out the primary methodoly of how \ac{TRACER} extracts models from chatbots.
+\autoref{chapter:user_profiles} explains the user profile structure, and the way \ac{TRACER} creates them.
+\autoref{chapter:tool_support} illustrates \ac{TRACER} Command Line Interface (CLI) and web application to utilize both Sensei and \ac{TRACER}.
+\autoref{chapter:evaluation} provides the comparison of \ac{TRACER} with the research questions.
+\autoref{chapter:conclusion} summarizes the thesis and addresses future work.
 
 
 
