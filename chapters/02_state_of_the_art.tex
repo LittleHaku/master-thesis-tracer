@@ -555,15 +555,13 @@ compares the testing paradigms discussed.
 \caption{Comparison of State-of-the-Art Chatbot Testing Paradigms}
 \label{tab:sota_comparison}
 \resizebox{\textwidth}{!}{
-\begin{tabular}{@{}lllll@{}}
+\begin{tabular}{@{}llllll@{}}
 \toprule
-\textbf{Paradigm} & \textbf{Requires Source Code?} & \textbf{Requires Corpus/Scripts?} & \textbf{Automation Level} & \textbf{Key Limitation} \\ \midrule
-Manual Testing & No & No & Low & Unscalable, not reproducible \\
-Scripted Testing & No & Yes (Manual Scripts) & Medium & High manual effort, brittle \\
-Corpus-Based & No & Yes (Existing Corpus) & Medium & Dependent on corpus quality \\
-White-Box Testing & Yes & No & High & Requires source code access \\
-\textbf{TRACER} & \textbf{No} & \textbf{No} & \textbf{High} & \textbf{Addresses prior limitations}
-\\ \bottomrule
+\textbf{Paradigm} & \textbf{Requires Source Code?} & \textbf{Requires Corpus/Scripts?} & \textbf{Automation Level} & \textbf{Example Works} & \textbf{Key Limitation} \\ \midrule
+Manual Testing & No & No & Low & GastroBot \autocite{zhouGastroBotChineseGastrointestinal2024}, Ren et al. \autocite{renEvaluationTechniquesChatbot2019} & Unscalable, not reproducible \\
+Scripted Testing & No & Yes & Medium & Bottester \autocite{vasconcelosBottesterTestingConversational2017}, Cyara \autocite{CyaraBotium}, Rasa \autocite{RasaTest2025} & High manual effort, brittle \\
+White-Box Testing & Yes & No & High & Cañizares et al. \autocite{canizaresCoveragebasedStrategiesAutomated2024}, Gómez-Abajo et al. \autocite{gomez-abajoMutationTestingTaskOriented2024} & Requires source code access \\ \midrule
+\textbf{TRACER} & \textbf{No} & \textbf{No} & \textbf{High} & \textbf{(This Thesis)} & \textbf{Addresses prior limitations} \\ \bottomrule
 \end{tabular}
 }
 \end{table}
