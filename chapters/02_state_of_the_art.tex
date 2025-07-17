@@ -359,7 +359,7 @@ each addressing different aspects of the validation challenge.
 A comprehensive survey by Ren et al. \autocite{renEvaluationTechniquesChatbot2019} highlights the difficulties
 in defining appropriate metrics and methodologies for these complex systems.
 
-\subsubsection{Manual and Corpus-Based Testing}
+\subsubsection{Manual Testing}
 
 The earliest and most direct approaches to chatbot testing
 rely on manual effort and existing conversation corpora.
@@ -373,19 +373,35 @@ it highlights the persistence of manual methods
 that are inherently subjective, resource-intensive,
 and unscalable for comprehensive regression testing.
 
-To introduce automation, frameworks like Bottester
+\subsubsection{Scripted Testing}
+
+Scripted testing represents a middle ground
+between manual testing and fully automated testing.
+In this case, developers write tests
+indicating the input and the expected output
+like in traditional unit testing,
+where an output is checked on an assertion.
+For example, a test script could make the input
+"What are your opening hours?"
+and then the assertion would check
+if the response contains the specific information.
+
+Frameworks like Bottester
 \autocite{vasconcelosBottesterTestingConversational2017}
-use existing Q\&A corpora.
-The main limitation of this approach
-is its complete dependence on
-the quality and comprehensiveness of the pre-existing dataset;
-if a conversational path is not in the corpus, it cannot be tested.
-Similarly, commercial platforms like Cyara \autocite{CyaraBotium}
+use existing Q\&A corpora to test this.
+Commercial platforms like Cyara \autocite{CyaraBotium}
 and Rasa's testing framework \autocite{RasaTest2025}
 require the manual specification of test conversations and expected outcomes.
 These approaches are primarily confirmatory,
 designed to verify known behaviours rather than explore the unknown,
 and they struggle to scale to the dynamic nature of modern agents.
+
+The issue with this type of testing
+is that it fails to scale with modern conversational agents
+that can show functionalities that were not explicitly configured,
+or that the answers can be different each time.
+Also, the test cases require to be maintained
+as the chatbot evolves.
 
 \subsubsection{Static Analysis and White-Box Testing}
 
