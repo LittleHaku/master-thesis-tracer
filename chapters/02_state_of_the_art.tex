@@ -56,7 +56,7 @@ has been facilitated by various frameworks and platforms.
   \item \textbf{Intent-based frameworks:}
     these frameworks such as Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020}
     enable developers to define conversation flow through intents, utterances, and responses.
-    These platforms have low latency and deterministic behavior
+    These platforms have low latency and deterministic behaviour
     but are very rigid, struggle to scale,
     and to work properly require a big corpus to be trained on.
 
@@ -126,16 +126,16 @@ means that the system's state space increases dramatically with conversation len
 as the response depends not just on the immediate input
 but on the entire preceding dialogue history.
 
-The emergent behavior of \ac{LLM}-powered systems further complicates testing efforts.
+The emergent behaviour of \ac{LLM}-powered systems further complicates testing efforts.
 These systems can demonstrate capabilities
 that were not explicitly programmed by their developers,
 making it difficult to define the complete functional scope of the agent.
-A particularly problematic form of this emergent behavior is hallucination,
+A particularly problematic form of this emergent behaviour is hallucination,
 where the model generates responses that are
 factually incorrect, nonsensical, or ungrounded in the provided context.
-Such behavior is especially dangerous in high-stakes domains
+Such behaviour is especially dangerous in high-stakes domains
 where misinformation can have severe consequences.
-When these unpredictable behaviors are combined
+When these unpredictable behaviours are combined
 with the virtually infinite ways a user can
 phrase an intent or introduce unexpected topics,
 it becomes impossible to achieve adequate test coverage through manual scripting.
@@ -145,7 +145,7 @@ it becomes impossible to achieve adequate test coverage through manual scripting
 Black-box testing is a software testing methodology
 where the internal structure, implementation details, and source code of the system under test
 are unknown or inaccessible to the tester.
-This approach focuses on validating system behavior based solely on inputs and outputs,
+This approach focuses on validating system behaviour based solely on inputs and outputs,
 treating the system as an opaque "black box."
 In practice, this involves interacing with the chatbot as a real user would:
 asking questions about capabilities
@@ -176,13 +176,70 @@ while the validation challenge requires
 determining if responses are correct
 without access to internal specifications.
 
-\subsection{\aclp{DSL} for Chatbot Development}
+\subsection{Development Frameworks}
+
+When it comes to building conversational agents
+there exists a diverse way of building them.
+In this section we are going to cover three paradigms,
+intent-based frameworks, that rely on predefined conversation patterns;
+multi-agent programming frameworks, that use the power \acp{LLM};
+and \aclp{DSL} that provide a declarative approach.
+
+\subsubsection{Intent-Based Frameworks}
+
+Google's Dialogflow \autocite{Dialogflow}
+is one of the most used intent-based frameworks.
+It offers a visual interface
+for designing conversational flows
+through intents (e.g., order a pizza),
+entities (e.g., pizza size and type)
+and the fulfillment logic that executes when an intent is recognized.
+When designing it, on top of the intents,
+one must also provide examples of how the user can express things
+and how the chatbot would answer,
+this makes it very difficult to scale
+as the more intents we have,
+the more training examples we need to create.
+
+Rasa \autocite{Rasa2020} offers and open-source \autocite{RasaHQRasa2025} alternative.
+The architecture is divided into two sections:
+the \ac{NLU} and the Core.
+It utilizes machine learning to train a pipeline
+for intent classification and entity extraction.
+Although it allows to create more complex chatbots,
+the missing visual interface creates a steeper learning curve.
+
+\subsubsection{Multi-Agent Programming Environments}
+
+LangGraph \autocite{LangGraph} is one of the main exponents
+of this new frameworks that leverage the use of \ac{LLM}
+to create complex conversational systems.
+As the name says, LangGraph is made up by a graph
+where nodes are \ac{AI} agents or tools
+and edges control the flow of information between the nodes.
+This allows for more dyncamic conversational flows
+than traditional intent-based systems,
+and also allow to break a complex problem into different agents.
+However, implementing all of this is not trivial
+and requires proper orchestration of all the agents
+and also comes with the risk of \acp{LLM}'s non-deterministic behaviour.
+
+Similarly, Microsoft's AutoGen \autocite{AutoGen}
+enables the development of multi-agent systems
+where different \ac{AI} agents collaborate to complete complex tasks.
+This allows to follow a divide and conquer approach
+where each agent is a specialized \ac{AI} agent.
+For example, one could have a planner agent,
+that would divide the user's petition into bite-sized tasks
+and send each to the agent that better suits the task.
+
+\subsubsection{\aclp{DSL}}
 
 A \acl{DSL} is a computer language
 specialized for a particular application domain.
 In the context of conversational AI,
 \acp{DSL} provide high-level abstractions
-that allow developers to define chatbot behavior declaratively,
+that allow developers to define chatbot behaviour declaratively,
 focusing on the 'what' rather than the 'how'.
 While a deep understanding of any single framework
 is not essential for this thesis's work,
@@ -277,7 +334,7 @@ Traditional model learning techniques,
 such as those demonstrated by Muzammil et al. \autocite{shahbazAnalysisTestingBlackbox2014},
 often focus on automatically inferring finite state machines.
 Similarly, the reverse engineering techniques applied by Walkinshaw et al. \autocite{walkinshawReverseEngineeringSoftwareBehavior2013}
-extract behavioral models through dynamic analysis.
+extract behavioural models through dynamic analysis.
 These methods have proven effective for systems with discrete and well-defined input/output alphabets.
 
 However, these classical approaches
@@ -323,7 +380,7 @@ Similarly, commercial platforms like Cyara \autocite{CyaraBotium}
 and Rasa's testing framework \autocite{RasaTest2025}
 require the manual specification of test conversations and expected outcomes.
 These approaches are primarily confirmatory,
-designed to verify known behaviors rather than explore the unknown,
+designed to verify known behaviours rather than explore the unknown,
 and they struggle to scale to the dynamic nature of modern agents.
 
 \subsubsection{Static Analysis and White-Box Testing}
@@ -380,7 +437,7 @@ which may not be available or cover all necessary scenarios.
 The arrival of \acp{LLM} has enabled a new generation
 of highly flexible and realistic user simulators.
 Researchers have demonstrated the ability
-to simulate users with specific personality traits and behaviors.
+to simulate users with specific personality traits and behaviours.
 For example, Ferreira et al. \autocite{ferreiraMultitraitUserSimulation2024}
 generate profiles with traits like engagement and verbosity,
 while Sekulic et al. \autocite{sekulicSimulatingConversationalSearch2024}
@@ -389,7 +446,7 @@ Frameworks like CoSearcher \autocite{salleStudyingEffectivenessConversational202
 also allow for tuning user cooperativeness.
 These works prove the principle of creating diverse, persona-driven simulated users.
 
-Other approaches focus on specific conversational behaviors.
+Other approaches focus on specific conversational behaviours.
 Kiesel et al. \autocite{kieselSimulatingFollowUpQuestions2024}
 simulate follow-up questions,
 and the followQG framework \autocite{bImprovingAsynchronousInterview2021}
