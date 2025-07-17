@@ -39,8 +39,9 @@ given the domain and range of their capabilities.
     such as booking appointments, processing orders, or providing customer support.
     These systems typically follow structured conversation flows
     and maintain explicit state management to track task progress.
-    Examples of these chatbots are Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}
-    or UAM's assistant Ada \autocite{AdaUAM}.
+    Examples of these chatbots are
+    UAM's assistant Ada \autocite{AdaUAM}.
+    or chatbots made with the framework Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}
 
   \item \textbf{Open-domain:}
     in contrast, open-domain chatbots
@@ -78,6 +79,32 @@ without explicit programming of conversational rules like in intent-based framew
 These models, trained on a vast amount of text data,
 have demonstrated remarkable capabilities in
 language understanding \autocite{liEnhancingNaturalLanguage2024}, generation, and reasoning across diverse domains.
+
+\aclp{LLM} are built employing transformers,
+an architecture proposed by Vaswani et al. \autocite{vaswaniAttentionAllYou2017}.
+This architecture's main innovation is the self-attention mechanism,
+which allows the model to weight the importance of the words in the input,
+allowing the model to capture longer dependencies and understanding the context.
+These models are usually trained in two phases,
+the first one, the pre-training,
+is a self-supervised stage where the model
+is fed with a vast amount of text,
+where the model learns 
+general relationships between words,
+language patterns, facts and reasoning patterns.
+Following this, the next stage is the fine-tuning,
+where the model is fed with a curated dataset
+that aligns with the model's purpose (e.g., medical or coding),
+also using techniques such as
+Reinforcement Learning from Human Feedback (RLHF)
+which helps the model to give responses
+that align better with human preferences.
+This process has made possible models like
+OpenAI's GPT series (e.g., GPT-4) \autocite{OpenAI2025},
+Google's Gemini series \autocite{GoogleGemini},
+Meta's open-source Llama Series \autocite{touvronLLaMAOpenEfficient2023},
+or Anthropic's Claude models \autocite{ClaudeAnthropic}.
+
 
 The integration of \acp{LLM} into conversational agents
 has transformed the way humans interact with computers.
