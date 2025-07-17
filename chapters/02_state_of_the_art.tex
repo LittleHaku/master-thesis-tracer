@@ -290,7 +290,7 @@ simplifies the systematic introduction of faults,
 facilitating the creation of a large set of mutants
 for our mutation testing analysis,
 which is essential for evaluating
-the fault-detection effectiveness of the generated profiles
+the fault-detection effectiveness of the generated user profiles
 
 \indent
 
@@ -469,11 +469,11 @@ is an example of an \ac{LLM}-based user simulator.
 The simulator works using user profiles
 that are written in YAML
 and allow for high levels of customization and control.
-The profiles allow to specify the user's
+The user profiles allow to specify the user's
 personality, its role, context and goals,
 these goals can then have variables of different types,
 which can have given values or \ac{LLM} generated ones,
-the profiles can also have interaction styles like
+the user profiles can also have interaction styles like
 making spelling errors or changing language mid-conversation.
 On top of this, we have the outputs,
 where is a set of values that the \ac{LLM}
@@ -506,7 +506,7 @@ Finally, Wit \autocite{dewitLeveragingLargeLanguage2024}
 demonstrates the practicality of using commercial APIs like ChatGPT
 for low-cost testing of rule-based agents.
 
-\subsubsection{The Profile Generation Bottleneck}
+\subsubsection{The User Profile Generation Bottleneck}
 Despite the remarkable progress in creating sophisticated user simulators,
 a critical challenge remains:
 the user profile creation bottleneck.
@@ -515,11 +515,11 @@ used in this research, exemplifies this issue.
 It is a powerful tool capable of executing highly detailed test profiles,
 but its effectiveness is entirely dependent on the quality of those profiles.
 Across the state of the art,
-these essential input profiles are either created manually,
+these essential input user profiles are either created manually,
 a process that is time-consuming and does not scale,
 or generated from generic descriptions
 that lack grounding in the specific functionalities of the chatbot under test.
-For example, manually writing even a dozen comprehensive test profiles,
+For example, manually writing even a dozen comprehensive test user profiles,
 complete with varied user personalities, goals, and parameter combinations,
 could take a skilled engineer several hours or even days of effort,
 making it impractical for large-scale or continuous testing.
@@ -572,10 +572,10 @@ This analysis identifies three primary research gaps in the current literature:
       or require manual artifacts like scripts or corpora,
       preventing a universal, automated approach.
 
-    \item \textbf{An Unsolved Profile Generation Bottleneck:}
+    \item \textbf{An Unsolved User Profile Generation Bottleneck:}
       The potential of advanced user simulators
       is currently constrained by the lack of an automated method
-      to generate detailed, realistic test profiles.
+      to generate detailed, realistic test user profiles.
       The high manual effort required to create such profiles
       constitutes a major barrier
       to the adoption of automated, simulation-based testing at scale.
@@ -587,14 +587,14 @@ This analysis identifies three primary research gaps in the current literature:
       There is a clear need for a technique
       that can automatically infer a rich, functional model of a chatbot
       through natural language interaction alone,
-      for the express purpose of generating comprehensive test cases.
+      for the specific purpose of generating comprehensive test cases.
 
 \end{enumerate}
 
 This thesis directly addresses these interconnected gaps.
 We propose \ac{TRACER}, a novel framework
 that provides a fully automated black-box method
-for chatbot model learning and test profile generation.
+for chatbot model learning and test user profile generation.
 By requiring only \ac{API} access to a deployed chatbot,
 \ac{TRACER} overcomes the limitations of existing approaches
 and provides a comprehensive, end-to-end solution
