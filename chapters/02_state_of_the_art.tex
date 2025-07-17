@@ -557,11 +557,23 @@ compares the testing paradigms discussed.
 \resizebox{\textwidth}{!}{
 \begin{tabular}{@{}llllll@{}}
 \toprule
-\textbf{Paradigm} & \textbf{Requires Source Code?} & \textbf{Requires Corpus/Scripts?} & \textbf{Automation Level} & \textbf{Example Works} & \textbf{Key Limitation} \\ \midrule
-Manual Testing & No & No & Low & GastroBot \autocite{zhouGastroBotChineseGastrointestinal2024}, Ren et al. \autocite{renEvaluationTechniquesChatbot2019} & Unscalable, not reproducible \\
-Scripted Testing & No & Yes & Medium & Bottester \autocite{vasconcelosBottesterTestingConversational2017}, Cyara \autocite{CyaraBotium}, Rasa \autocite{RasaTest2025} & High manual effort, brittle \\
-White-Box Testing & Yes & No & High & Cañizares et al. \autocite{canizaresCoveragebasedStrategiesAutomated2024}, Gómez-Abajo et al. \autocite{gomez-abajoMutationTestingTaskOriented2024} & Requires source code access \\ \midrule
-\textbf{TRACER} & \textbf{No} & \textbf{No} & \textbf{High} & \textbf{(This Thesis)} & \textbf{Addresses prior limitations} \\ \bottomrule
+\textbf{Paradigm} & \makecell[l]{\textbf{Requires} \\ \textbf{Source Code?}} & \makecell[l]{\textbf{Requires Predefined} \\ \textbf{Test Cases?}} & \makecell[l]{\textbf{Automation} \\ \textbf{Level}} & \textbf{Example Works} & \textbf{Key Limitation} \\ \midrule
+
+\makecell[l]{Manual \\ Testing} & No & No & Low & 
+\makecell[l]{GastroBot \autocite{zhouGastroBotChineseGastrointestinal2024} \\ Ren et al. \autocite{renEvaluationTechniquesChatbot2019}} & 
+\makecell[l]{Unscalable, \\ not reproducible} \\[0.3em]
+
+\makecell[l]{Scripted \\ Testing} & No & Yes & Medium & 
+\makecell[l]{Bottester \autocite{vasconcelosBottesterTestingConversational2017} \\ Cyara \autocite{CyaraBotium} \\ Rasa \autocite{RasaTest2025}} & 
+\makecell[l]{High manual effort, \\ brittle} \\[0.3em]
+
+\makecell[l]{White-Box \\ Testing} & Yes & No & High & 
+\makecell[l]{Cañizares et al. \autocite{canizaresCoveragebasedStrategiesAutomated2024} \\ Gómez-Abajo et al. \autocite{gomez-abajoMutationTestingTaskOriented2024}} & 
+\makecell[l]{Requires source \\ code access} \\[0.3em]
+
+\midrule
+\textbf{TRACER} & \textbf{No} & \textbf{No} & \textbf{High} & \textbf{(This Thesis)} & \makecell[l]{\textbf{Addresses prior} \\ \textbf{limitations}} \\ 
+\bottomrule
 \end{tabular}
 }
 \end{table}
