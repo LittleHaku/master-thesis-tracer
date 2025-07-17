@@ -399,8 +399,21 @@ To assess test adequacy, Cañizares et al.
 develop coverage-based strategies that
 require access to the chatbot's internal structure to compute metrics.
 
-Mutation testing, a powerful technique for assessing test suite quality,
-has also been adapted for chatbots.
+Mutation testing is a technique for evaluating
+the quality of a test suite
+(N.B. it evaluates the tests, not the system that the tests evaluate).
+The technique works by introducing
+small deliberate faults (mutations) into the system
+and evaluating wether these tests can discover the mutations.
+With this, then we obtain a mutation score
+that measures how many mutants have been killed (found),
+meaning that the higher the score, the better.
+The principle introduced by DeMillo, Lipton and Sayward
+\autocite{demilloHintsTestData1978}
+states that if a test suite is able to find these mutations
+it is likely that it will be able to detect real faults as well.
+
+This technique has been adapted for chatbots in recent work.
 Gómez-Abajo et al. \autocite{gomez-abajoMutationTestingTaskOriented2024}
 propose mutation operators specifically for task-oriented chatbots like Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024},
 while Urrico et al. \autocite{urricoMutaBotMutationTesting2024} introduce MutaBot,
