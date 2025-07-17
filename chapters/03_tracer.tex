@@ -3,7 +3,7 @@
 
 \chapter{TRACER: Automated Chatbot Exploration}\label{chapter:tracer}
 
-In this chapter we presnet \ac{TRACER},
+In this chapter we present \ac{TRACER},
 a tool that tries to fill the gaps that we have seen
 during our State of the Art \autoref{sec:sota} review.
 This tool's purpose is to address the black-box testing challenge mentioned
@@ -16,6 +16,46 @@ Then we will detail the exploration phase \autoref{sec:exploration},
 followed by the refinement phase \autoref{sec:refinement}.
 
 \section{Overview}\label{sec:overview}
+
+\ac{TRACER} - \acl{TRACER} - the tool developed for this thesis,
+whose source code can be found at \url{https://github.com/Chatbot-TRACER/TRACER},
+is a tool that using the power of \acp{LLM}
+is able to extract a model from a chatbot,
+and then turn this model into a set of profiles
+that can be used for the SENSEI user simulator
+to test the chatbot.
+An scheme of the approach can view in \autoref{fig:approach}.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=\linewidth]{figures/approach.pdf}
+  \caption{Scheme of our approach and its main components.
+    (1a) Chatbot’s functionality explorer.
+    (1b) Synthesiser of test conversation profiles.
+    (2) User simulator.}
+  \label{fig:approach}
+\end{figure}
+
+The extracted model contains:
+
+\begin{enumerate}
+  \item \textbf{Exploration phase (1a):}
+    an explorer agent interacts with the chatbot in multiple sessions
+    and extracts functionalities
+
+  \item \textbf{Refinement phase (1b):}
+    in this pase the extracted functionalities and conversations
+    will be consolidated into a final model
+    and this model, into user profiles for SENSEI.
+
+  \item \textbf{User simulator (2):}
+    Once the model and user profiles have been created,
+    we use the profiles within SENSEI, the user simulator.
+    It is important to note that
+    although SENSEI is an important part in this testing process
+    it has not been developed in this work.
+\end{enumerate}
+
 
 
 

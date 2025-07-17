@@ -21,13 +21,13 @@ The intricacy of \ac{NLP}, the non-deterministic nature of \acp{LLM} and the dyn
 Although there have been some methods for developing testing methods for chatbots \cite{cuadradoIntegratingStaticQuality2024, canizaresMeasuringClusteringHeterogeneous2024}, they often focus on particular chatbot technologies \autocite{RasaTest2025}, require substantial manual effort including the provision of test conversations \autocite{CyaraBotium, RasaTest2025} or synchronous human interaction \autocite{renEvaluationTechniquesChatbot2019}, rely on available conversation corpus \autocite{vasconcelosBottesterTestingConversational2017}, or require access to the source code of the chatbot \autocite{canizaresCoveragebasedStrategiesAutomated2024, gomez-abajoMutationTestingTaskOriented2024, urricoMutaBotMutationTesting2024}, thus restricting their applicability to deployed systems as black boxes.
 
 
-The work in this thesis seeks to address these issues by the development of Task Recognition And Chatbot ExploreR (\ac{TRACER}), a tool for extracting comprehensive models from deployed conversational agents, and then, with this model, generate user profiles that are test cases for a user simulator named Sensei \autocite{delaraSensei}.
+The work in this thesis seeks to address these issues by the development of Task Recognition And Chatbot ExploreR (\ac{TRACER}), a tool for extracting comprehensive models from deployed conversational agents, and then, with this model, generate user profiles that are test cases for a user simulator named Sensei \autocite{delaraAutomatedEndtoEndTesting2025, delaraSensei}.
 \ac{TRACER} uses an \ac{LLM} agent to systematically investigate the chatbot's abilities through natural language interactions, without requiring manual test case writing or access to the source code of the chatbot.
 This black-box strategy facilitates automated generation of comprehensive chatbot models that capture supported languages, fallback mechanisms, functional capabilities, input parameters, acceptable parameter values, output data structures, and conversational flow patterns.
 
 
 The extracted chatbot model serves as the foundation for the automated synthesis of test cases.
-In particular, \ac{TRACER} produces user profiles that model varied users that interacts with the chatbot through Sensei \autocite{delaraSensei}, yet alternate implementations of \ac{TRACER} could be used to produce various kinds of test cases from the extracted model.
+In particular, \ac{TRACER} produces user profiles that model varied users that interacts with the chatbot through Sensei \autocite{delaraAutomatedEndtoEndTesting2025, delaraSensei}, yet alternate implementations of \ac{TRACER} could be used to produce various kinds of test cases from the extracted model.
 The combination of \ac{TRACER} and Sensei results in a test approach that requires just a connector for the chatbot’s API.
 
 In order to make this research accessible and reproducible, \ac{TRACER} has been developed as a full, open-source tool.
