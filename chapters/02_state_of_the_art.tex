@@ -329,10 +329,17 @@ and network protocol inference \autocite{luoDynPREProtocolReverse}.
 
 Traditional model learning techniques,
 such as those demonstrated by Muzammil et al. \autocite{shahbazAnalysisTestingBlackbox2014},
-often focus on automatically inferring finite state machines.
+often focus on automatically inferring finite state machines
+from general software systems,
+including web applications, embedded systems, and desktop applications.
+These techniques typically employ active learning algorithms.
 Similarly, the reverse engineering techniques applied by Walkinshaw et al. \autocite{walkinshawReverseEngineeringSoftwareBehavior2013}
-extract behavioural models through dynamic analysis.
-These methods have proven effective for systems with discrete and well-defined input/output alphabets.
+extract behavioural models through dynamic analysis,
+utilizing techniques like k-tails algorithms
+\autocite{biermannSynthesisFiniteStateMachines1972}
+to infer finite state machines from execution traces.
+These methods have proven effective for
+systems with discrete and well-defined input/output alphabets.
 
 However, these classical approaches
 face limitations when applied to modern conversational agents.
