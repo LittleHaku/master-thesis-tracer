@@ -463,6 +463,27 @@ Frameworks like CoSearcher \autocite{salleStudyingEffectivenessConversational202
 also allow for tuning user cooperativeness.
 These works prove the principle of creating diverse, persona-driven simulated users.
 
+The SENSEI user simulator \autocite{delaraAutomatedEndtoEndTesting2025, delaraSensei},
+which is used in this thesis since, \ac{TRACER} generates SENSEI user profiles,
+is an example of an \ac{LLM}-based user simulator.
+The simulator works using user profiles
+that are written in YAML
+and allow for high levels of customization and control.
+The profiles allow to specify the user's
+personality, its role, context and goals,
+these goals can then have variables of different types,
+which can have given values or \ac{LLM} generated ones,
+the profiles can also have interaction styles like
+making spelling errors or changing language mid-conversation.
+On top of this, we have the outputs,
+where is a set of values that the \ac{LLM}
+will try to extract from the conversation simulated,
+these outputs can be things like an address, a price or a phone number;
+these outputs will allow
+to see if the chatbot is giving the information
+that it is supposed to give.
+
+
 Other approaches focus on specific conversational behaviours.
 Kiesel et al. \autocite{kieselSimulatingFollowUpQuestions2024}
 simulate follow-up questions,
@@ -488,7 +509,7 @@ for low-cost testing of rule-based agents.
 \subsubsection{The Profile Generation Bottleneck}
 Despite the remarkable progress in creating sophisticated user simulators,
 a critical challenge remains: the profile generation bottleneck.
-The SENSEI simulator \autocite{delaraSensei},
+The SENSEI simulator \autocite{delaraAutomatedEndtoEndTesting2025, delaraSensei},
 used in this research, exemplifies this issue.
 It is a powerful tool capable of executing highly detailed test profiles,
 but its effectiveness is entirely dependent on the quality of those profiles.
