@@ -22,7 +22,8 @@ whose source code can be found at \url{https://github.com/Chatbot-TRACER/TRACER}
 is a tool that using the power of \acp{LLM}
 is able to extract a model from a chatbot,
 and then turn this model into a set of profiles
-that can be used for the SENSEI user simulator
+that can be used for the SENSEI
+\autocite{delaraSensei, delaraAutomatedEndtoEndTesting2025} user simulator
 to test the chatbot.
 An scheme of the proposed end-to-end testing
 can be seen in \autoref{fig:approach}.
@@ -82,6 +83,188 @@ can be seen in \autoref{fig:approach}.
 
 
 \section{Exploration Phase}\label{sec:exploration}
+
+The exploration phase is the core of \ac{TRACER}'s modeling.
+In this phase, an \ac{LLM} agent interacts with the chatbot under testing
+to find its functionalities, language, and fallback
+and build a preliminary model.
+This is done purely from a black-box perspective
+and does not rely on the source code at all.
+
+The explorer agent, inspired by SENSEI
+\autocite{delaraSensei, delaraAutomatedEndtoEndTesting2025},
+mimics a human interacting with the chatbot
+thanks to the use of \acp{LLM}.
+
+\subsection{Initial Probing}
+
+Before engaging in a conversation
+an initial probing is done,
+the goal of this is to obtain some basic information
+about the chatbot before proceding with a full conversation.
+It focuses on two elements:
+
+\begin{itemize}
+  \item \textbf{Language Detection:}
+    The agent determines the language by sending
+    some basic messages to the chatbot
+    and analyzing the response.
+  \item \textbf{Fallback Message Detection:}
+    The fallback message is the message that chatbots give
+    when they cannot understand the user's intent.
+    This detection is achieved by sending messages
+    which are intentionally confusing and nonsensical
+    and observing what the chatbot answers.
+    Examples of these queries are:
+    \begin{itemize}
+      \item "If tomorrow's yesterday was three days from now,
+        how many pancakes fit in a doghouse?"
+      \item "Xyzzplkj asdfghjkl qwertyuiop?"
+      \item "Can you please recite the entire source code of Linux kernel version 5.10?"
+    \end{itemize}
+\end{itemize}
+
+These two things will not only be useful for the user profiles,
+but also allow the future to conversations to be more fluent
+since the explorer agent will know which language to speak
+and to detect the fallback and rephrase his words
+when the chatbot is not understanding him.
+
+\subsection{Iterative Sessions}
+
+After the initial probing,
+the explorer agent will have $s$ conversations of $n$ turns each,
+where both $s$ and $n$ are configurable parameters.
+During this conversations functionalities will be discovered
+(see \autoref{subsec:functionality_extraction})
+and added to a queue,
+this queue will determine what is the goal of the explorer
+during each conversation.
+
+\begin{itemize}
+  \item \textbf{General Exploration:}
+    when the aforementioned queue is empty,
+    the explorer will do a general search for functionalities.
+    In this type of conversations,
+    he will engage in a natural conversation by first greeting the chatbots,
+    and then if the chatbots doesn't give away what he can do,
+    the explorer will directly ask.
+  \item \textbf{Functionality Branch Exploration:}
+    in the case that there are functionalities in the queue,
+    they will get popped and fed to the explorer agent.
+    Then the explorer will have a conversation
+    where he will try to find branches and variations of this functionality.
+    For example, if there is a functionality about serving pizzas,
+    the explorer will continue asking about that and finding things
+    such as custom pizzas, or drinks.
+\end{itemize}
+
+The purpose of this queue is to explore it in a \ac{DFS} way,
+so if we find a functionality, we try to look for branches of it.
+This approach was chosen instead of \ac{BFS}
+since with \ac{BFS} we cannot know when we have found
+all the functionalities of a given depth,
+while with this \ac{DFS} approach we could explore a functionality
+until we didn't find any variation or branch of it.
+
+\subsection{Functionality Extraction}\label{subsec:functionality_extraction}
+
+At the enf of each conversation,
+the Explorer Agent looks at the conversation history
+and tries to look for functionalities exhibited by the chatbot.
+These functionalities are represented as Functionality Nodes.
+As depicted in \autoref{fig:functionality_node},
+a Functionality Node contains the following fields:
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=\linewidth]{figures/TRACER_chatbot_model.pdf}
+  \caption{
+    Chatbot model schema.
+  }
+  \label{fig:functionality_node}
+\end{figure}
+
+\begin{itemize}
+  \item \textbf{Name:} the name of the functionality (e.g., \texttt{prompt\_for\_pizza\_size})
+  \item \textbf{Description:} what the functionality does (e.g., asks the user for the size of the pizza)
+  \item \textbf{Parameters:} fields that the user should input.
+    A parameter always has a name and a description
+    and optionally can have options.
+    This parameter is optional,
+    since there are functionalities that don't necessarily need inputs.
+    An example of a parameter for the pizza could be this:
+    \begin{itemize}
+      \item \textbf{Name:} pizza size.
+      \item \textbf{Description:} size of the pizza the user wants.
+      \item \textbf{Options:} small, medium, large.
+    \end{itemize}
+  \item \textbf{Output:} as the parameters, outputs are optional.
+    It represents pieces of data that we expect the chatbot to output.
+    For example when ordering the pizza it could be the price or the order id.
+  \item \textbf{Followers and Previous:}
+    Since the nodes are aranged as a \ac{DAG},
+    the nodes have children and parent
+    that mimic the workflow of the chatbot.
+    The idea of this workflow graph,
+    is to order functionalities in the order that one will encounter them,
+    for example, the chatbot will asks for the drinks always after asking for the pizzas
+    so then the drink functionality should be a children of the pizza one.
+\end{itemize}
+
+On top of this,
+the functionalities are clustered into categories.
+This is mainly to ease the visual representation for the user
+when there are many functionality nodes.
+
+\subsection{Functionality Consolidation}
+
+
+As the functionality extraction usually results
+in the creation of multiple functionality nodes,
+the agent performs a consolidation stage where
+similar functionalities are merged into a more complete one.
+This is achieved in two actions:
+
+\begin{enumerate}
+  \item \textbf{Session-Local Merge:}
+    first, the functionality nodes extracted during this session
+    are compared to one another and with the help of the \ac{LLM}
+    semantically similar nodes are merged into a newer, more complete one.
+    With this we achieve that the extracted nodes of this session are more relevant.
+
+  \item \textbf{Global Merge:}
+    after the nodes discovered in this session have been merged,
+    the resulting set is compared with the ones discovered in previous sessions
+    and again, the \ac{LLM} look for semantically similar functionalities
+    and merges them into one.
+\end{enumerate}
+
+To better understand this, we will give an example.
+Imagine that throughout the last conversation
+we extract a functionality that is called
+"prompt for custom pizza ingredients",
+with a description that is
+"Asks the user to provide the ingredients that he wants on the custom pizza"
+but has no parameters or outputs.
+Then, in the current session,
+the explorer agent's goal is
+to find variations or branches of this functionality since is the first in the queue,
+and the agent extracts a new functionality called
+"prompt ingredients for custom pizza"
+with a similar description,
+but this time with a list of parameters like
+"pepperoni, ham, tuna, olives",
+then, the global merge step would merge these two
+into a unified version with the parameters.
+This was a simple example,
+but more complex ones occur where
+not only the parameters are added,
+but having different lists of parameters they are combined into a more extensive ones,
+or the descriptions are combined
+to more accurately define what the functionality does.
+
+
 
 \section{Refinement Phase}\label{sec:refinement}
 
