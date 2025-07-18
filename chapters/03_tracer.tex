@@ -4,9 +4,9 @@
 \chapter{TRACER: Automated Chatbot Exploration}\label{chapter:tracer}
 
 In this chapter we present \ac{TRACER},
-a tool that tries to fill the gaps that we have seen
+a tool designed to fill the gaps that we have seen
 during our State of the Art \autoref{sec:sota} review.
-This tool's purpose is to address the black-box testing challenge mentioned
+This tool addresses the black-box testing challenge mentioned
 by iteratively discovering functionalities
 to create a structured model.
 
@@ -125,7 +125,7 @@ It focuses on two elements:
 \end{itemize}
 
 These two things will not only be useful for the user profiles,
-but also allow the future to conversations to be more fluent
+but also allow the future conversations to be more fluent
 since the explorer agent will know which language to speak
 and to detect the fallback and rephrase his words
 when the chatbot is not understanding him.
@@ -268,4 +268,128 @@ to more accurately define what the functionality does.
 
 \section{Refinement Phase}\label{sec:refinement}
 
+
+Once all the conversation sessions are over,
+and the functionalities have been extracted,
+we enter the the refinement phase.
+The goal of this phase is to take the raw, potentially messy,
+functionalities discovered during the exploration phase
+and creating a coherent model.
+
+\subsection{Global Consolidation}
+
+While during the exploration phase we have a consolidation phase,
+variations of the same functionalities may still appear.
+This consolidation step solves this by checking again all the functionality nodes.
+
+\subsection{Chatbot Classification}
+
+Next, based on the discovered functionalities
+and the conversation history
+the chatbot is classified into informational or transactional.
+
+\begin{itemize}
+  \item \textbf{Informational:}
+    these are chatbots that mainly answer questions and provide information.
+    Examples of these are unversity or bank chatbots that only give you information
+    or if you need to do any paperwork they will give you a link and redirect you
+    but they will not assist you with the tramit directly.
+
+  \item \textbf{Transactional:}
+    these are chatbots that do guide the user
+    through a task or workflow.
+    For example, the pizzeria example we have been using
+    or a hotel chatbot that helps you book a room.
+\end{itemize}
+
+\subsection{Workflow Structure Inference}
+
+The final step is to define the \acl{DAG}
+that models the chatbot's workflow.
+During the exploration phase,
+parent-child relationships are set
+when a functionality is discovered as a branch or variation from another one,
+but most of the nodes are still set as root nodes.
+So, we manage to structure this by asking the \ac{LLM}
+identify likely sequences, branches, and joins
+based on conversational evidence and the dependencies between functionalities.
+The prompt for the LLM depends on the chatbot classification:
+
+\begin{itemize}
+  \item \textbf{Informational chatbots:}
+    usually informational chatbots' functionalities
+    don't have parent-child relationships,
+    this is because they simply serve information that is not nested through steps.
+    This is why this prompt is conservative on the identifications of relations,
+    since usually all the questions are entry points
+    that can be asked directly.
+    So, relationships are only established
+    if there is strong evidence that
+    a sequence of actions is needed to access the functionality.
+
+  \item \textbf{Transactional chatbots:}
+    these other chatbots are more likely to have sequential workflows
+    where one functionality will only exhibit
+    if a previous action has been done.
+    Also, the prompt will look for branches of optional choices,
+    for example, ordering a custom pizza or a predefined pizza.
+\end{itemize}
+
+\subsection{Example: Inferred Model of a Pizzeria Chatbot}
+
+\autoref{fig:pizzeria-workflow}
+shows the workflow graph resulting from a \ac{TRACER} execution
+against a pizzeria chatbot built with Taskyto taken from
+\autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}.
+The entrypoint, represented as a black dot,
+is the starting point of a new conversation.
+From there, you can go to four different root functionalities
+grouped into two categories.
+From one of the functionalities,
+you can continue the workflow to make your order.
+We will now break down the categories and functionalities.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=\linewidth]{figures/workflow_graph-crop-back.pdf}
+  \caption{
+    Workflow model inferred by \ac{TRACER} from a pizzeria chatbot.
+  }
+  \label{fig:pizzeria-workflow}
+\end{figure}
+
+\begin{itemize}
+  \item \textbf{Chatbot Meta:}
+    the category contains functionalities related to the chatbot talking about itself.
+    It has two functionality nodes, provide welcome message, that as its name says,
+    the chatbot will greet the user;
+    and state available information,
+    in which the chatbot will give information such as
+    the opening hours or its capabilities.
+
+  \item \textbf{Order Placement:}
+    contains two root functionalities,
+    list available pizza types,
+    which gives you the flavours of the different pizzas;
+    and prompt for pizza details,
+    which expects the pizza size and type,
+    once this has been completed
+    it will continue to ask the user for a confirmation
+    and then prompt the user for the type and number of drinks he wishes.
+
+  \item \textbf{Order Confirmation:}
+    once the user has gone through all the order placement steps,
+    we have the last functionality of the workflow which is
+    provide order total,
+    here the chatbot will the price of the total order
+    and finalize the workflow.
+\end{itemize}
+
+This final model can be used for different purposes,
+such as reverse engineering, reengineering,
+migrating to a different framework
+or maintaining the chatbot.
+In the next section we will show
+how \ac{TRACER} uses this model
+to generate user profiles for SENSEI.
 
