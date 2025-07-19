@@ -116,5 +116,45 @@
   autogobble,
   keywordstyle=\bfseries\color{UAMBlue},
   stringstyle=\color{UAMGreen},
-  captionpos=b
+  commentstyle=\color{EPS},
+  captionpos=b,
+  frame=single,
+  framerule=0.4pt,
+  rulecolor=\color{UAMBlue},
+  backgroundcolor=\color{TUMLightGray!10},
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny\color{TUMGray},
+  stepnumber=1,
+  numbersep=5pt
+}
+
+% YAML language definition
+\lstdefinelanguage{yaml}{
+  basicstyle=\fontsize{8}{9}\selectfont\sffamily\color{black},
+  numberstyle=\fontsize{8}{9}\selectfont,
+  comment=[l]{\#},
+  commentstyle=\color{EPS},
+  string=[s]{"}{"},
+  morestring=[s]{'}{'},
+  stringstyle=\color{UAMGreen},
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  % Define two groups of keywords
+  morekeywords=[1]{true,false,null,yes,no},
+  keywordstyle=[1]\color{EPS}\bfseries,
+  morekeywords=[2]{
+    llm,chatbot,user,language,model,temperature,role,context,goals,
+    random,function,type,data,min,max,step,forward,output,fallback,
+    description,conversation,number,test_name,goal_style,all_answered,
+    limit,interaction_style,personality
+  },
+  keywordstyle=[2]\color{UAMBlue},
+  rulecolor=\color{UAMBlue},
+  aboveskip=0.1\baselineskip,
+  belowskip=-1\baselineskip,
+  sensitive=false,
 }
