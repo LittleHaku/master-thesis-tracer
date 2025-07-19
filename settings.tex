@@ -133,28 +133,28 @@
 
 % YAML language definition
 \lstdefinelanguage{yaml}{
-  basicstyle=\fontsize{8}{9}\selectfont\sffamily\color{black},
-  numberstyle=\fontsize{8}{9}\selectfont,
+  basicstyle=\fontsize{7.5}{8.5}\selectfont\ttfamily\color{TUMDarkGray},
+  numberstyle=\fontsize{7}{8}\selectfont\ttfamily\color{TUMGray},
   comment=[l]{\#},
-  commentstyle=\color{EPS},
+  commentstyle=\color{TUMGray}\itshape,
   string=[s]{"}{"},
   morestring=[s]{'}{'},
   stringstyle=\color{UAMGreen},
   showstringspaces=false,
   breaklines=true,
   breakatwhitespace=true,
-  % Define two groups of keywords
-  morekeywords=[1]{true,false,null,yes,no},
+  morekeywords=[1]{true,false,null,yes,no,on,off},
   keywordstyle=[1]\color{EPS}\bfseries,
-  morekeywords=[2]{
-    llm,chatbot,user,language,model,temperature,role,context,goals,
-    random,function,type,data,min,max,step,forward,output,fallback,
-    description,conversation,number,test_name,goal_style,all_answered,
-    limit,interaction_style,personality
-  },
-  keywordstyle=[2]\color{UAMBlue},
+  morekeywords=[2]{llm,chatbot,user,language,model,temperature,role,context,goals,function,type,data,min,max,step,output,fallback,description,conversation,number,test_name,goal_style,all_answered,limit,interaction_style,personality},
+  keywordstyle=[2]\color{UAMBlue}\bfseries,
+  morekeywords=[3]{0,1,2,3,4,5,6,7,8,9,10,18},
+  keywordstyle=[3]\color{UAMBlue}\bfseries,
+  morekeywords=[4]{pizza_type,pizza_size,number_of_drinks,pizza_types,number_of_drinks_confirmation,final_order_summary,total_cost},
+  keywordstyle=[4]\color{TUMSecondaryBlue2}\bfseries,
+  morekeywords=[5]{random,forward},
+  keywordstyle=[5]\color{UAMGreen}\bfseries,
   rulecolor=\color{UAMBlue},
-  aboveskip=0.1\baselineskip,
+  aboveskip=-0.5\baselineskip,
   belowskip=-1\baselineskip,
-  sensitive=false,
+  sensitive=false
 }
