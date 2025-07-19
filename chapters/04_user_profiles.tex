@@ -19,5 +19,21 @@ will cover how these profiles are generated from the infered model.
 
 \section{User Profiles Structure}\label{sec:profile-structure}
 
+A user profile contains all the information
+that characterises the user,
+the conversation goals,
+interaction style,
+and other information such as the \ac{LLM} that will be used,
+or the number of conversations and turn per conversations.
+These profiles are structured in a YAML file,
+
+\begin{figure}[htpb]
+  \centering
+  \begin{tabular}{c}
+    \lstinputlisting[language=SQL]{code/pizza_order_placement.yaml}
+  \end{tabular}
+  \caption[Example listing]{Example of a conversation profile for a pizzeria chatbot.}\label{lst:user_profile}
+\end{figure}
+
 \section{User Profiles Generation}\label{sec:profile-generation}
 

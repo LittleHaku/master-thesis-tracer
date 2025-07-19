@@ -1,0 +1,59 @@
+test_name: Pizza Order Placement
+llm:
+  model: gpt-4o-mini
+  temperature: 0.8
+user:
+  language: English
+  role: A customer ordering a pizza and drinks for delivery or pickup.
+  context:
+  - personality: personalities/conversational-persona
+  - You are planning a casual get-together with friends tonight and want to order pizza and drinks.
+  goals:
+  - "Ask what pizza options are available."
+  - "Select the pizza type {{pizza_type}}."
+  - "Specify the pizza size as {{pizza_size}}."
+  - "Specify that I want {{number_of_drinks}} drinks."
+  - "Confirm the order details and total cost."
+  - number_of_drinks:		# parameter of the conversation
+      function: random()	# in each conversation, selects a random int value in the range defined below
+      type: int
+      data:
+        min: 1
+        max: 6
+        step: 1
+  - pizza_size:			# parameter of the conversation
+      function: forward()	# in each conversation, iterates forward in the following list of values
+      type: string
+      data:
+      - large
+      - medium
+      - small
+  - pizza_type:			# parameter of the conversation
+      function: forward()	# in each conversation, iterates forward (the forward function supports nesting)
+      type: string
+      data:
+      - Carbonara
+      - Four cheese
+      - ...
+chatbot:
+  fallback: "I'm sorry, I did not get what you said. Can you rephrase?"
+  output:
+  - pizza_types:
+      type: string
+      description: "A comma-separated list of the available pizza types offered by the chatbot."
+  - number_of_drinks_confirmation:
+      type: int
+      description: "The number of drinks confirmed by the chatbot." 
+  - final_order_summary:
+      type: string
+      description: "A summary of the order, including pizza type, size, number of drinks, and total cost." 
+  - total_cost:
+      type: money
+      description: "The total cost of the pizza order, including the pizza and drinks."
+conversation:
+  number: 8
+  goal_style:
+    all_answered:
+      limit: 18
+  interaction_style:
+  - single question
