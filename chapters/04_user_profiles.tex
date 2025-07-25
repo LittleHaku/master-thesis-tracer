@@ -14,7 +14,7 @@ and to find other errors such as timeouts.
 First, \autoref{sec:profile-structure}
 will cover the structure of these profiles and how they work,
 then \autoref{sec:profile-generation}
-will cover how these profiles are generated from the infered model.
+will detail how these profiles are synthesized from the inferred model.
 
 
 \section{User Profiles Structure}\label{sec:profile-structure}
@@ -39,9 +39,9 @@ These profiles are structured in a YAML file,
 
 To better understand how the profiles are generated,
 we must first understand the profiles and their structure
-made up of the \texttt{test\_name}
-which as its name implies is a unique name for the profile,
-followed by four different sections:
+made up of the \texttt{test\_name},
+a unique identifier for the profile,
+followed by four configuration blocks: 
 \texttt{llm}, \texttt{user}, \texttt{chatbot} and \texttt{conversation}.
 
 \subsection{LLM Configuration (\texttt{llm})}
@@ -77,16 +77,18 @@ These objectives are written like templates with placeholders
 (e.g., Specify the pizza size as {{pizza\_size}}).
 Below the list with all the objectives
 we have the list of parameters, which is the placeholders we left in goals.
-Each of these parameters will have assigned a function,
-let it be \texttt{random()} where a random value of the data below will be taken,
-or \texttt{random(x: int)}, in which case $x$ different random values will be taken.
-Then we have the \texttt{forward()} or \texttt{forward(x)},
-which will take in order a single value or $x$ values respectively.
-Lastly, the nested forward, \texttt{forward(var)},
-allows to cycle through all the combinations of a pair (or more, depending on the nested combinations) of variables.
-For example, one could nest pizza sizes with pizza types,
-that means that all combinations of pizza sizes with pizza types would be tested,
-that is, small pepperoni, small four chesee, ..., medium pepperoni, medium four chesee, ..., large pepperoni, large four chesee...
+Each of these parameters will have assigned a function:
+\begin{itemize}
+  \item \texttt{random()}: A random value of the data below will be taken.
+  \item \texttt{random(x)}: Takes $x$ different random values.
+  \item \texttt{forward()}: Selects one value sequentially from the data list.
+  \item \texttt{forward(x)}: Instead of one by one, takes the $x$ next values.
+  \item \texttt{forward(var)}: 
+    Allows to cycle through all the combinations of a pair (or more, depending on the nested combinations) of variables.
+    For example, one could nest pizza sizes with pizza types,
+    that means that all combinations of pizza sizes with pizza types would be tested,
+    that is, small pepperoni, small four chesee, ..., medium pepperoni, medium four chesee, ..., large pepperoni, large four chesee...
+\end{itemize}
 After the function, we can specify its \texttt{type},
 with values like int, float, string or date.
 Right after that, we have the data field,
@@ -125,9 +127,6 @@ and take a percentage of all of these.
 The second field, \texttt{goal\_style}, is the test's stop condition.
 It can be the number of steps taken in the conversation
 (let a step be a user message followed by a chatbot's one),
-or \texttt{all\_answered} which will stop once the user has completed all of its goals,
-this parameter is also accompanied by a \texttt{limit} field which sets a hard limit
-making sure that the conversation finishes even if the chatbot is not able to fulfil the user's goals,
 or \texttt{all\_answered} which will stop once the user has completed all of its goals,
 this parameter is also accompanied by a \texttt{limit} field which sets a hard limit
 making sure that the conversation finishes even if the chatbot is not able to fulfil the user's goals.
