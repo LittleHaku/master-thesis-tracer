@@ -1,0 +1,65 @@
+test_name: Drink Orderer
+llm:
+  temperature: 0.4
+  model: gpt-4.1-mini
+  format:
+    type: text
+user:
+  language: English
+  role: A customer who wants to view available drink options, select quantity and type of drinks, and confirm their drink order
+  context:
+  - 'personality: personalities/conversational-user'
+  - You are looking to purchase beverages for an upcoming event and want to review all the available drink options before deciding.
+  - You plan to order a specific quantity and type of drinks based on the selections that fit your needs and preferences.
+  - Before finalizing, you want to confirm your order details to ensure accuracy and avoid any mistakes.
+  goals:
+  - Ask the chatbot to provide the available drink options along with their prices.
+  - State how many drinks I want to order and specify the type of drink from the provided options, using {{drink_quantity}} and {{drink_type}}.
+  - Confirm my drink order by repeating the number and type of drinks I want to purchase.
+  - drink_quantity:
+      function: forward()
+      type: int
+      data:
+        min: 1
+        max: 5
+        step: 1
+  - drink_type:
+      function: forward()
+      type: string
+      data:
+      - Coke
+      - Sprite
+      - Water
+      - Pepsi
+chatbot:
+  is_starter: false
+  fallback: I'm sorry, I did not get what you said. I can help you ordering predefined or custom pizzas, and then drinks.
+  output:
+  - drinks_menu:
+      type: string
+      description: List of available drinks with prices
+  - drink_option_name:
+      type: string
+      description: Name of a single drink option
+  - drink_option_price:
+      type: money
+      description: Price of a single drink option
+  - drink_quantity_requested:
+      type: int
+      description: Number of drinks user wants to order
+  - drink_type_selected:
+      type: string
+      description: Type of drink user selects
+  - drink_order_confirmation_number:
+      type: string
+      description: Unique identifier for the confirmed order
+  - drink_order_summary:
+      type: string
+      description: Summary of number and type of drinks ordered
+conversation:
+  number: 5
+  max_cost: 0.75
+  goal_style:
+    steps: 20
+  interaction_style:
+  - single question
