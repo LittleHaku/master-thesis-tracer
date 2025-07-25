@@ -1,0 +1,82 @@
+test_name: Pizza Orderer and Customizer
+llm:
+  temperature: 0.5
+  model: gpt-4.1-mini
+  format:
+    type: text
+user:
+  language: English
+  role: A customer who wants to browse pizza options, understand how to customize a pizza, select toppings and size, and complete their pizza order
+  context:
+  - You are planning to order a pizza and want to explore the available options before making your selection.
+  - You prefer to create a custom pizza that fits your taste by choosing specific toppings and size.
+  - You want to understand the customization process clearly to ensure your order meets your preferences.
+  goals:
+  - Ask the chatbot what types of pizzas are available to order.
+  - Request an explanation of the process and options for customizing a pizza.
+  - Ask for a detailed list of available custom pizza toppings categorized by vegetables, meats, cheeses, and sauces.
+  - Order a custom pizza specifying the toppings as {{chosen_toppings}} but omit the size initially.
+  - When prompted, provide the pizza size as {{pizza_size}} to complete the customization.
+  - chosen_toppings:
+      function: forward()
+      type: string
+      data:
+      - bacon
+      - cheese
+      - chicken
+      - corn
+      - ham
+      - mushrooms
+      - olives
+      - pepper
+      - pepperoni
+      - pineapple
+  - pizza_size:
+      function: forward()
+      type: string
+      data:
+      - large
+      - medium
+      - small
+      - extra large
+chatbot:
+  is_starter: false
+  fallback: I'm sorry, I did not get what you said. I can help you ordering predefined or custom pizzas, and then drinks.
+  output:
+  - pizza_type_list:
+      type: string
+      description: Available pizza types to order
+  - customization_instructions:
+      type: string
+      description: Explanation of pizza customization process
+  - vegetable_toppings:
+      type: string
+      description: List of available vegetable toppings
+  - meat_toppings:
+      type: string
+      description: List of available meat toppings
+  - cheese_toppings:
+      type: string
+      description: List of available cheese toppings
+  - sauce_options:
+      type: string
+      description: List of available pizza sauces
+  - chosen_toppings:
+      type: string
+      description: Selected toppings for custom pizza
+  - pizza_size:
+      type: string
+      description: Size of the pizza selected
+  - size_prompt_status:
+      type: string
+      description: Status of pizza size prompt after toppings input
+  - order_completion_status:
+      type: string
+      description: Confirmation status of pizza order completion
+conversation:
+  number: 10
+  max_cost: 1.5
+  goal_style:
+    steps: 30
+  interaction_style:
+  - single question
