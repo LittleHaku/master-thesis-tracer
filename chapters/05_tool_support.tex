@@ -121,19 +121,19 @@ It also allows \ac{TRACER} to be integrated within other projects.
 To see in more detail its options, users can run \texttt{tracer --help}.
 Some of the key arguments are the following ones:
 
-\subsubsection{Conversation Control}
+\subsection{Conversation Control}
 
 \texttt{--sessions} or \texttt{-s} that controls the number of conversations
 that \ac{TRACER} will have with the chatbot under testing
 and \texttt{--turns} or \texttt{-n} for the number of turns or steps per conversation.
 
-\subsubsection{Connector Configuration}
+\subsection{Connector Configuration}
 
 The arguments \texttt{--technology} or \texttt{-t} along with \texttt{--url} or \texttt{-u}
 allow to configure the connector by choosing
 the chatbot technology along with the \ac{API} endpoint.
 
-\subsubsection{LLM Configuration}
+\subsection{LLM Configuration}
 
 Using \texttt{--model} or \texttt{-m} lets one decide the \acl{LLM} used for the exploration and analysis,
 then \texttt{--profile-model} or \texttt{-pm} is an optional argument
@@ -145,7 +145,7 @@ and then a more economic model to run the profiles
 since there will be many more \ac{LLM} calls
 and the chosen model will not have that much impact.
 
-\subsubsection{Output and Logging}
+\subsection{Output and Logging}
 
 We also have the verbose levels which can be three levels:
 the basic one where we will just see things like the discovered functionalities,
@@ -175,3 +175,54 @@ We used the \texttt{-v} to be able to monitor the conversations that are happeni
 between the explorer agent and the chatbot under testing.
 Finally, all the artifacts will be stored in a directory called \texttt{pizzeria\_results}.
 
+\section{The Web Application}
+
+To complement the \ac{CLI},
+we developed a web application
+to provide a user friendly interface that will allow to run the whole end-to-end pipeline,
+that it is, to run \ac{TRACER} to generate the user profiles,
+and then to execute these with Sensei.
+This, allows a broader audience to use both \ac{TRACER} and Sensei
+without the need of knowing how to use the \ac{CLI}.
+
+\subsection{System Architecture}
+
+\subsection{Core Technology Stack}
+
+The backend of the application was developed in Django \autocite{Django},
+the reason why this framework was used is because it is made for Python
+so it suits both \ac{TRACER} and Sensei,
+and also it offers the Django REST Framework \autocite{DjangoRESTFramework}
+that will allow us to develop a \ac{REST} \ac{API} that will be consumed by our frontend.
+
+For the frontend we went with React \autocite{React},
+a JavaScript library to develop \acp{SPA}
+that will consume directly from our Django \ac{API}.
+
+Lastly, to ensure data persistance,
+we used PostgreSQL \autocite{PostgreSQL2025},
+we chose a \ac{SQL} database since Django's \ac{ORM} supports this type of databases out of the box,
+also, we preferred PostgreSQL over the default Django's SQLite
+since the latter is more oriented to development and testing
+and stores everything in a single file which causes concurrency and performance issues when used in production.
+
+\subsection{Asynchronous Task Handling}
+
+\ac{TRACER} and Sensei executions both take from a few minutes up to hours,
+thus, executing this tasks synchronously would leave the user's interface frozen
+for the duration of the whole process.
+To handle this we implemented asynchronous executions,
+we did this by using a distributed task queue called Celery \autocite{Celery},
+which lets us handle these jobs asynchronously.
+Then, to communicate Django with Celery we need a broker,
+for this we used RabbitMQ \autocite{RabbitMQ}.
+These two tools in conjunction will allow the user to execute \ac{TRACER} or Sensei
+and change to a different view, log out, or even turn off the computer
+and then come back to check the progress.
+It will also help the server to not get saturated
+since we can limit the number of concurrent jobs
+and if there are requests to execute more than this number,
+the jobs will be waiting on the queue instead of saturating the server.
+
+
+\subsection{The Nginx Reverse Proxy}
