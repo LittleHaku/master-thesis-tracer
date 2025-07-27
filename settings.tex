@@ -155,3 +155,28 @@
   rulecolor=\color{UAMBlue},
   sensitive=false
 }
+
+\lstdefinelanguage{bash}{
+  sensitive=true,
+  morekeywords={
+    tracer, curl, grep, cat, echo, sudo, export, alias, cd, ls, pwd, mkdir, rm, mv, cp, ps, kill
+  },
+  keywordstyle=\color{UAMBlue}\bfseries,
+  morestring=[b]",
+  morestring=[b]',
+  stringstyle=\color{UAMGreen},
+  morecomment=[l]{\#},
+  commentstyle=\color{EPS}\itshape,
+  literate=
+    {\$}{{\textcolor{EPS}{\textbf{\$}\ }}}1
+    {-t}{{\textcolor{UAMGreen}{\textbf{-t}\ }}}2
+    {-u}{{\textcolor{UAMGreen}{\textbf{-u}\ }}}2
+    {-n}{{\textcolor{UAMGreen}{\textbf{-n}\ }}}2
+    {-m}{{\textcolor{UAMGreen}{\textbf{-m}\ }}}2
+    {-pm}{{\textcolor{UAMGreen}{\textbf{-pm}\ }}}3
+    {-s}{{\textcolor{UAMGreen}{\textbf{-s}\ }}}2
+    {-o}{{\textcolor{UAMGreen}{\textbf{-o}\ }}}2
+    {-v}{{\textcolor{UAMGreen}{\textbf{-v}\ }}}2
+}
+
+

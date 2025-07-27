@@ -106,3 +106,72 @@ automatically builds the package,
 publishes it to \ac{PyPI},
 and creates the corresponding GitHub release.
 All the \ac{TRACER} source code can be accessed in \url{https://github.com/Chatbot-TRACER/TRACER}.
+
+\section{The \acl{CLI}}
+
+The primary way of using \ac{TRACER} is through the \ac{CLI}.
+We can execute the whole \ac{TRACER} pipeline,
+from chatbot exploration to profile generation,
+through a single command.
+This way enables users who prefer terminal-based workflows
+such as developers, to execute TRACER easily.
+It also allows \ac{TRACER} to be integrated within other projects.
+
+\ac{TRACER} is run by one main command: \texttt{tracer}.
+To see in more detail its options, users can run \texttt{tracer --help}.
+Some of the key arguments are the following ones:
+
+\subsubsection{Conversation Control}
+
+\texttt{--sessions} or \texttt{-s} that controls the number of conversations
+that \ac{TRACER} will have with the chatbot under testing
+and \texttt{--turns} or \texttt{-n} for the number of turns or steps per conversation.
+
+\subsubsection{Connector Configuration}
+
+The arguments \texttt{--technology} or \texttt{-t} along with \texttt{--url} or \texttt{-u}
+allow to configure the connector by choosing
+the chatbot technology along with the \ac{API} endpoint.
+
+\subsubsection{LLM Configuration}
+
+Using \texttt{--model} or \texttt{-m} lets one decide the \acl{LLM} used for the exploration and analysis,
+then \texttt{--profile-model} or \texttt{-pm} is an optional argument
+that if set will make the generated user profiles' \ac{LLM} be the one specified,
+otherwise the \ac{LLM} that will appaer in the profiles will be the same one used for \ac{TRACER},
+it is recommended to use a better model for exploration and analysis
+since will infer a more comprehensive model with more realistic profiles,
+and then a more economic model to run the profiles
+since there will be many more \ac{LLM} calls
+and the chosen model will not have that much impact.
+
+\subsubsection{Output and Logging}
+
+We also have the verbose levels which can be three levels:
+the basic one where we will just see things like the discovered functionalities,
+which session or phase are we in and warnings.
+The verbose level, activated with \texttt{-v},
+which allows us to see the conversation too,
+and the debug \texttt{-vv} that will show what the verbose shows plus information like
+prompts sent to the \ac{LLM}, its responses,
+and other logs that may have been set during the development and debugging of the program.
+Lastly, we have \texttt{--output} or \texttt{-o},
+which simply controls where all the generated artifacts will be placed.
+
+\begin{lstlisting}[
+language=bash,
+caption={Tracer command example.},
+label={code:tracer-command-example}
+]
+$ tracer -t taskyto -u http://localhost:5000 -s 12 -n 8 -m gemini-2.5-flash -pm gemini-2.0-flash -o ./pizzeria_results -v
+\end{lstlisting}
+
+The command in \autoref{code:tracer-command-example}
+demonstrates a typical execution of \ac{TRACER} against a Taskyto-based pizzeria chatbot. 
+It is configured to run 12 exploration sessions of 8 turns each.
+For the exploration, analysis and profile generation, the smarter model Gemini 2.5 Flash will be used,
+then for the model that is defined in each user profile, Gemini 2.0 Flash will be used since it is faster and cheaper.
+We used the \texttt{-v} to be able to monitor the conversations that are happening
+between the explorer agent and the chatbot under testing.
+Finally, all the artifacts will be stored in a directory called \texttt{pizzeria\_results}.
+
