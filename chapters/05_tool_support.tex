@@ -229,36 +229,7 @@ the jobs will be waiting on the queue instead of saturating the server.
 
 \begin{figure}[ht]
     \centering
-    \begin{tikzpicture}[
-        node distance=1.5cm,
-        box/.style={rectangle, draw, fill=blue!20, text centered, minimum height=1cm, minimum width=2.5cm, align=center},
-        client/.style={rectangle, draw, fill=green!20, text centered, minimum height=1cm, minimum width=2.2cm, align=center},
-        storage/.style={rectangle, draw, fill=orange!20, text centered, minimum height=1cm, minimum width=2.2cm, align=center},
-        backend/.style={rectangle, draw, fill=yellow!20, text centered, minimum height=1cm, minimum width=2.2cm, align=center},
-        arrow/.style={->, thick, align=center},
-        scale=0.9
-    ]
-
-    % Client
-    \node[client] (client) {Client Browser\\Port 80};
-
-    % Nginx
-    \node[box, below=of client] (nginx) {Nginx Proxy\\Port 8080};
-
-    % Destinations arranged vertically for better fit
-    \node[storage, below left=1.2cm and 1.2cm of nginx] (react) {React Files\\/var/www/react};
-    \node[storage, below=1.2cm of nginx] (static) {Static Files\\/var/www/static};
-    \node[backend, below right=1.2cm and 1.2cm of nginx] (backend) {Django API\\backend:8000};
-
-    % Arrows from client to nginx
-    \draw[arrow] (client) -- (nginx);
-
-    % Arrows from nginx to destinations
-    \draw[arrow] (nginx) -- node[above left, font=\footnotesize] {/} (react);
-    \draw[arrow] (nginx) -- node[right, font=\footnotesize] {/static/} (static);
-    \draw[arrow] (nginx) -- node[above right, font=\footnotesize] {/api/, /admin/,\\/filevault/} (backend);
-
-    \end{tikzpicture}
+    \input{figures/nginx_routing.tex}
     \caption{Nginx routing to serve React, Django's static files and Django API.}
     \label{fig:nginx-routing}
 \end{figure}
@@ -269,68 +240,7 @@ the jobs will be waiting on the queue instead of saturating the server.
 \begin{figure}[ht]
     \centering
     \resizebox{\linewidth}{!}{
-    \begin{tikzpicture}[
-        node distance=2.2cm,
-        container/.style={rectangle, draw, thick, text centered, minimum height=0.5cm, minimum width=3cm, align=center},
-        volume/.style={cylinder, draw, fill=gray!20, text centered, minimum height=0.15cm, minimum width=1.8cm, aspect=0.3, align=center},
-        dependency/.style={->, dashed, thick, red},
-        mount/.style={-, thick, blue},
-        scale=1.0
-    ]
-
-
-    % Shared Volumes at top
-    \node[volume] (filevault) at (6, 6.5) {filevault\_data\_prod};
-    \node[volume] (reactbuild) at (-5, 6.5) {react\_build};
-
-    % Top: NGINX
-    \node[container, fill=orange!20] (nginx) at (0.5, 9.2) {nginx:latest\\Port 80→8080};
-
-    % Mid: Frontend | Backend | Celery
-    \node[container, fill=green!20] (frontend) at (-5, 4.2) {Frontend\\React Build};
-    \node[container, fill=yellow!20] (backend) at (-0.2, 4.2) {Backend\\Django API\\Port 8000};
-    \node[container, fill=blue!20] (celery) at (5, 4.2) {Celery Worker\\Async Tasks};
-
-    \node[volume] (staticfiles) at (2, 6.7) {static\_files\_prod};
-
-    % Lower: DB | RabbitMQ
-    \node[container, fill=cyan!20] (db) at (-2, 1.3) {postgres:16\\Port 5432};
-    \node[container, fill=pink!20] (rabbitmq) at (2.5, 1.3) {rabbitmq:3-mgmt\\Port 5672};
-
-    % Volumes at bottom
-    \node[volume] (pgdata) at (-2, -1) {postgres\_data};
-    \node[volume] (rmqdata) at (2.5, -1) {rabbitmq\_data};
-
-    % Dependency arrows (red dashed)
-    \draw[dependency] (backend) -- (db);
-    \draw[dependency] (backend) -- (rabbitmq);
-    \draw[dependency] (celery) -- (db);
-    \draw[dependency] (celery) -- (rabbitmq);
-    \draw[dependency] (frontend) -- (backend);
-    \draw[dependency] (nginx) -- (backend);
-    \draw[dependency] (nginx) -- (frontend);
-
-    % Volume mounts (blue solid)
-    \draw[mount] (db) -- (pgdata);
-    \draw[mount] (rabbitmq) -- (rmqdata);
-    \draw[mount] (frontend) -- (reactbuild);
-
-    \draw[mount] (filevault) -- (backend);
-    \draw[mount] (filevault) -- (celery);
-    \draw[mount] (staticfiles) -- (backend);
-    \draw[mount] (staticfiles) -- (celery);
-    \draw[mount] (staticfiles) -- (nginx);
-    \draw[mount] (staticfiles) -- (frontend);
-    \draw[mount] (reactbuild) -- (nginx);
-
-    % Legend at bottom
-    \node[font=\small] at (-5.5, -2.4) {Legend:};
-    \draw[dependency] (-5, -2.7) -- (-4.3, -2.7);
-    \node[font=\footnotesize, anchor=west] at (-4.1, -2.7) {Container Dependencies};
-    \draw[mount] (-5, -3.0) -- (-4.3, -3.0);
-    \node[font=\footnotesize, anchor=west] at (-4.1, -3.0) {Volume Mounts};
-
-    \end{tikzpicture}
+      \input{figures/docker_setup.tex}
     }
     \caption{Docker Container Architecture.}
     \label{fig:docker-architecture}
@@ -338,87 +248,7 @@ the jobs will be waiting on the queue instead of saturating the server.
 
 \begin{figure}[htbp]
     \centering
-    \begin{tikzpicture}[
-        auto,
-        node distance=1.3cm and 1cm,
-        every node/.style={align=center},
-        % Node styles
-        client/.style={rectangle, draw, fill=blue!20, minimum height=1.5em, minimum width=6em},
-        proxy/.style={rectangle, draw, fill=orange!20, minimum height=2em, minimum width=7em},
-        frontend/.style={rectangle, draw, fill=green!20, minimum height=2em, minimum width=6em},
-        backend/.style={rectangle, draw, fill=yellow!20, minimum height=2.5em, minimum width=7em},
-        worker/.style={rectangle, draw, fill=cyan!20, minimum height=1.5em, minimum width=6em},
-        broker/.style={rectangle, draw, fill=pink!20, minimum height=2em, minimum width=6em},
-        analysis/.style={rectangle, draw, fill=red!20, minimum height=1.5em, minimum width=4.5em},
-        db/.style={cylinder, shape border rotate=90, draw, fill=blue!20, aspect=0.4, minimum height=2.5em, minimum width=5em},
-        storage/.style={rectangle, draw, fill=purple!20, minimum height=2em, minimum width=5em},
-        % Layer style
-        layer/.style={rectangle, fill=gray!10, rounded corners},
-        % Arrow styles
-        arrow/.style={-Stealth, thick},
-        async_arrow/.style={-Stealth, thick, dashed, red},
-        data_arrow/.style={-Stealth, thick, blue},
-        % Style for labels on arrows
-        label_bg/.style={fill=white, inner sep=2pt, rounded corners=8pt},
-        % Style for Layer titles 
-        layer_label/.style={font=\small\bfseries, rounded corners=3pt, inner sep=3pt,
-                            fill=white}
-    ]
-
-    % NODES
-    \node[client] (user) {User Browser};
-    \node[proxy, below=of user, yshift=-0.5cm] (nginx) {Nginx Proxy\\Port 80};
-    \node[frontend, right=of nginx, xshift=1.5cm] (react) {React SPA\\(Build Files)};
-    \node[backend, below=of nginx, yshift=-1.5cm] (django) {Django App\\REST API\\Port 8000};
-    \node[broker, below=of django, xshift=-4cm, yshift=-1cm] (rabbitmq) {RabbitMQ\\Broker\\Port 5672};
-    \node[worker, below=of rabbitmq] (celery) {Celery Worker};
-    \node[analysis, below=of celery, xshift=-1.2cm] (tracer) {TRACER};
-    \node[analysis, below=of celery, xshift=1.2cm] (sensei) {Sensei};
-    \node[db, right=of django, xshift=2.5cm] (postgres) {PostgreSQL\\Port 5432};
-    \node[storage, below=of postgres, yshift=-0.2cm] (filevault) {File Vault};
-    \node[storage, below=of filevault, yshift=-0.2cm] (staticfiles) {Django Static\\Files};
-
-    \begin{scope}[on background layer]
-        \node[layer, fit=(user)] (user_layer) {};
-        \node[layer, fit=(nginx)(react)] (presentation_layer) {};
-        \node[layer, fit=(django)] (application_layer) {};
-        \node[layer, fit=(rabbitmq)(celery)(tracer)(sensei)] (task_layer) {};
-        \node[layer, fit=(postgres)(filevault)(staticfiles)] (data_layer) {};
-    \end{scope}
-
-    % CONNECTIONS
-    \draw[arrow] (user) -- node[label_bg, left, pos=0.5] {HTTP} (nginx);
-    \draw[arrow] (nginx) -- node[above] {Serves SPA} (react);
-    \draw[arrow] (nginx) -- node[label_bg, left, pos=0.35, align=right] {/api/\\/admin/\\/filevault/} (django);
-    \draw[arrow] (react.south) to[bend right=20] node[label_bg, right, pos=0.5] {REST API\\Calls} (django.north east);
-    \draw[arrow] (nginx.east) to[out=-45, in=125] node[label_bg, left, pos=0.15] {/static/} (staticfiles.north west);
-    \draw[data_arrow] (django.east) to[bend left=15] node[label_bg, above, pos=0.25] {queries} (postgres.west);
-    \draw[data_arrow] (django.east) to[out=0, in=180, looseness=0.4] node[label_bg, below, pos=0.3] {file\\operations} (filevault.west);
-    \draw[data_arrow] (celery.east) to[out=330, in=220, looseness=0.4] node[below, pos=0.4] {file\\operations} (filevault.south);
-    \draw[async_arrow] (django.west) to[bend left=20] node[label_bg, above, pos=0.4] {queue} (rabbitmq.north);
-    \draw[async_arrow] (rabbitmq) -- node[right] {consume} (celery);
-    \draw[async_arrow] (celery) -- node[left] {execute} (tracer);
-    \draw[async_arrow] (celery) -- node[right] {execute} (sensei); 
-    \draw[async_arrow] (celery.east) to[bend right=30, looseness=0.8] node[label_bg, above, pos=0.5] {task results\\and status} (postgres.west);
-
-    % FOREGROUND LAYER LABELS 
-    \node[layer_label, yshift=0.5cm] at (user_layer.north) {Client Layer};
-    \node[layer_label, yshift=0.5cm] at (presentation_layer.north) {Presentation Layer};
-    \node[layer_label, yshift=0.5cm] at (application_layer.north) {Application Layer};
-    \node[layer_label, yshift=0.5cm] at (task_layer.north) {Task Processing Layer};
-    \node[layer_label, yshift=0.5cm] at (data_layer.north) {Data Layer};
-
-    % Legend
-    \node[anchor=north west, align=left, yshift=-0.5cm] at (current bounding box.south west) {
-        \begin{tabular}{@{}ll}
-            \multicolumn{2}{l}{\textbf{Legend:}}\\
-            \tikz{\draw[arrow] (0,0.5ex) -- (0.5,0.5ex);} & HTTP Flow\\
-            \tikz{\draw[async_arrow] (0,0.5ex) -- (0.5,0.5ex);} & Async Tasks\\
-            \tikz{\draw[data_arrow] (0,0.5ex) -- (0.5,0.5ex);} & Data Access
-        \end{tabular}
-    };
-
-    \end{tikzpicture}
+    \input{figures/web_architecture.tex} 
     \caption{Web Application Architecture and Connections.}
     \label{fig:app-architecture}
 \end{figure}

@@ -1,0 +1,62 @@
+\begin{tikzpicture}[
+    node distance=2.2cm,
+    container/.style={rectangle, draw, thick, text centered, minimum height=0.5cm, minimum width=3cm, align=center},
+    volume/.style={cylinder, draw, fill=gray!20, text centered, minimum height=0.15cm, minimum width=1.8cm, aspect=0.3, align=center},
+    dependency/.style={->, dashed, thick, red},
+    mount/.style={-, thick, blue},
+    scale=1.0
+]
+
+
+% Shared Volumes at top
+\node[volume] (filevault) at (6, 6.5) {filevault\_data\_prod};
+\node[volume] (reactbuild) at (-5, 6.5) {react\_build};
+
+% Top: NGINX
+\node[container, fill=orange!20] (nginx) at (0.5, 9.2) {nginx:latest\\Port 80→8080};
+
+% Mid: Frontend | Backend | Celery
+\node[container, fill=green!20] (frontend) at (-5, 4.2) {Frontend\\React Build};
+\node[container, fill=yellow!20] (backend) at (-0.2, 4.2) {Backend\\Django API\\Port 8000};
+\node[container, fill=blue!20] (celery) at (5, 4.2) {Celery Worker\\Async Tasks};
+
+\node[volume] (staticfiles) at (2, 6.7) {static\_files\_prod};
+
+% Lower: DB | RabbitMQ
+\node[container, fill=cyan!20] (db) at (-2, 1.3) {postgres:16\\Port 5432};
+\node[container, fill=pink!20] (rabbitmq) at (2.5, 1.3) {rabbitmq:3-mgmt\\Port 5672};
+
+% Volumes at bottom
+\node[volume] (pgdata) at (-2, -1) {postgres\_data};
+\node[volume] (rmqdata) at (2.5, -1) {rabbitmq\_data};
+
+% Dependency arrows (red dashed)
+\draw[dependency] (backend) -- (db);
+\draw[dependency] (backend) -- (rabbitmq);
+\draw[dependency] (celery) -- (db);
+\draw[dependency] (celery) -- (rabbitmq);
+\draw[dependency] (frontend) -- (backend);
+\draw[dependency] (nginx) -- (backend);
+\draw[dependency] (nginx) -- (frontend);
+
+% Volume mounts (blue solid)
+\draw[mount] (db) -- (pgdata);
+\draw[mount] (rabbitmq) -- (rmqdata);
+\draw[mount] (frontend) -- (reactbuild);
+
+\draw[mount] (filevault) -- (backend);
+\draw[mount] (filevault) -- (celery);
+\draw[mount] (staticfiles) -- (backend);
+\draw[mount] (staticfiles) -- (celery);
+\draw[mount] (staticfiles) -- (nginx);
+\draw[mount] (staticfiles) -- (frontend);
+\draw[mount] (reactbuild) -- (nginx);
+
+% Legend at bottom
+\node[font=\small] at (-5.5, -2.4) {Legend:};
+\draw[dependency] (-5, -2.7) -- (-4.3, -2.7);
+\node[font=\footnotesize, anchor=west] at (-4.1, -2.7) {Container Dependencies};
+\draw[mount] (-5, -3.0) -- (-4.3, -3.0);
+\node[font=\footnotesize, anchor=west] at (-4.1, -3.0) {Volume Mounts};
+
+\end{tikzpicture}
