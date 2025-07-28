@@ -402,9 +402,9 @@ the jobs will be waiting on the queue instead of saturating the server.
     % Async Task Flow
     \draw[async_arrow] (django.west) to[bend left=20] node[above, pos=0.4] {queue} (rabbitmq.north);
     \draw[async_arrow] (rabbitmq) -- node[right] {consume} (celery);
-    \draw[async_arrow] (celery) -- (tracer);
-    \draw[async_arrow] (celery) -- (sensei);
-    \draw[async_arrow] (celery.east) to[bend right=30, looseness=0.8] node[above, pos=0.5] {results} (postgres.west);
+      \draw[async_arrow] (celery) -- node[left] {execute} (tracer);
+    \draw[async_arrow] (celery) -- node[right] {execute} (sensei);
+    \draw[async_arrow] (celery.east) to[bend right=30, looseness=0.8] node[above, pos=0.5] {task results\\and status} (postgres.west);
 
     % Legend
     \node[anchor=north west, align=left, yshift=-0.5cm] at (current bounding box.south west) {
