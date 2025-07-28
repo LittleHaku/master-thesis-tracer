@@ -187,6 +187,21 @@ without the need of knowing how to use the \ac{CLI}.
 
 \subsection{System Architecture}
 
+The web application is built on a modern,
+multi-tiered architecture designed for scalability, security, and asynchronous processing.
+\autoref{fig:app-architecture} provides an overview of this architecture,
+illustrating the relationships between the five key layers:
+the Client, Presentation, Application, Task Processing, and Data layers.
+The following subsections will provide a detailed explanation
+of the technologies and design patterns used within each of these layers.
+
+\begin{figure}[!htbp]
+    \centering
+    \input{figures/web_architecture.tex} 
+    \caption{Web Application Architecture and Connections.}
+    \label{fig:app-architecture}
+\end{figure}
+
 \subsection{Core Technology Stack}
 
 The backend of the application was developed in Django \autocite{Django},
@@ -279,6 +294,7 @@ Each blue arrow means that the volume is mounted in that container, i.e., the co
 and the red ones show dependencies for the Docker compose,
 which means that until the container that the arrow is pointing at is not working,
 the one that is pointing (has the start of the arrow) is not going to get started.
+
 This ensures that until we don't have the \ac{DB} and message broker set
 the queue and backend won't start,
 and only then the frontend will get build
@@ -286,16 +302,6 @@ and lastly the Nginx reverse proxy.
 In the development version the setup was mostly the same
 but we had another volume that had the frontend and backend code
 so that we would have hot reload (i.e., changes in the code were shown live in the web).
-
-
-
-\begin{figure}[!htbp]
-    \centering
-    \input{figures/web_architecture.tex} 
-    \caption{Web Application Architecture and Connections.}
-    \label{fig:app-architecture}
-\end{figure}
-
 
 \subsection{Security Measures}
 
