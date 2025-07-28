@@ -357,7 +357,12 @@ the jobs will be waiting on the queue instead of saturating the server.
         % Arrow styles
         arrow/.style={-Stealth, thick},
         async_arrow/.style={-Stealth, thick, dashed, red},
-        data_arrow/.style={-Stealth, thick, blue}
+        data_arrow/.style={-Stealth, thick, blue},
+        % Style for labels on arrows
+        label_bg/.style={fill=white, inner sep=2pt, rounded corners=8pt},
+        % Style for Layer titles 
+        layer_label/.style={font=\small\bfseries, rounded corners=3pt, inner sep=3pt,
+                         fill=violet!20, fill opacity=0.75, text opacity=1}
     ]
 
     % NODES
@@ -373,38 +378,35 @@ the jobs will be waiting on the queue instead of saturating the server.
     \node[storage, below=of postgres, yshift=-0.2cm] (filevault) {File Vault};
     \node[storage, below=of filevault, yshift=-0.2cm] (staticfiles) {Django Static\\Files};
 
-    % LAYERS
     \begin{scope}[on background layer]
-        \node[layer, fit=(user), label={[yshift=0.2cm]north:Client Layer}] {};
-        \node[layer, fit=(nginx)(react), label={[yshift=0.2cm]north:Presentation Layer}] {};
-        \node[layer, fit=(django), label={[xshift=-2cm, yshift=-0.1cm]north:Application Layer}] {};
-        \node[layer, fit=(rabbitmq)(celery)(tracer)(sensei), label={[yshift=0.2cm]north:Task Processing Layer}] {};
-        \node[layer, fit=(postgres)(filevault)(staticfiles), label={[yshift=0.2cm]north:Data Layer}] {};
+        \node[layer, fit=(user)] (user_layer) {};
+        \node[layer, fit=(nginx)(react)] (presentation_layer) {};
+        \node[layer, fit=(django)] (application_layer) {};
+        \node[layer, fit=(rabbitmq)(celery)(tracer)(sensei)] (task_layer) {};
+        \node[layer, fit=(postgres)(filevault)(staticfiles)] (data_layer) {};
     \end{scope}
 
     % CONNECTIONS
-    \draw[arrow] (user) -- node[left, pos=0.5] {HTTP} (nginx);
+    \draw[arrow] (user) -- node[label_bg, left, pos=0.5] {HTTP} (nginx);
     \draw[arrow] (nginx) -- node[above] {Serves SPA} (react);
-    
-    % Nginx Proxy Pass to Django Backend
-    \draw[arrow] (nginx) -- node[left, pos=0.35, align=right] {/api/\\/admin/\\/filevault/} (django);
-
-    \draw[arrow] (react.south) to[bend right=20] node[right, pos=0.5] {REST API\\Calls} (django.north east);
-    
-    % Nginx serves Django's static files directly
-    \draw[arrow] (nginx.east) to[out=-45, in=125] node[left, pos=0.15] {/static/} (staticfiles.north west);
-
-    % Data Persistence & File Storage
-    \draw[data_arrow] (django.east) to[bend left=15] node[above, pos=0.25] {queries} (postgres.west);
-    \draw[data_arrow] (django.east) to[out=0, in=180, looseness=0.5] node[below, pos=0.25] {file\\operations} (filevault.west);
+    \draw[arrow] (nginx) -- node[label_bg, left, pos=0.35, align=right] {/api/\\/admin/\\/filevault/} (django);
+    \draw[arrow] (react.south) to[bend right=20] node[label_bg, right, pos=0.5] {REST API\\Calls} (django.north east);
+    \draw[arrow] (nginx.east) to[out=-45, in=125] node[label_bg, left, pos=0.15] {/static/} (staticfiles.north west);
+    \draw[data_arrow] (django.east) to[bend left=15] node[label_bg, above, pos=0.25] {queries} (postgres.west);
+    \draw[data_arrow] (django.east) to[out=0, in=180, looseness=0.4] node[label_bg, below, pos=0.3] {file\\operations} (filevault.west);
     \draw[data_arrow] (celery.east) to[out=330, in=220, looseness=0.4] node[below, pos=0.4] {file\\operations} (filevault.south);
-
-    % Async Task Flow
-    \draw[async_arrow] (django.west) to[bend left=20] node[above, pos=0.4] {queue} (rabbitmq.north);
+    \draw[async_arrow] (django.west) to[bend left=20] node[label_bg, above, pos=0.4] {queue} (rabbitmq.north);
     \draw[async_arrow] (rabbitmq) -- node[right] {consume} (celery);
-      \draw[async_arrow] (celery) -- node[left] {execute} (tracer);
-    \draw[async_arrow] (celery) -- node[right] {execute} (sensei);
-    \draw[async_arrow] (celery.east) to[bend right=30, looseness=0.8] node[above, pos=0.5] {task results\\and status} (postgres.west);
+    \draw[async_arrow] (celery) -- node[left] {execute} (tracer);
+    \draw[async_arrow] (celery) -- node[right] {execute} (sensei); 
+    \draw[async_arrow] (celery.east) to[bend right=30, looseness=0.8] node[label_bg, above, pos=0.5] {task results\\and status} (postgres.west);
+
+    % FOREGROUND LAYER LABELS 
+    \node[layer_label, yshift=0.5cm] at (user_layer.north) {Client Layer};
+    \node[layer_label, yshift=0.5cm] at (presentation_layer.north) {Presentation Layer};
+    \node[layer_label, yshift=0.5cm] at (application_layer.north) {Application Layer};
+    \node[layer_label, yshift=0.5cm] at (task_layer.north) {Task Processing Layer};
+    \node[layer_label, yshift=0.5cm] at (data_layer.north) {Data Layer};
 
     % Legend
     \node[anchor=north west, align=left, yshift=-0.5cm] at (current bounding box.south west) {
