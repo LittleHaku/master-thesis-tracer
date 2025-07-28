@@ -1,9 +1,7 @@
-% This file contains the corrected main architecture diagram.
 \begin{tikzpicture}[
     auto,
     node distance=1.3cm and 1cm,
     every node/.style={align=center},
-    % --- Unified Styles with Rounded Corners ---
     rect_node/.style={rectangle, draw, thick, rounded corners=3pt},
     client/.style={rect_node, fill=blue!20, minimum height=1.5em, minimum width=6em},
     proxy/.style={rect_node, fill=orange!20, minimum height=2em, minimum width=7em},
@@ -13,7 +11,6 @@
     broker/.style={rect_node, fill=pink!20, minimum height=2em, minimum width=6em},
     analysis/.style={rect_node, fill=red!20, minimum height=1.5em, minimum width=4.5em},
     storage/.style={rect_node, fill=purple!20, minimum height=2em, minimum width=5em},
-    % --- Other Styles ---
     db/.style={cylinder, shape border rotate=90, draw, fill=blue!20, aspect=0.4, minimum height=2.5em, minimum width=5em},
     layer/.style={rectangle, fill=gray!10, rounded corners},
     arrow/.style={-Stealth, thick},
@@ -25,14 +22,15 @@
 
     % NODES
     \node[client] (user) {User Browser};
-    \node[proxy, below=of user, yshift=-0.5cm] (nginx) {Nginx Proxy\\Port 80};
+    \node[proxy, below=of user, yshift=-0.5cm] (nginx) {Nginx Proxy\\Port 8080};
     \node[frontend, right=of nginx, xshift=1.5cm] (react) {React SPA\\(Build Files)};
     \node[backend, below=of nginx, yshift=-1.5cm] (django) {Django App\\REST API\\Port 8000};
-    \node[broker, below=of django, xshift=-4cm, yshift=-1cm] (rabbitmq) {RabbitMQ\\Broker\\Port 5672};
+    \node[db, right=of django, xshift=2cm] (postgres) {PostgreSQL\\Port 5432};
+    \node[broker, left=of django, xshift=-2cm] (rabbitmq) {RabbitMQ\\Broker\\Port 5672};
+    
     \node[worker, below=of rabbitmq] (celery) {Celery Worker};
     \node[analysis, below=of celery, xshift=-1.2cm] (tracer) {TRACER};
     \node[analysis, below=of celery, xshift=1.2cm] (sensei) {Sensei};
-    \node[db, right=of django, xshift=2.5cm] (postgres) {PostgreSQL\\Port 5432};
     \node[storage, below=of postgres, yshift=-0.2cm] (filevault) {File Vault};
     \node[storage, below=of filevault, yshift=-0.2cm] (staticfiles) {Django Static\\Files};
 
@@ -50,15 +48,15 @@
     \draw[arrow] (nginx) -- node[above] {Serves SPA} (react);
     \draw[arrow] (nginx) -- node[label_bg, left, pos=0.35, align=right] {/api/\\/admin/\\/filevault/} (django);
     \draw[arrow] (react.south) to[bend right=20] node[label_bg, right, pos=0.5] {REST API\\Calls} (django.north east);
-    \draw[arrow] (nginx.east) to[out=-45, in=125] node[label_bg, left, pos=0.15] {/static/} (staticfiles.north west);
+    \draw[arrow] (nginx.east) to[out=-45, in=125] node[label_bg, below, pos=0.1] {/static/} (staticfiles.north west);
     \draw[data_arrow] (django.east) to[bend left=15] node[above, pos=0.25] {queries} (postgres.west);
-    \draw[data_arrow] (django.east) to[out=0, in=180, looseness=0.4] node[label_bg, below, pos=0.3] {file\\operations} (filevault.west);
-    \draw[data_arrow] (celery.east) to[out=330, in=220, looseness=0.4] node[below, pos=0.4] {file\\operations} (filevault.south);
-    \draw[async_arrow] (django.west) to[bend left=20] node[label_bg, above, pos=0.4] {queue} (rabbitmq.north);
+    \draw[data_arrow] (django.east) to[out=-60, in=200, looseness=0.9] node[left, pos=0.6] {file\\operations} (filevault.west);
+    \draw[async_arrow] (django.west) -- node[label_bg, above] {queue} (rabbitmq.east);
     \draw[async_arrow] (rabbitmq) -- node[right] {consume} (celery);
     \draw[async_arrow] (celery) -- node[left] {execute} (tracer);
     \draw[async_arrow] (celery) -- node[right] {execute} (sensei); 
-    \draw[async_arrow] (celery.east) to[bend right=30, looseness=0.8] node[label_bg, above, pos=0.5] {task results\\and status} (postgres.west);
+    \draw[async_arrow] (celery.east) to[bend right=20] node[above, pos=0.25] {task results\\and status} (postgres.west);
+    \draw[data_arrow] (celery.east) to[bend right=45] node[below, pos=0.5] {file\\operations} (filevault.west);
 
     % FOREGROUND LAYER LABELS 
     \node[layer_label, yshift=0.5cm] at (user_layer.north) {Client Layer};
@@ -68,7 +66,7 @@
     \node[layer_label, yshift=0.5cm] at (data_layer.north) {Data Layer};
 
     % Legend
-    \node[anchor=north west, align=left, yshift=-0.5cm] at (current bounding box.south west) {
+    \node[anchor=north west, align=left, yshift=0.5cm] at (current bounding box.south west) {
         \begin{tabular}{@{}ll}
             \multicolumn{2}{l}{\textbf{Legend:}}\\
             \tikz{\draw[arrow] (0,0.5ex) -- (0.5,0.5ex);} & HTTP Flow\\
