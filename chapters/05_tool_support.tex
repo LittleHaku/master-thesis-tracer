@@ -256,14 +256,6 @@ Lastly, the remaining calls will be redirected to React's build files.
 \subsection{Deployment and Containarization}
 
 
-\begin{figure}[htbp]
-    \centering
-    \resizebox{\linewidth}{!}{
-      \input{figures/docker_setup.tex}
-    }
-    \caption{Docker Container Architecture.}
-    \label{fig:docker-architecture}
-\end{figure}
 
 To be able to deploy all of these services we containerized the whole web application using Docker \autocite{merkelDockerLightweightLinux2014} along Docker compose.
 This was done not only to simplify the deployment process,
@@ -271,6 +263,14 @@ but to ensure that no matter the machine and the dependencies it had installed,
 it would work if it had Docker.
 We made two different Docker compose versions, one for development and one for production,
 each with their own \ac{DB}, message broker, etc. So that production data was not affected during development.
+The complete production architecture is shown in \autoref{fig:docker-architecture}.
+
+\begin{figure}[!htbp]
+    \centering
+    \input{figures/docker_setup.tex}
+    \caption{Docker Container Architecture.}
+    \label{fig:docker-architecture}
+\end{figure}
 
 In the \autoref{fig:docker-architecture} we show how the production containers and volumes are organized.
 Each square is a container running said service,
