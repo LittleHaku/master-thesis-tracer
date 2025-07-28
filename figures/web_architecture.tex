@@ -1,29 +1,27 @@
+% This file contains the corrected main architecture diagram.
 \begin{tikzpicture}[
-        auto,
-        node distance=1.3cm and 1cm,
-        every node/.style={align=center},
-        % Node styles
-        client/.style={rectangle, draw, fill=blue!20, minimum height=1.5em, minimum width=6em},
-        proxy/.style={rectangle, draw, fill=orange!20, minimum height=2em, minimum width=7em},
-        frontend/.style={rectangle, draw, fill=green!20, minimum height=2em, minimum width=6em},
-        backend/.style={rectangle, draw, fill=yellow!20, minimum height=2.5em, minimum width=7em},
-        worker/.style={rectangle, draw, fill=cyan!20, minimum height=1.5em, minimum width=6em},
-        broker/.style={rectangle, draw, fill=pink!20, minimum height=2em, minimum width=6em},
-        analysis/.style={rectangle, draw, fill=red!20, minimum height=1.5em, minimum width=4.5em},
-        db/.style={cylinder, shape border rotate=90, draw, fill=blue!20, aspect=0.4, minimum height=2.5em, minimum width=5em},
-        storage/.style={rectangle, draw, fill=purple!20, minimum height=2em, minimum width=5em},
-        % Layer style
-        layer/.style={rectangle, fill=gray!10, rounded corners},
-        % Arrow styles
-        arrow/.style={-Stealth, thick},
-        async_arrow/.style={-Stealth, thick, dashed, red},
-        data_arrow/.style={-Stealth, thick, blue},
-        % Style for labels on arrows
-        label_bg/.style={fill=white, inner sep=2pt, rounded corners=8pt},
-        % Style for Layer titles 
-        layer_label/.style={font=\small\bfseries, rounded corners=3pt, inner sep=3pt,
-                            fill=white}
-    ]
+    auto,
+    node distance=1.3cm and 1cm,
+    every node/.style={align=center},
+    % --- Unified Styles with Rounded Corners ---
+    rect_node/.style={rectangle, draw, thick, rounded corners=3pt},
+    client/.style={rect_node, fill=blue!20, minimum height=1.5em, minimum width=6em},
+    proxy/.style={rect_node, fill=orange!20, minimum height=2em, minimum width=7em},
+    frontend/.style={rect_node, fill=green!20, minimum height=2em, minimum width=6em},
+    backend/.style={rect_node, fill=yellow!20, minimum height=2.5em, minimum width=7em},
+    worker/.style={rect_node, fill=cyan!20, minimum height=1.5em, minimum width=6em},
+    broker/.style={rect_node, fill=pink!20, minimum height=2em, minimum width=6em},
+    analysis/.style={rect_node, fill=red!20, minimum height=1.5em, minimum width=4.5em},
+    storage/.style={rect_node, fill=purple!20, minimum height=2em, minimum width=5em},
+    % --- Other Styles ---
+    db/.style={cylinder, shape border rotate=90, draw, fill=blue!20, aspect=0.4, minimum height=2.5em, minimum width=5em},
+    layer/.style={rectangle, fill=gray!10, rounded corners},
+    arrow/.style={-Stealth, thick},
+    async_arrow/.style={-Stealth, thick, dashed, red},
+    data_arrow/.style={-Stealth, thick, blue},
+    label_bg/.style={fill=white, inner sep=2pt, rounded corners=8pt},
+    layer_label/.style={font=\small\bfseries, rounded corners=3pt, inner sep=3pt, fill=white}
+]
 
     % NODES
     \node[client] (user) {User Browser};
@@ -38,6 +36,7 @@
     \node[storage, below=of postgres, yshift=-0.2cm] (filevault) {File Vault};
     \node[storage, below=of filevault, yshift=-0.2cm] (staticfiles) {Django Static\\Files};
 
+    % BACKGROUNDS
     \begin{scope}[on background layer]
         \node[layer, fit=(user)] (user_layer) {};
         \node[layer, fit=(nginx)(react)] (presentation_layer) {};
@@ -52,7 +51,7 @@
     \draw[arrow] (nginx) -- node[label_bg, left, pos=0.35, align=right] {/api/\\/admin/\\/filevault/} (django);
     \draw[arrow] (react.south) to[bend right=20] node[label_bg, right, pos=0.5] {REST API\\Calls} (django.north east);
     \draw[arrow] (nginx.east) to[out=-45, in=125] node[label_bg, left, pos=0.15] {/static/} (staticfiles.north west);
-    \draw[data_arrow] (django.east) to[bend left=15] node[label_bg, above, pos=0.25] {queries} (postgres.west);
+    \draw[data_arrow] (django.east) to[bend left=15] node[above, pos=0.25] {queries} (postgres.west);
     \draw[data_arrow] (django.east) to[out=0, in=180, looseness=0.4] node[label_bg, below, pos=0.3] {file\\operations} (filevault.west);
     \draw[data_arrow] (celery.east) to[out=330, in=220, looseness=0.4] node[below, pos=0.4] {file\\operations} (filevault.south);
     \draw[async_arrow] (django.west) to[bend left=20] node[label_bg, above, pos=0.4] {queue} (rabbitmq.north);
@@ -77,5 +76,4 @@
             \tikz{\draw[data_arrow] (0,0.5ex) -- (0.5,0.5ex);} & Data Access
         \end{tabular}
     };
-
-    \end{tikzpicture}
+\end{tikzpicture}
