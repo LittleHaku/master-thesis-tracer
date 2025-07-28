@@ -1,30 +1,20 @@
 \begin{tikzpicture}[
-    node distance=1.5cm,
-    box/.style={rectangle, draw, fill=blue!20, text centered, minimum height=1cm, minimum width=2.5cm, align=center},
-    client/.style={rectangle, draw, fill=green!20, text centered, minimum height=1cm, minimum width=2.2cm, align=center},
-    storage/.style={rectangle, draw, fill=orange!20, text centered, minimum height=1cm, minimum width=2.2cm, align=center},
-    backend/.style={rectangle, draw, fill=yellow!20, text centered, minimum height=1cm, minimum width=2.2cm, align=center},
-    arrow/.style={->, thick, align=center},
-    scale=0.9
+    node distance=1cm and 0.8cm, 
+    box/.style={rectangle, draw, thick, text centered, minimum height=1.2cm, minimum width=2.8cm, align=center, rounded corners=3pt},
+    arrow/.style={-Stealth, thick},
+    label_bg/.style={fill=white, inner sep=1.5pt, rounded corners=3pt}
 ]
+    \node[box, fill=blue!20] (client) {Client Browser\\Port 80};
+    \node[box, fill=orange!20, below=1.2cm of client] (nginx) {Nginx Proxy\\Port 8080};
 
-% Client
-\node[client] (client) {Client Browser\\Port 80};
+    \node[box, fill=green!20, below left=of nginx] (react) {React Files\\/var/www/react};
+    \node[box, fill=purple!20, below=2cm of nginx] (static) {Static Files\\/var/www/static};
+    \node[box, fill=yellow!20, below right=of nginx] (backend) {Django API\\backend:8000};
 
-% Nginx
-\node[box, below=of client] (nginx) {Nginx Proxy\\Port 8080};
-
-% Destinations arranged vertically for better fit
-\node[storage, below left=1.2cm and 1.2cm of nginx] (react) {React Files\\/var/www/react};
-\node[storage, below=1.2cm of nginx] (static) {Static Files\\/var/www/static};
-\node[backend, below right=1.2cm and 1.2cm of nginx] (backend) {Django API\\backend:8000};
-
-% Arrows from client to nginx
-\draw[arrow] (client) -- (nginx);
-
-% Arrows from nginx to destinations
-\draw[arrow] (nginx) -- node[above left, font=\footnotesize] {/} (react);
-\draw[arrow] (nginx) -- node[right, font=\footnotesize] {/static/} (static);
-\draw[arrow] (nginx) -- node[above right, font=\footnotesize] {/api/, /admin/,\\/filevault/} (backend);
+    \draw[arrow] (client) -- (nginx);
+    \draw[arrow] (nginx) -- node[label_bg, above left, font=\footnotesize] {/} (react);
+    \draw[arrow] (nginx) -- node[label_bg, right, font=\footnotesize] {/static/} (static);
+    
+    \draw[arrow] (nginx) -- node[label_bg, above right, font=\footnotesize, align=right] {/api/, /admin/,\\/filevault/} (backend);
 
 \end{tikzpicture}
