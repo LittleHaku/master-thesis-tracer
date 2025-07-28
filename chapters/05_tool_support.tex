@@ -227,17 +227,36 @@ the jobs will be waiting on the queue instead of saturating the server.
 
 \subsection{The Nginx Reverse Proxy}
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
     \centering
     \input{figures/nginx_routing.tex}
     \caption{Nginx routing to serve React, Django's static files and Django API.}
     \label{fig:nginx-routing}
 \end{figure}
 
+A reverse proxy is essential for managing the communication between
+the user, the React frontend, and the Django backend.
+For this role, we used Nginx \autocite{Nginx}.
+Its primary responsibility is to route incoming HTTP requests to the appropriate service based on the URL path.
+This also solves the issue of accessing each service in a different port,
+although they are running in a different port
+we can just access always the same URL and Nginx will redirect the call.
+
+In the \autoref{fig:nginx-routing}
+we can see the configuration of the reverse proxy.
+It recieves all the calls from the users and routes them to the correct service.
+We have that all calls made to \texttt{/api/}, \texttt{/admin/} and \texttt{/filevault/}
+get redirected to Django's backend since it is who will process \ac{API} calls,
+return the different files and show the admin dashboard,
+although to show the admin dashboard's CSS
+we need to collect and serve the Django static files,
+which is why calls made to \texttt{/static/} will get redirected to Django's static files.
+Lastly, the remaining calls will be redirected to React's build files.
 
 \subsection{Deployment and Containarization}
 
-\begin{figure}[ht]
+
+\begin{figure}[htbp]
     \centering
     \resizebox{\linewidth}{!}{
       \input{figures/docker_setup.tex}
@@ -246,9 +265,75 @@ the jobs will be waiting on the queue instead of saturating the server.
     \label{fig:docker-architecture}
 \end{figure}
 
+To be able to deploy all of these services we containerized the whole web application using Docker \autocite{merkelDockerLightweightLinux2014} along Docker compose.
+This was done not only to simplify the deployment process,
+but to ensure that no matter the machine and the dependencies it had installed,
+it would work if it had Docker.
+We made two different Docker compose versions, one for development and one for production,
+each with their own \ac{DB}, message broker, etc. So that production data was not affected during development.
+
+In the \autoref{fig:docker-architecture} we show how the production containers and volumes are organized.
+Each square is a container running said service,
+then each cylinder is volume, where files are stored to ensure data persistance when containers are taken down.
+Each blue arrow means that the volume is mounted in that container, i.e., the container can access the volume's files,
+and the red ones show dependencies for the Docker compose,
+which means that until the container that the arrow is pointing at is not working,
+the one that is pointing (has the start of the arrow) is not going to get started.
+This ensures that until we don't have the \ac{DB} and message broker set
+the queue and backend won't start,
+and only then the frontend will get build
+and lastly the Nginx reverse proxy.
+In the development version the setup was mostly the same
+but we had another volume that had the frontend and backend code
+so that we would have hot reload (i.e., changes in the code were shown live in the web).
+
+
 \begin{figure}[htbp]
     \centering
     \input{figures/web_architecture.tex} 
     \caption{Web Application Architecture and Connections.}
     \label{fig:app-architecture}
 \end{figure}
+
+
+\subsection{Security Measures}
+
+To ensure the application's security we followed the Django Deployment Checklist \autocite{DeploymentChecklistDjango}.
+Related to the authentication we implemented a new user model,
+and to handle the authentication we used Django-Rest-Knox \autocite{DjangoRestKnox} tokens.
+This is a library that implements a improved token system over the default in the Django REST Framework \autocite{DjangoRESTFramework},
+the main improvements that it brings are:
+\begin{itemize}
+  \item \textbf{One token per device:}
+    instead of having one token per user
+    which would mean that logging in from different devices
+    would mean that they share the same token,
+    causing that for example closing session in one device would close it in all the others.
+    Knox solves this by creating one token per device.
+
+  \item \textbf{Encrypted token in \ac{DB}:}
+    this is a major security flaw from \ac{DRF}
+    and it is that tokens are stored as plain text in the \ac{DB},
+    meaning that if the \ac{DB} was compromised,
+    the attacker could use those tokens to act like he was logged in the account he wanted.
+
+  \item \textbf{Token expire time:}
+    in \ac{DRF} once you log in with an account that token is valid for ever.
+    Meanwhile, in Knox you can set a expiracy time which will cause that after that time,
+    your session will be closed since the token won't be valid.
+\end{itemize}
+
+To store the \ac{API} keys uploaded by the user to run \ac{TRACER} or Sensei
+we used Fernet Symmetric Encryption \autocite{FernetSymmetricEncryption}
+to encrypt them before saving them to the \ac{DB}.
+Although the \ac{DB} has a user and password (not the default ones)
+we decided this was a good idea to have more layers of security,
+the same way that Knox encrypts, so that if someone managed to breach the \ac{DB}
+those things would still be encrypted.
+
+These things combined with the fact that
+every time that a petition is made to the \ac{API} the token is validated,
+and that the models are configured so that they can only be
+read by the owner unless it is set to be public (one can set projects as public)
+but that even if it is public it can only be written by the owner,
+ensure that the application follows good security practices.
