@@ -22,7 +22,7 @@
 
     % NODES
     \node[client] (user) {User Browser};
-    \node[proxy, below=of user, yshift=-0.5cm] (nginx) {Nginx Proxy\\Port 8080};
+    \node[proxy, below=of user, yshift=-0.5cm] (nginx) {Nginx Proxy\\Port 80};
     \node[frontend, right=of nginx, xshift=1.5cm] (react) {React SPA\\(Build Files)};
     \node[backend, below=of nginx, yshift=-1.5cm] (django) {Django App\\REST API\\Port 8000};
     \node[db, right=of django, xshift=2cm] (postgres) {PostgreSQL\\Port 5432};
