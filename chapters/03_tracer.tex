@@ -68,6 +68,7 @@ can be seen in \autoref{fig:approach}.
     the user profiles for SENSEI will be created based on this model.
     The profiles will have goals, context, roles and outputs
     that will match what is found on the model.
+    This will be explained in \autoref{sec:profile-generation}.
 
   \item \textbf{User Simulator (2):}
     Once the model and user profiles have been created,
@@ -126,9 +127,9 @@ It focuses on two elements:
 
 \begin{itemize}
   \item \textbf{Language Detection:}
-    The agent determines the language by sending
-    some basic messages to the chatbot
-    and analyzing the response.
+    The agent determines the main language by sending
+    a simple "Hello" and checking the language in which the chatbot replies.
+    Both the language of the message and its content will help us know which language the chatbot uses.
   \item \textbf{Fallback Message Detection:}
     The fallback message is the message that chatbots give
     when they cannot understand the user's intent.
