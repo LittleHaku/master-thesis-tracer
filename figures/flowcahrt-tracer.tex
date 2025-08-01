@@ -1,0 +1,36 @@
+\begin{tikzpicture}[
+    node distance=0.8cm and 1.2cm,
+    phase/.style={rectangle, draw, thick, fill=gray!10, text centered, minimum height=7cm, minimum width=5.8cm, align=center, rounded corners=5pt, label={[font=\bfseries\large]north:#1}},
+    process_step/.style={rectangle, draw, thick, text centered, minimum height=0.8cm, minimum width=4.5cm, align=center, rounded corners=3pt, fill=cyan!20, font=\small},
+    arrow/.style={-Stealth, thick},
+    phase_arrow/.style={-Stealth, ultra thick, draw=black}
+]
+    % Main Phase Containers
+    \node[phase=Exploration Phase] (exploration) at (0,0) {};
+    \node[phase=Refinement Phase] (refinement) at (8.5,0) {};
+    
+    % Arrow between phases
+    \draw[phase_arrow] (exploration.east) -- (refinement.west) node[midway, above, text width=2.5cm, align=center, font=\small] {Raw Functionality Nodes};
+    
+    % Steps within the Exploration Phase (positioned relative to phase center)
+    \node[process_step] (probing) at ([yshift=2.5cm]exploration.center) {1. Initial Probing};
+    \node[process_step] (sessions) at ([yshift=0.8cm]exploration.center) {2. Iterative Sessions};
+    \node[process_step] (extraction) at ([yshift=-0.8cm]exploration.center) {3. Functionality Extraction};
+    \node[process_step] (consolidation) at ([yshift=-2.5cm]exploration.center) {4. Functionality Consolidation};
+    
+    % Arrows for Exploration Phase
+    \draw[arrow] (probing) -- (sessions);
+    \draw[arrow] (sessions) -- (extraction);
+    \draw[arrow] (extraction) -- (consolidation);
+    % Unlabelled feedback loop arrow - clean and clear
+    \draw[arrow] (consolidation.west) to[bend left=15] (sessions.west);
+    
+    % Steps within the Refinement Phase (positioned relative to phase center)
+    \node[process_step] (global_consolidation) at ([yshift=1.5cm]refinement.center) {5. Final Global Consolidation};
+    \node[process_step] (classification) at ([yshift=0cm]refinement.center) {6. Chatbot Classification};
+    \node[process_step] (inference) at ([yshift=-1.5cm]refinement.center) {7. Workflow Structure Inference};
+    
+    % Arrows for Refinement Phase
+    \draw[arrow] (global_consolidation) -- (classification);
+    \draw[arrow] (classification) -- (inference);
+\end{tikzpicture}
