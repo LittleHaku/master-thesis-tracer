@@ -1,0 +1,128 @@
+\begin{tikzpicture}[
+    % Overall settings
+    node distance=2cm and 3cm, 
+    % Styles
+    box/.style={
+        rectangle, 
+        draw, 
+        minimum width=4cm, 
+        minimum height=1.5cm, 
+        text width=3.8cm, 
+        align=left
+    },
+    composition/.style={
+        draw, 
+        -{Stealth[length=3mm, width=2mm]}
+    },
+    association/.style={
+        draw, 
+        -{Stealth[length=3mm, width=2mm]}
+    },
+    % Filled diamond for composition
+    diamond_filled/.style={
+        fill=black, 
+        diamond, 
+        minimum size=3mm, 
+        inner sep=0pt
+    },
+    % Empty diamond for aggregation
+    diamond_empty/.style={
+        draw=black,
+        fill=white, 
+        diamond, 
+        minimum size=3mm, 
+        inner sep=0pt
+    },
+    label/.style={font=\small},
+    multiplicity/.style={font=\small, near end}
+]
+
+% 1. DEFINE NODES using relative positioning
+\node[box] (chatbot) {
+    \centerline{\textbf{Chatbot Model}}\\[-5pt]
+    \rule{3.8cm}{0.4pt}\\
+    - name: String\\
+    - language: String\\
+    - fallback: String
+};
+
+\node[box, right=of chatbot] (functionality) {
+    \centerline{\textbf{Functionality Node}}\\[-5pt]
+    \rule{3.8cm}{0.4pt}\\
+    - name: String\\
+    - description: String
+};
+
+\node[box, below=of chatbot] (category) {
+    \centerline{\textbf{Functional Category}}\\[-5pt]
+    \rule{3.8cm}{0.4pt}\\
+    - name: String
+};
+
+\node[box, below=of functionality, xshift=-1.25cm] (parameter) {
+    \centerline{\textbf{Parameter Definition}}\\[-5pt]
+    \rule{3.8cm}{0.4pt}\\
+    - name: String\\
+    - description: String\\
+    - options: String[*]
+};
+
+\node[box, right=of parameter, xshift=-2.5cm] (output) {
+    \centerline{\textbf{Output Option}}\\[-5pt]
+    \rule{3.8cm}{0.4pt}\\
+    - category: String\\
+    - description: String
+};
+
+% 2. DRAW CONNECTIONS AND RELATIONSHIPS
+
+% Chatbot Model to Functional Category
+\draw[composition] (chatbot.south) -- (category.north) 
+    node[diamond_filled, pos=0.06] {}
+    node[label, pos=0.7, right] {categories}
+    node[multiplicity, pos=0.85, right] {*};
+
+% Chatbot Model to Functionality Node 
+\draw[composition] ([yshift=0.8cm]chatbot.east) -- ([yshift=0.8cm]functionality.west)
+    node[diamond_filled, pos=0.05] {}
+    node[label, pos=0.5, above] {entryPoints}
+    node[multiplicity, pos=0.2, below] {0..1}
+    node[label, pos=0.2, below, yshift=-4mm] {model}
+    node[multiplicity, pos=0.85, below] {*};
+
+% Functional Category to Functionality Node (COMPOSITION - filled diamond)
+\coordinate (turn1) at ([xshift=1cm]category.east); 
+\coordinate (turn2) at (turn1 |- functionality.south west); 
+\draw[composition] (category.east) -- (turn1)
+    node[diamond_filled, pos=0.15] {} 
+    -- ([yshift=0.2cm]turn2) 
+    -- ([yshift=0.2cm]functionality.south west)
+    node[label, midway, above] {convFlows}
+    node[multiplicity, pos=0.8, below] {*};
+
+% Functionality Node to Parameter Definition (COMPOSITION - filled diamond)
+\draw[composition] ([xshift=0.3cm]functionality.south west) -- ([xshift=0.3cm]functionality.south west |- parameter.north)
+    node[diamond_filled, pos=0.07] {}
+    node[label, midway, right] {parameters}
+    node[multiplicity, pos=0.85, right] {*};
+
+% Functionality Node to Output Option (COMPOSITION - filled diamond)
+\draw[composition] ([xshift=-0.3cm]functionality.south east) -- ([xshift=-0.3cm]functionality.south east |- output.north)
+    node[diamond_filled, pos=0.06] {}
+    node[label, midway, right] {outputs}
+    node[multiplicity, pos=0.85, left] {*};
+
+% Functionality Node self association
+\coordinate (followers_entry) at ([yshift=0.6cm]functionality.east);
+\coordinate (previous_entry) at ([yshift=-0.6cm]functionality.east);
+\coordinate (loop_top_right) at ([xshift=2cm]followers_entry);
+\coordinate (loop_bottom_right) at ([xshift=2cm]previous_entry);
+\draw (loop_top_right) -- (loop_bottom_right);
+\draw[association] (loop_top_right) -- (followers_entry)
+    node[pos=0.45, above] {following}
+    node[pos=0.75, below] {*};
+\draw[association] (loop_bottom_right) -- (previous_entry)
+    node[pos=0.45, above] {previous}
+    node[pos=0.75, below] {*};
+
+\end{tikzpicture}
