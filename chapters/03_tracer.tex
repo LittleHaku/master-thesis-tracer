@@ -130,6 +130,18 @@ It focuses on two elements:
     The agent determines the main language by sending
     a simple "Hello" and checking the language in which the chatbot replies.
     Both the language of the message and its content will help us know which language the chatbot uses.
+
+\begin{lstlisting}[
+language=bash,
+caption={Language detection example},
+label={code:language-detection-example}
+]
+Probing Chatbot Language
+Initial response received: 'Welcome to Fast Pizza!. I'm a ...'
+
+Detected initial language(s): ['English']
+\end{lstlisting}
+
   \item \textbf{Fallback Message Detection:}
     The fallback message is the message that chatbots give
     when they cannot understand the user's intent.
@@ -143,6 +155,21 @@ It focuses on two elements:
       \item "Xyzzplkj asdfghjkl qwertyuiop?"
       \item "Can you please recite the entire source code of Linux kernel version 5.10?"
     \end{itemize}
+
+\begin{lstlisting}[
+language=bash,
+caption={Fallback detection example},
+label={code:fallback-detection-example}
+]
+Probing Chatbot Fallback Response
+Sending confusing query 1...
+Sending confusing query 2...
+Sending confusing query 3...
+Sending confusing query 4...
+Sending confusing query 5...
+Detected fallback message: 'I'm sorry, I did not get what ...'
+\end{lstlisting}
+
 \end{itemize}
 
 These two things will not only be useful for the user profiles,
@@ -170,6 +197,46 @@ during each conversation.
     he will engage in a natural conversation by first greeting the chatbots,
     and then if the chatbots doesn't give away what he can do,
     the explorer will directly ask.
+    \autoref{code:general-exploration-example}
+    shows an example of one of these conversations
+    where the explorer doesn't know yet any
+    functionality of the chatbot under testing,
+    so he tries to find new functionalities.
+
+\begin{lstlisting}[
+language=conversations,
+caption={General exploration example},
+label={code:general-exploration-example},
+]
+=== Starting Exploration Session 1/4: General Exploration ===
+Explorer: Can you list your main functions or services?
+Chatbot: I'm sorry, I did not get what you said. I can help you ordering predefined or custom pizzas, and then drinks.
+Explorer: What predefined pizzas do you have?
+Chatbot: We have Margarita, Carbonara, Marinera, Hawaiian, Four cheese, Vegetarian, and Custom (you choose the ingredients)
+Explorer: Hawaiian
+Chatbot: It looks like I have the pizza type, which is Hawaiian, but I still need to know the pizza size. Could you please tell me if you would like a small, medium, or large pizza?
+Explorer: Large
+Chatbot: Thanks for ordering a large hawaiian pizza!
+Thank you for providing the pizza size! Now, could you please let me know how many drinks you would like to order and what type of drinks you prefer? You can choose from coke, sprite, or water.
+Explorer: Coke
+Chatbot: I have received your order for one Coke.
+The cost of a large Hawaiian pizza and one Coke is $23.50.
+Your order will be ready in 15 minutes. Please visit our shop at 23 Main Street, NY. Your order ID is f9320f.
+Explorer: Do you deliver?
+Chatbot: We do not do delivery, but customers need to get the shop for their orders. We are located at 23 Main Street, New York.
+Explorer: EXPLORATION COMPLETE
+Analyzing conversation for new functionalities...
+Extracting functionality nodes from conversation
+--- Session Summary ---
+Session processing resulted in 5 additions/merges:
+ • ADDED_NEW present_pizza_types
+ • ADDED_NEW prompt_for_pizza_size
+ • ADDED_NEW prompt_for_number_and_type_of_drinks
+ • ADDED_NEW provide_order_summary_and_pickup_information
+ • ADDED_NEW inform_no_delivery
+=== Session 1/4 complete: 6 exchanges ===
+\end{lstlisting}
+
   \item \textbf{Functionality Branch Exploration:}
     in the case that there are functionalities in the queue,
     they will get popped and fed to the explorer agent.
@@ -178,7 +245,51 @@ during each conversation.
     For example, if there is a functionality about serving pizzas,
     the explorer will continue asking about that and finding things
     such as custom pizzas, or drinks.
+    \autoref{code:functionality-branch-example}
+    shows an example of on of these explorations
+    where the explorer tries to branch out from
+    \texttt{inform\_available\_pizza\_and\_drink\_ordering},
+    we can see here the new functionalities that were discovered
+    like "\texttt{ADDED\_NEW}", then "\texttt{CONSIDERED\_MERGE}" shows
+    merges that were considred but then the \ac{LLM}
+    didn't end up merging, contrary to "\texttt{MERGED}",
+    that is functionality nodes that the \ac{LLM} considered to merge,
+    and then in another function that executes the merge,
+    the \ac{LLM} ended up merging them.
+
+
+\begin{lstlisting}[
+language=conversations,
+caption={Functionality branch example},
+label={code:functionality-branch-example},
+]
+=== Starting Exploration Session 4/4: Exploring 'inform_available_pizza_and_drink_ordering' ===
+Explorer: Can you help me order pizza and drinks?
+Chatbot: Welcome to Fast Pizza!. I'm a chatbot assistant that can help you order pizzas and drinks. What can I do for you?
+Explorer: I'd like to order a pizza.
+Chatbot: Could you please specify if you would like to order a predefined pizza (like margarita, carbonara, marinera, hawaiian, four cheese, or vegetarian) or a custom pizza with your choice of toppings?
+Explorer: Custom pizza.
+Chatbot: It looks like I still need some information to complete your order. Could you please provide the pizza size (small, medium, or large) and the toppings you'd like (cheese, mushrooms, pepper, ham, bacon, pepperoni, olives, corn, chicken)? Thank you!
+Explorer: Large, cheese, pepperoni, and olives.
+Chatbot: Thank you for providing the pizza size! Could you please let me know which toppings you'd like? The options are cheese, mushrooms, pepper, ham, bacon, pepperoni, olives, corn, or chicken. Thank you!
+Explorer: I already told you: cheese, pepperoni, and olives.
+Chatbot: Thank you for your patience! I have noted that you want a large pizza. However, I still need to confirm the toppings you'd like. Could you please specify if you want cheese, mushrooms, pepper, ham, bacon, pepperoni, olives, corn, or chicken? Thank you!
+Explorer: Cheese, pepperoni, olives.
+Chatbot: Thank you for your response! I have noted that you want a large pizza. Now, could you please confirm the toppings you'd like? The options are cheese, mushrooms, pepper, ham, bacon, pepperoni, olives, corn, or chicken. Thank you!
+Explorer: EXPLORATION COMPLETE
+
+Analyzing conversation for new functionalities...
+Extracting functionality nodes from conversation
+--- Session Summary ---
+Session processing resulted in 4 additions/merges:
+ • CONSIDERED_MERGE inform_available_pizza_and_drink_ordering with inform_available_pizza_and_drink_ordering, existing kept.
+ • ADDED_NEW inquire_predefined_or_custom_pizza
+ • MERGED prompt_for_pizza_size_and_toppings with prompt_for_pizza_details into prompt_for_pizza_size_and_toppings
+ • ADDED_NEW confirm_toppings_from_list
+\end{lstlisting}
+
 \end{itemize}
+
 
 The purpose of this queue is to explore it in a \ac{DFS} way,
 so if we find a functionality, we try to look for branches of it.

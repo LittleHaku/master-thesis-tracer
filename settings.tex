@@ -161,7 +161,7 @@
   sensitive=false
 }
 
-\lstdefinelanguage{bash}{
+\lstdefinelanguage{tracer-examples}{
   sensitive=true,
   morekeywords={
     tracer, curl, grep, cat, echo, sudo, export, alias, cd, ls, pwd, mkdir, rm, mv, cp, ps, kill
@@ -184,4 +184,33 @@
     {-v}{{\textcolor{UAMGreen}{\textbf{-v}\ }}}2
 }
 
+\lstdefinelanguage{bash}{
+  sensitive=true,
+  keywordstyle=\color{UAMBlue}\bfseries,
+  morecomment=[l]{\#},
+  commentstyle=\color{EPS}\itshape,
+}
 
+\lstdefinelanguage{conversations}{
+  basicstyle=\small\ttfamily,
+  sensitive=true,
+  alsoletter={:}, % Treat ':' as part of a keyword
+  keepspaces=true,
+  morecomment=[l][\color{TUMSecondaryBlue2}\bfseries]{===},
+  morecomment=[l][\color{TUMSecondaryBlue2}\bfseries]{---},
+  morecomment=[l][\color{TUMGray}\itshape]{Analyzing},
+  morecomment=[l][\color{TUMGray}\itshape]{Extracting},
+  morecomment=[l][\color{TUMGray}\itshape]{Session},
+  morecomment=[l][\color{TUMAccentGreen}]{•},
+  % Keywords for inline highlighting only
+  morekeywords=[1]{MERGED, EXPLORATION, COMPLETE, CONSIDERED_MERGE, ADDED_NEW},
+  keywordstyle=[1]{\bfseries\color{TUMSecondaryBlue2}},
+  morekeywords=[2]{Explorer:},
+  keywordstyle=[2]{\color{UAMBlue}\bfseries},
+  morekeywords=[3]{Chatbot:},
+  keywordstyle=[3]{\color{UAMGreen}\bfseries},
+  % Basic settings
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+}
