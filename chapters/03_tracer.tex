@@ -349,7 +349,7 @@ the functionalities are clustered into categories.
 This is mainly to ease the visual representation for the user
 when there are many functionality nodes.
 
-\subsection{Functionality Consolidation}
+\subsection{Functionality Consolidation}\label{subsec:functionality-consolidation}
 
 
 As the functionality extraction usually results
@@ -410,9 +410,22 @@ and creating a coherent model.
 
 \subsection{Global Consolidation}
 
-While during the exploration phase we have a consolidation phase,
+While during the exploration phase we have a consolidation phase
+(see \autoref{subsec:functionality-consolidation}),
 variations of the same functionalities may still appear.
-This consolidation step solves this by checking again all the functionality nodes.
+For this we have a more in depth consolidation phase.
+The step in the explorer phase groups all the node
+sand sends them to the \ac{LLM},
+meanwhile, in this step every possible pair of functionality nodes
+is sent to the \ac{LLM} one pair at a time.
+Although it takes considerably longer than the previous approach,
+checking in pairs helps the \ac{LLM} to focus on a single merge
+instead of having to find merge cases between for example 20 nodes.
+Also, although it takes longer and there are more \ac{LLM} calls
+it doesn't become expensive since it is just a short prompt
+with a pair of functionalities
+and the \ac{LLM} response is also short response
+containing if they are merged or not.
 
 \subsection{Chatbot Classification}
 
