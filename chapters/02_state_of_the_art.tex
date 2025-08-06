@@ -40,14 +40,16 @@ given the domain and range of their capabilities.
     These systems typically follow structured conversation flows
     and maintain explicit state management to track task progress.
     Examples of these chatbots are
-    UAM's assistant Ada \autocite{AdaUAM}.
-    or chatbots made with the framework Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}
+    UAM's assistant Ada \autocite{AdaUAM},
+    Metro Madrid's chatbot \autocite{MetroMadridEmpleara2025},
+    or Amtrack's Julie \autocite{MeetJulieYour}.
 
   \item \textbf{Open-domain:}
     in contrast, open-domain chatbots
     engage in general conversation without specific task constraints,
     aiming to provide informative, helpful, or entertaining interactions across a wide range of topics.
-    These are chatbots like ChatGPT \autocite{ChatGPT} or Gemini \autocite{GoogleGemini}.
+    These are chatbots like ChatGPT \autocite{ChatGPT},
+    Gemini \autocite{GoogleGemini} or Kuki \autocite{Kuki_ai}.
 \end{itemize}
 
 The development of these conversational agents
@@ -69,6 +71,14 @@ has been facilitated by various frameworks and platforms.
     they can suffer from hallucinations,
     higher latency, and since they are not deterministic,
     getting out of the scope, and thus, making it harder to test it.
+
+  \item \textbf{\ac{DSL} frameworks:}
+    \acp{DSL} are a languages specialized for a particular domain.
+    In this case, they provide a high-level abstraction
+    that enables developers to create chatbots
+    without focusing on how, but rather on what.
+    A good example of this that will be explained later is Taskyto
+    \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}.
 \end{itemize}
 
 \subsection{\aclp{LLM}}
@@ -83,13 +93,13 @@ language understanding \autocite{liEnhancingNaturalLanguage2024}, generation, an
 \aclp{LLM} are built employing transformers,
 an architecture proposed by Vaswani et al. \autocite{vaswaniAttentionAllYou2017}.
 This architecture's main innovation is the self-attention mechanism,
-which allows the model to weight the importance of the words in the input,
+which enables the model to weight the importance of the words in the input,
 allowing the model to capture longer dependencies and understanding the context.
 These models are usually trained in two phases,
 the first one, the pre-training,
 is a self-supervised stage where the model
 is fed with a vast amount of text,
-where the model learns 
+where the model learns
 general relationships between words,
 language patterns, facts and reasoning patterns.
 Following this, the next stage is the fine-tuning,
@@ -98,7 +108,8 @@ that aligns with the model's purpose (e.g., medical or coding),
 also using techniques such as
 Reinforcement Learning from Human Feedback (RLHF)
 which helps the model to give responses
-that align better with human preferences.
+that align better with human preferences
+\autocite{zieglerFineTuningLanguageModels2020}.
 This process has made possible models like
 OpenAI's GPT series (e.g., GPT-4) \autocite{OpenAI2025},
 Google's Gemini series \autocite{GoogleGemini},
@@ -108,10 +119,11 @@ or Anthropic's Claude models \autocite{ClaudeAnthropic}.
 
 The integration of \acp{LLM} into conversational agents
 has transformed the way humans interact with computers.
-Unlike traditional rules-based systems that rely on predefined patterns and responses,
+Unlike traditional rule-based systems that rely on predefined patterns and responses,
 \ac{LLM}-powered chatbots can engage in natural conversations,
 even keeping context about what the user said before.
-However, this flexibility comes with challenges,
+However, this flexibility comes with challenges
+\autocite{zamfirescu-pereiraHerdingAICats2023},
 specially for testing and validation.
 The non-deterministic nature of \acp{LLM} means that
 identical inputs may produce different outputs across multiple interactions.
@@ -144,7 +156,8 @@ it becomes impossible to achieve adequate test coverage through manual scripting
 
 Black-box testing is a software testing methodology
 where the internal structure, implementation details, and source code of the system under test
-are unknown or inaccessible to the tester.
+are unknown or inaccessible to the tester
+\autocite{ammannIntroductionSoftwareTesting2017}.
 This approach focuses on validating system behaviour based solely on inputs and outputs,
 treating the system as an opaque "black box."
 In practice, this involves interacing with the chatbot as a real user would:
@@ -187,6 +200,16 @@ and \aclp{DSL} that provide a declarative approach.
 
 \subsubsection{Intent-Based Frameworks}
 
+The intent-based framework chosen for the development of a chatbot
+is a key step in its success.
+As described by Pérez-Soler et al. \autocite{perez-solerChoosingChatbotDevelopment2021},
+these frameworks are structured around the principle of
+mapping a user's natural language input
+to a predefined set of intents,
+which represent the user's objective (e.g., ordering a pizza).
+To achieve this, we have different frameworks
+that allow developers to create chatbots.
+
 Google's Dialogflow \autocite{Dialogflow}
 is one of the most used intent-based frameworks.
 It offers a visual interface
@@ -209,15 +232,43 @@ for intent classification and entity extraction.
 Although it allows to create more complex chatbots,
 the missing visual interface creates a steeper learning curve.
 
+Other major technology providers offer similar platforms
+that are integrated into their cloud ecosystems.
+The Microsoft Bot Framework \autocite{MicrosoftBotFramework}
+along with \ac{LUIS} \autocite{LUISLanguageUnderstanding}
+provide a comprehensive environment
+for building chatbots that will integrate with Azure.
+Similarly, IBM's Watsonx Assistant \autocite{IBMWatsonxAssistant2025}
+and Amazon's Lex \autocite{AmazonLex}
+provide powerful \ac{NLU} capabilities that integrate
+with IBM Cloud and Amazon Web Services (AWS) respectively.
+These platforms, except for Rasa or other open-source alternatives,
+typically offer a low-code or visual development experience,
+making them accessible but also potentially leading to vendor lock-in \autocite{perez-solerChoosingChatbotDevelopment2021}.
+
+
 \subsubsection{Multi-Agent Programming Environments}
+
+The multi-agent programming environments are a new way
+of creating chatbots employing \acp{LLM}.
+What differentiates these environments is that
+there are multiple specialized \ac{AI} agents
+that collaborate to solve complex tasks.
+These frameworks represent a significant evolution from
+simple, linear \ac{LLM} chains, as they are designed to
+handle multi-step tasks that require
+statefulness, reasoning, tool use, and cyclical logic.
 
 LangGraph \autocite{LangGraph} is one of the main exponents
 of this new frameworks that leverage the use of \ac{LLM}
 to create complex conversational systems.
-As the name says, LangGraph is made up by a graph
-where nodes are \ac{AI} agents or tools
+As the name says, LangGraph is made up by a state graph
+where nodes are \ac{AI} agents or tools (e.g., an \ac{LLM} call or a tool)
 and edges control the flow of information between the nodes.
-This allows for more dyncamic conversational flows
+The framework's power lies on the use of conditional edges,
+which can dynamically route the process to different paths
+depending on a node's output.
+This allows for more dynamic conversational flows
 than traditional intent-based systems,
 and also allow to break a complex problem into different agents.
 However, implementing all of this is not trivial
@@ -233,10 +284,31 @@ For example, one could have a planner agent,
 that would divide the user's petition into bite-sized tasks
 and send each to the agent that better suits the task.
 
+Another emerging alternative is CrewAI \autocite{CrewAI},
+a Python framework built from scratch
+(meaning that does not depend on LangGraph or any other agentic framework)
+and open-source \autocite{CrewAIIncCrewAI2025}.
+CrewAI organizes its agents into \textit{crews} and \textit{flows},
+crews are optimized for autonomy and collaborative intelligence,
+allowing to create AI teams where each agent has specific roles, tools, and goals.
+While flows and enable a more granular, event-driven control,
+single LLM calls for precise task orchestration \autocite{CrewAIIntroduction}.
+Duan et al. \autocite{duanExplorationLLMMultiAgent2024}
+propose combining CrewAI and LangGraph
+to utilize LangGraph's efficient graph architecture for information flow
+and CrewAI’s team and task management strengths.
+
+While this multi-agent paradigm offers a great power for solving complex problems,
+it also introduces significant engineering challenges.
+The orchestration of the different agents requires careful design and debugging,
+furthermore, managing the inherent non-deterministic nature
+of the \acp{LLM} to ensure reliable and predictable outcomes also adds a challenge.
+
 \subsubsection{\aclp{DSL}}
 
 A \acl{DSL} is a computer language
-specialized for a particular application domain.
+specialized for a particular application domain
+\autocite{wasowskiDomainSpecificLanguagesEffective2023}.
 In the context of conversational AI,
 \acp{DSL} provide high-level abstractions
 that allow developers to define chatbot behaviour declaratively,
@@ -288,6 +360,10 @@ achieved by \ac{TRACER}.
 Furthermore, the declarative YAML structure
 simplifies the systematic introduction of faults,
 facilitating the creation of a large set of mutants
+(mutants are small errors that are introduced on purpose into the system
+and aim to evaluate how good the are the tests at capturing these mutations,
+it will be further explained in
+\autoref{subsub:static-analysis})
 for our mutation testing analysis,
 which is essential for evaluating
 the fault-detection effectiveness of the generated user profiles
@@ -403,7 +479,7 @@ or that the answers can be different each time.
 Also, the test cases require to be maintained
 as the chatbot evolves.
 
-\subsubsection{Static Analysis and White-Box Testing}
+\subsubsection{Static Analysis and White-Box Testing}\label{subsub:static-analysis}
 
 For scenarios where source code is available,
 white-box techniques offer more rigorous validation.
@@ -531,7 +607,7 @@ used in this research, exemplifies this issue.
 It is a powerful tool capable of executing highly detailed test profiles,
 but its effectiveness is entirely dependent on the quality of those profiles.
 Across the state of the art,
-these essential input user profiles are either created manually,
+these essential profiles are either created manually,
 a process that is time-consuming and does not scale,
 or generated from generic descriptions
 that lack grounding in the specific functionalities of the chatbot under test.
@@ -559,20 +635,20 @@ compares the testing paradigms discussed.
 \toprule
 \textbf{Paradigm} & \makecell[l]{\textbf{Requires} \\ \textbf{Source Code?}} & \makecell[l]{\textbf{Requires Predefined} \\ \textbf{Test Cases?}} & \makecell[l]{\textbf{Automation} \\ \textbf{Level}} & \textbf{Example Works} & \textbf{Key Limitation} \\ \midrule
 
-\makecell[l]{Manual \\ Testing} & No & No & Low & 
-\makecell[l]{GastroBot \autocite{zhouGastroBotChineseGastrointestinal2024} \\ Ren et al. \autocite{renEvaluationTechniquesChatbot2019}} & 
+\makecell[l]{Manual \\ Testing} & No & No & Low &
+\makecell[l]{GastroBot \autocite{zhouGastroBotChineseGastrointestinal2024} \\ Ren et al. \autocite{renEvaluationTechniquesChatbot2019}} &
 \makecell[l]{Unscalable, \\ not reproducible} \\[0.3em]
 
-\makecell[l]{Scripted \\ Testing} & No & Yes & Medium & 
-\makecell[l]{Bottester \autocite{vasconcelosBottesterTestingConversational2017} \\ Cyara \autocite{CyaraBotium} \\ Rasa \autocite{RasaTest2025}} & 
+\makecell[l]{Scripted \\ Testing} & No & Yes & Medium &
+\makecell[l]{Bottester \autocite{vasconcelosBottesterTestingConversational2017} \\ Cyara \autocite{CyaraBotium} \\ Rasa \autocite{RasaTest2025}} &
 \makecell[l]{High manual effort, \\ brittle} \\[0.3em]
 
-\makecell[l]{White-Box \\ Testing} & Yes & No & High & 
-\makecell[l]{Cañizares et al. \autocite{canizaresCoveragebasedStrategiesAutomated2024} \\ Gómez-Abajo et al. \autocite{gomez-abajoMutationTestingTaskOriented2024}} & 
+\makecell[l]{White-Box \\ Testing} & Yes & No & High &
+\makecell[l]{Cañizares et al. \autocite{canizaresCoveragebasedStrategiesAutomated2024} \\ Gómez-Abajo et al. \autocite{gomez-abajoMutationTestingTaskOriented2024}} &
 \makecell[l]{Requires source \\ code access} \\[0.3em]
 
 \midrule
-\textbf{TRACER} & \textbf{No} & \textbf{No} & \textbf{High} & \textbf{(This Thesis)} & \makecell[l]{\textbf{Addresses prior} \\ \textbf{limitations}} \\ 
+\textbf{TRACER} & \textbf{No} & \textbf{No} & \textbf{High} & \textbf{(This Thesis)} & \makecell[l]{\textbf{Addresses prior} \\ \textbf{limitations}} \\
 \bottomrule
 \end{tabular}
 }

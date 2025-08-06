@@ -7,7 +7,7 @@ To ensure that the previous methodology can be reproduced
 we have implemented \acf{TRACER} in an open-source Python package
 to allow users to execute it from a \ac{CLI}.
 On top of that, we have developed a web application
-that allows users to execute both \ac{TRACER} and Sensei
+that allows users to execute both \ac{TRACER} and SENSEI
 without the need of knowing how to operate the command line.
 
 
@@ -167,7 +167,7 @@ $ tracer -t taskyto -u http://localhost:5000 -s 12 -n 8 -m gemini-2.5-flash -pm 
 \end{lstlisting}
 
 The command in \autoref{code:tracer-command-example}
-demonstrates a typical execution of \ac{TRACER} against a Taskyto-based pizzeria chatbot. 
+demonstrates a typical execution of \ac{TRACER} against a Taskyto-based pizzeria chatbot.
 It is configured to run 12 exploration sessions of 8 turns each.
 For the exploration, analysis and profile generation, the smarter model Gemini 2.5 Flash will be used,
 then for the model that is defined in each user profile, Gemini 2.0 Flash will be used since it is faster and cheaper.
@@ -181,8 +181,8 @@ To complement the \ac{CLI},
 we developed a web application
 to provide a user friendly interface that will allow to run the whole end-to-end pipeline,
 that it is, to run \ac{TRACER} to generate the user profiles,
-and then to execute these with Sensei.
-This, allows a broader audience to use both \ac{TRACER} and Sensei
+and then to execute these with SENSEI.
+This, allows a broader audience to use both \ac{TRACER} and SENSEI
 without the need of knowing how to use the \ac{CLI}.
 
 \subsection{System Architecture}
@@ -197,7 +197,7 @@ of the technologies and design patterns used within each of these layers.
 
 \begin{figure}[!htbp]
     \centering
-    \input{figures/web_architecture.tex} 
+    \input{figures/web_architecture.tex}
     \caption{Web Application Architecture and Connections.}
     \label{fig:app-architecture}
 \end{figure}
@@ -206,7 +206,7 @@ of the technologies and design patterns used within each of these layers.
 
 The backend of the application was developed in Django \autocite{Django},
 the reason why this framework was used is because it is made for Python
-so it suits both \ac{TRACER} and Sensei,
+so it suits both \ac{TRACER} and SENSEI,
 and also it offers the Django REST Framework \autocite{DjangoRESTFramework}
 that will allow us to develop a \ac{REST} \ac{API} that will be consumed by our frontend.
 
@@ -223,7 +223,7 @@ and stores everything in a single file which causes concurrency and performance 
 
 \subsection{Asynchronous Task Handling}
 
-\ac{TRACER} and Sensei executions both take from a few minutes up to hours,
+\ac{TRACER} and SENSEI executions both take from a few minutes up to hours,
 thus, executing this tasks synchronously would leave the user's interface frozen
 for the duration of the whole process.
 To handle this we implemented asynchronous executions,
@@ -231,7 +231,7 @@ we did this by using a distributed task queue called Celery \autocite{Celery},
 which lets us handle these jobs asynchronously.
 Then, to communicate Django with Celery we need a broker,
 for this we used RabbitMQ \autocite{RabbitMQ}.
-These two tools in conjunction will allow the user to execute \ac{TRACER} or Sensei
+These two tools in conjunction will allow the user to execute \ac{TRACER} or SENSEI
 and change to a different view, log out, or even turn off the computer
 and then come back to check the progress.
 It will also help the server to not get saturated
@@ -330,7 +330,7 @@ the main improvements that it brings are:
     your session will be closed since the token won't be valid.
 \end{itemize}
 
-To store the \ac{API} keys uploaded by the user to run \ac{TRACER} or Sensei
+To store the \ac{API} keys uploaded by the user to run \ac{TRACER} or SENSEI
 we used Fernet Symmetric Encryption \autocite{FernetSymmetricEncryption}
 to encrypt them before saving them to the \ac{DB}.
 Although the \ac{DB} has a user and password (not the default ones)

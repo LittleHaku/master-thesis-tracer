@@ -27,10 +27,10 @@
     \node[backend, below=of nginx, yshift=-1.5cm] (django) {Django App\\REST API\\Port 8000};
     \node[db, right=of django, xshift=2cm] (postgres) {PostgreSQL\\Port 5432};
     \node[broker, left=of django, xshift=-2cm] (rabbitmq) {RabbitMQ\\Broker\\Port 5672};
-    
+
     \node[worker, below=of rabbitmq] (celery) {Celery Worker};
     \node[analysis, below=of celery, xshift=-1.2cm] (tracer) {TRACER};
-    \node[analysis, below=of celery, xshift=1.2cm] (sensei) {Sensei};
+    \node[analysis, below=of celery, xshift=1.2cm] (SENSEI) {SENSEI};
     \node[storage, below=of postgres, yshift=-0.2cm] (filevault) {File Vault};
     \node[storage, below=of filevault, yshift=-0.2cm] (staticfiles) {Django Static\\Files};
 
@@ -39,7 +39,7 @@
         \node[layer, fit=(user)] (user_layer) {};
         \node[layer, fit=(nginx)(react)] (presentation_layer) {};
         \node[layer, fit=(django)] (application_layer) {};
-        \node[layer, fit=(rabbitmq)(celery)(tracer)(sensei)] (task_layer) {};
+        \node[layer, fit=(rabbitmq)(celery)(tracer)(SENSEI)] (task_layer) {};
         \node[layer, fit=(postgres)(filevault)(staticfiles)] (data_layer) {};
     \end{scope}
 
@@ -54,11 +54,11 @@
     \draw[async_arrow] (django.west) -- node[label_bg, above] {queue} (rabbitmq.east);
     \draw[async_arrow] (rabbitmq) -- node[right] {consume} (celery);
     \draw[async_arrow] (celery) -- node[left] {execute} (tracer);
-    \draw[async_arrow] (celery) -- node[right] {execute} (sensei); 
+    \draw[async_arrow] (celery) -- node[right] {execute} (SENSEI);
     \draw[async_arrow] (celery.east) to[bend right=20] node[above, pos=0.25] {task results\\and status} (postgres.west);
     \draw[data_arrow] (celery.east) to[bend right=45] node[below, pos=0.5] {file\\operations} (filevault.west);
 
-    % FOREGROUND LAYER LABELS 
+    % FOREGROUND LAYER LABELS
     \node[layer_label, yshift=0.5cm] at (user_layer.north) {Client Layer};
     \node[layer_label, yshift=0.5cm] at (presentation_layer.north) {Presentation Layer};
     \node[layer_label, yshift=0.5cm] at (application_layer.north) {Application Layer};
