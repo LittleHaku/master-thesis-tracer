@@ -56,7 +56,7 @@ can be seen in \autoref{fig:approach}.
     that mimics the workflow of the chatbot.
     Its nodes are functionality nodes,
     an object that contains all the information regarding a functionality
-    (will be explained further in 
+    (will be explained further in
     \autoref{sec:exploration}).
 
   \item \textbf{Test Profile Synthesiser (1b):}
@@ -175,7 +175,7 @@ Detected fallback message: 'I'm sorry, I did not get what ...'
 These two things will not only be useful for the user profiles,
 but also allow the future conversations to be more fluent
 since the explorer agent will know which language to speak
-and to detect the fallback and rephrase his words
+and to detect the fallback and rephrase its words
 when the chatbot is not understanding him.
 
 \subsection{Iterative Sessions}
@@ -194,14 +194,14 @@ during each conversation.
     when the aforementioned queue is empty,
     the explorer will do a general search for functionalities.
     In this type of conversations,
-    he will engage in a natural conversation by first greeting the chatbots,
-    and then if the chatbots doesn't give away what he can do,
+    it will engage in a natural conversation by first greeting the chatbots,
+    and then if the chatbots doesn't give away what it can do,
     the explorer will directly ask.
     \autoref{code:general-exploration-example}
     shows an example of one of these conversations
     where the explorer doesn't know yet any
     functionality of the chatbot under testing,
-    so he tries to find new functionalities.
+    so it tries to find new functionalities.
 
 \begin{lstlisting}[
 language=conversations,
@@ -241,7 +241,7 @@ Session processing resulted in 5 additions/merges:
     in the case that there are functionalities in the queue,
     they will get popped and fed to the explorer agent.
     Then the explorer will have a conversation
-    where he will try to find branches and variations of this functionality.
+    where it will try to find branches and variations of this functionality.
     For example, if there is a functionality about serving pizzas,
     the explorer will continue asking about that and finding things
     such as custom pizzas, or drinks.
@@ -552,4 +552,3 @@ or maintaining the chatbot.
 In the next section we will show
 how \ac{TRACER} uses this model
 to generate user profiles for SENSEI.
-

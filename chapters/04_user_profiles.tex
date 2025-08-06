@@ -48,7 +48,7 @@ To better understand how the profiles are generated,
 we must first understand the profiles and their structure
 made up of the \texttt{test\_name},
 a unique identifier for the profile,
-followed by four configuration blocks: 
+followed by four configuration blocks:
 \texttt{llm}, \texttt{user}, \texttt{chatbot} and \texttt{conversation}.
 
 \subsection{LLM Configuration (\texttt{llm})}
@@ -90,7 +90,7 @@ Each of these parameters will have assigned a function:
   \item \texttt{random(x)}: Takes $x$ different random values.
   \item \texttt{forward()}: Selects one value sequentially from the data list.
   \item \texttt{forward(x)}: Instead of one by one, takes the $x$ next values.
-  \item \texttt{forward(var)}: 
+  \item \texttt{forward(var)}:
     Allows to cycle through all the combinations of a pair (or more, depending on the nested combinations) of variables.
     For example, one could nest pizza sizes with pizza types,
     that means that all combinations of pizza sizes with pizza types would be tested,
@@ -107,7 +107,7 @@ and the step to go from the min to the max.
 
 Here, expected behaviour of the system under test will be specified.
 The first field is the \texttt{fallback},
-this is the sentence given by the chatbot when he cannot understand what the user is saying,
+this is the sentence given by the chatbot when it cannot understand what the user is saying,
 or what he is saying is outside of the chatbot's scope.
 Next we have the \texttt{outputs}, a field similar to the goals
 but in this case instead of being related to the inputs,
@@ -202,7 +202,7 @@ just for the sake of making one.
 Then, if one match is given,
 we request the \ac{LLM} to generate another extra value
 based on what the returned data source
-to test the chatbot on values outside of the ones that he suggests.
+to test the chatbot on values outside of the ones that it suggests.
 For example, with the pizza sizes small, medium, large,
 it tends to generate extra large as the extra value,
 or in the toppings pineapple was generated in this case (see \autoref{code:yaml-profile-pizza})
