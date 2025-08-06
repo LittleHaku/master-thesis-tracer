@@ -486,7 +486,14 @@ The prompt for the LLM depends on the chatbot classification:
     The prompt for transactional chatbots can be seen in \autoref{code:prompt-informational-workflow}.
 \end{itemize}
 
-\subsection{Example: Inferred Model of a Pizzeria Chatbot}
+During this workflow inferrence step,
+as can be seen in the prompt,
+the \ac{LLM} also groups the functionality nodes into categories
+and it is asked to reuse them to not end up with
+one different category per functionality.
+
+
+%\subsection{Example: Inferred Model of a Pizzeria Chatbot}
 
 \autoref{fig:pizzeria-workflow}
 shows the workflow graph resulting from a \ac{TRACER} execution
@@ -498,7 +505,8 @@ From there, you can go to four different root functionalities
 grouped into two categories.
 From one of the functionalities,
 you can continue the workflow to make your order.
-We will now break down the categories and functionalities.
+We will now break down each category
+and the functionalities that it contains.
 
 \begin{figure}[htpb]
   \centering
@@ -529,10 +537,11 @@ We will now break down the categories and functionalities.
     and then prompt the user for the type and number of drinks he wishes.
 
   \item \textbf{Order Confirmation:}
+    this last category,
     once the user has gone through all the order placement steps,
     we have the last functionality of the workflow which is
     provide order total,
-    here the chatbot will the price of the total order
+    here the chatbot will give the price of the total order
     and finalize the workflow.
 \end{itemize}
 
