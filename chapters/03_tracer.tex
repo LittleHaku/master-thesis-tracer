@@ -5,15 +5,15 @@
 
 In this chapter we present \ac{TRACER},
 a tool designed to fill the gaps that we have seen
-during our State of the Art \autoref{sec:sota} review.
+during our State of the Art review in \autoref{sec:sota}.
 This tool addresses the black-box testing challenge mentioned
 by iteratively discovering functionalities
 to create a structured model.
 
-The chapter will be structured with first
-a high-level overview of the tool's two phase implementation \autoref{sec:overview}.
-Then we will detail the exploration phase \autoref{sec:exploration},
-followed by the refinement phase \autoref{sec:refinement}.
+The chapter first provides a high-level overview
+of the tool's two-phase implementation in \autoref{sec:overview}.
+Then we will detail the exploration phase in \autoref{sec:exploration},
+followed by the refinement phase in \autoref{sec:refinement}.
 
 \section{Overview}\label{sec:overview}
 
@@ -25,7 +25,7 @@ and then turn this model into a set of profiles
 that can be used for the SENSEI
 \autocite{delaraSensei, delaraAutomatedEndtoEndTesting2025} user simulator
 to test the chatbot.
-An scheme of the proposed end-to-end testing
+A diagram of the proposed end-to-end testing
 can be seen in \autoref{fig:approach}.
 
 
@@ -43,11 +43,11 @@ can be seen in \autoref{fig:approach}.
 \begin{enumerate}
   \item \textbf{Functionality Explorer (1a):}
     an explorer agent interacts with the chatbot in multiple sessions
-    and extracts a model of the chatbot
+    and extracts a model of the chatbot.
     The extracted model contains the following information:
     \begin{itemize}
-      \item Language(s) that the chatbot understands.
-      \item The chatbot's default fallback sentence (e.g., "I'm sorry, I can't undertand what you are saying.")
+      \item The language(s) the chatbot understands.
+      \item The chatbot's default fallback sentence (e.g., "I'm sorry, I can't understand what you are saying.")
       \item The functionality graph.
     \end{itemize}
 
@@ -60,7 +60,7 @@ can be seen in \autoref{fig:approach}.
     \autoref{sec:exploration}).
 
   \item \textbf{Test Profile Synthesiser (1b):}
-    in this pase the extracted model will be refined,
+    in this phase, the extracted model will be refined,
     similar functionalities will be merged,
     and order of the nodes in the \ac{DAG} will be revised
     so that it matches the chatbot's workflow.
@@ -87,18 +87,18 @@ can be seen in \autoref{fig:approach}.
     \centering
     \input{figures/flowcahrt-tracer.tex}
     \caption{Flow-chart of TRACER's two phase methodology.
-    The Exploration Phase (left) iteratively discoveres functionalities
+    The Exploration Phase (left) iteratively discovers functionalities
     while the Refinement Phase (right) consolidates and structures them into the final model.}
     \label{fig:flowchart-tracer}
 \end{figure}
 
-The \ac{TRACER} methodology to extract a model is two phase approach
+The \ac{TRACER} methodology for extracting a model is two-phase approach
 to first extract some functionalities and then merge them into a final model.
 The entire workflow from the initial probing up until the final inferred model
 can be visualized in \autoref{fig:flowchart-tracer}.
 The first stage, the Exploration Phase, is an iterative discovery process,
 while the second, the Refinement Phase, is a linear process of consolidation and structuring.
-Once we have the final model then we can start synthezing the profiles.
+Once we have the final model then we can start synthesizing the profiles.
 
 
 \section{Exploration Phase}\label{sec:exploration}
@@ -120,15 +120,15 @@ thanks to the use of \acp{LLM}.
 \subsection{Initial Probing}
 
 Before engaging in a conversation
-an initial probing is done,
+\ac{TRACER} performs an initial probing
 the goal of this is to obtain some basic information
-about the chatbot before proceding with a full conversation.
+about the chatbot before proceeding with a full conversation.
 It focuses on two elements:
 
 \begin{itemize}
   \item \textbf{Language Detection:}
     The agent determines the main language by sending
-    a simple "Hello" and checking the language in which the chatbot replies.
+    a simple "Hello" and checking the language in which the chatbot responds.
     Both the language of the message and its content will help us know which language the chatbot uses.
 
 \begin{lstlisting}[
@@ -143,11 +143,11 @@ Detected initial language(s): ['English']
 \end{lstlisting}
 
   \item \textbf{Fallback Message Detection:}
-    The fallback message is the message that chatbots give
+    The fallback message is the response that chatbots give
     when they cannot understand the user's intent.
     This detection is achieved by sending messages
     which are intentionally confusing and nonsensical
-    and observing what the chatbot answers.
+    and observing the chatbot's response.
     Examples of these queries are:
     \begin{itemize}
       \item "If tomorrow's yesterday was three days from now,
@@ -175,15 +175,15 @@ Detected fallback message: 'I'm sorry, I did not get what ...'
 These two things will not only be useful for the user profiles,
 but also allow the future conversations to be more fluent
 since the explorer agent will know which language to speak
-and to detect the fallback and rephrase its words
-when the chatbot is not understanding him.
+and to detect the fallback and rephrase its input
+when the chatbot does not understand it.
 
 \subsection{Iterative Sessions}
 
 After the initial probing,
 the explorer agent will have $s$ conversations of $n$ turns each,
 where both $s$ and $n$ are configurable parameters.
-During this conversations functionalities will be discovered
+During these conversations functionalities will be discovered
 (see \autoref{subsec:functionality_extraction})
 and added to a queue,
 this queue will determine what is the goal of the explorer
@@ -194,9 +194,9 @@ during each conversation.
     when the aforementioned queue is empty,
     the explorer will do a general search for functionalities.
     In this type of conversations,
-    it will engage in a natural conversation by first greeting the chatbots,
-    and then if the chatbots doesn't give away what it can do,
-    the explorer will directly ask.
+    the explorer first greets the chatbot.
+    If the chatbot does not specify its capabilities,
+    the explorer will directly ask for them.
     \autoref{code:general-exploration-example}
     shows an example of one of these conversations
     where the explorer doesn't know yet any
@@ -238,22 +238,22 @@ Session processing resulted in 5 additions/merges:
 \end{lstlisting}
 
   \item \textbf{Functionality Branch Exploration:}
-    in the case that there are functionalities in the queue,
-    they will get popped and fed to the explorer agent.
+    if there are functionalities in the queue,
+    they are taken from the queue and provided to the explorer agent.
     Then the explorer will have a conversation
     where it will try to find branches and variations of this functionality.
     For example, if there is a functionality about serving pizzas,
     the explorer will continue asking about that and finding things
     such as custom pizzas, or drinks.
     \autoref{code:functionality-branch-example}
-    shows an example of on of these explorations
+    shows an example of one of these explorations
     where the explorer tries to branch out from
     \texttt{inform\_available\_pizza\_and\_drink\_ordering},
     we can see here the new functionalities that were discovered
     like "\texttt{ADDED\_NEW}", then "\texttt{CONSIDERED\_MERGE}" shows
     merges that were considred but then the \ac{LLM}
     didn't end up merging, contrary to "\texttt{MERGED}",
-    that is functionality nodes that the \ac{LLM} considered to merge,
+    these are functionality nodes that the \ac{LLM} considered for merging
     and then in another function that executes the merge,
     the \ac{LLM} ended up merging them.
 
@@ -301,9 +301,9 @@ until we didn't find any variation or branch of it.
 
 \subsection{Functionality Extraction}\label{subsec:functionality_extraction}
 
-At the enf of each conversation,
+At the end of each conversation,
 the Explorer Agent looks at the conversation history
-and tries to look for functionalities exhibited by the chatbot.
+and tries to find functionalities exhibited by the chatbot.
 These functionalities are represented as Functionality Nodes.
 As depicted in \autoref{fig:functionality_node},
 a Functionality Node contains the following fields:
@@ -335,13 +335,13 @@ a Functionality Node contains the following fields:
     It represents pieces of data that we expect the chatbot to output.
     For example when ordering the pizza it could be the price or the order id.
   \item \textbf{Followers and Previous:}
-    Since the nodes are aranged as a \ac{DAG},
-    the nodes have children and parent
-    that mimic the workflow of the chatbot.
+    Since the nodes are arranged as a \ac{DAG},
+    the nodes have children and parents that mimic the chatbot's workflow.
     The idea of this workflow graph,
     is to order functionalities in the order that one will encounter them,
-    for example, the chatbot will asks for the drinks always after asking for the pizzas
-    so then the drink functionality should be a children of the pizza one.
+    for example,
+    the chatbot will always ask for drinks after asking for pizzas.
+    Therefore, the drink functionality should be a child of the pizza functionality.
 \end{itemize}
 
 On top of this,
@@ -368,12 +368,12 @@ This is achieved in two actions:
   \item \textbf{Global Merge:}
     after the nodes discovered in this session have been merged,
     the resulting set is compared with the ones discovered in previous sessions
-    and again, the \ac{LLM} look for semantically similar functionalities
+    and again, the \ac{LLM} looks for semantically similar functionalities
     and merges them into one.
 \end{enumerate}
 
 To better understand this, we will give an example.
-Imagine that throughout the last conversation
+Imagine that throughout the last conversation,
 we extract a functionality that is called
 "prompt for custom pizza ingredients",
 with a description that is
@@ -381,7 +381,8 @@ with a description that is
 but has no parameters or outputs.
 Then, in the current session,
 the explorer agent's goal is
-to find variations or branches of this functionality since is the first in the queue,
+to find variations or branches of this functionality
+since it is the first in the queue,
 and the agent extracts a new functionality called
 "prompt ingredients for custom pizza"
 with a similar description,
@@ -403,19 +404,19 @@ to more accurately define what the functionality does.
 
 Once all the conversation sessions are over,
 and the functionalities have been extracted,
-we enter the the refinement phase.
+we enter the refinement phase.
 The goal of this phase is to take the raw, potentially messy,
 functionalities discovered during the exploration phase
-and creating a coherent model.
+and to create a coherent model.
 
 \subsection{Global Consolidation}
 
 While during the exploration phase we have a consolidation phase
 (see \autoref{subsec:functionality-consolidation}),
 variations of the same functionalities may still appear.
-For this we have a more in depth consolidation phase.
-The step in the explorer phase groups all the node
-sand sends them to the \ac{LLM},
+For this we have a more in-depth consolidation phase.
+The step in the explorer phase groups all the nodes
+and sends them to the \ac{LLM},
 meanwhile, in this step every possible pair of functionality nodes
 is sent to the \ac{LLM} one pair at a time.
 Although it takes considerably longer than the previous approach,
@@ -424,23 +425,23 @@ instead of having to find merge cases between for example 20 nodes.
 Also, although it takes longer and there are more \ac{LLM} calls
 it doesn't become expensive since it is just a short prompt
 with a pair of functionalities
-and the \ac{LLM} response is also short response
+and the \ac{LLM} response is also a short response
 containing if they are merged or not.
 
 \subsection{Chatbot Classification}
 
 Next, the chatbot is classified into informational or transactional.
 To do so, the list of functionality nodes along with conversation snippets
-and a prompt that descibes the two types of chatbots
+and a prompt that describes the two types of chatbots
 is sent to the \ac{LLM} which will respond with
 "transactional" or "informational" based on what it decides.
 
 \begin{itemize}
   \item \textbf{Informational:}
     these are chatbots that mainly answer questions and provide information.
-    Examples of these are unversity or bank chatbots that only give you information
+    Examples of these are university or bank chatbots that only give you information
     or if you need to do any paperwork they will give you a link and redirect you
-    but they will not assist you with the tramit directly.
+    but they will not assist you with the transaction directly.
 
   \item \textbf{Transactional:}
     these are chatbots that do guide the user
@@ -451,12 +452,12 @@ is sent to the \ac{LLM} which will respond with
 
 \subsection{Workflow Structure Inference}
 
-The final step is to define the \acl{DAG}
+The final step is to define the \ac{DAG}
 that models the chatbot's workflow.
 During the exploration phase,
 parent-child relationships are set
 when a functionality is discovered as a branch or variation from another one,
-but most of the nodes are still set as root nodes.
+but most of the nodes are still designated as root nodes.
 So, we manage to structure this by asking the \ac{LLM}
 identify likely sequences, branches, and joins
 based on conversational evidence and the dependencies between functionalities.
@@ -467,14 +468,14 @@ The prompt for the LLM depends on the chatbot classification:
     usually informational chatbots' functionalities
     don't have parent-child relationships,
     this is because they simply serve information that is not nested through steps.
-    This is why this prompt is conservative on the identifications of relations,
+    This is why this prompt is conservative in identifying relations,
     since usually all the questions are entry points
     that can be asked directly.
     So, relationships are only established
     if there is strong evidence that
     a sequence of actions is needed to access the functionality.
     The prompt for informational chatbots can be seen in
-    \autoref{code:prompt-transactional-workflow}
+    \autoref{code:prompt-informational-workflow}
     .
 
   \item \textbf{Transactional chatbots:}
@@ -483,14 +484,14 @@ The prompt for the LLM depends on the chatbot classification:
     if a previous action has been done.
     Also, the prompt will look for branches of optional choices,
     for example, ordering a custom pizza or a predefined pizza.
-    The prompt for transactional chatbots can be seen in \autoref{code:prompt-informational-workflow}.
+    The prompt for transactional chatbots can be seen in \autoref{code:prompt-transactional-workflow}.
 \end{itemize}
 
 During this workflow inferrence step,
 as can be seen in the prompt,
 the \ac{LLM} also groups the functionality nodes into categories
-and it is asked to reuse them to not end up with
-one different category per functionality.
+and is instructed to reuse them
+to avoid creating a different category for each functionality.
 
 
 %\subsection{Example: Inferred Model of a Pizzeria Chatbot}
@@ -499,7 +500,7 @@ one different category per functionality.
 shows the workflow graph resulting from a \ac{TRACER} execution
 against a pizzeria chatbot built with Taskyto taken from
 \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}.
-The entrypoint, represented as a black dot,
+The entry point, represented as a black dot,
 is the starting point of a new conversation.
 From there, you can go to four different root functionalities
 grouped into two categories.
@@ -521,7 +522,7 @@ and the functionalities that it contains.
   \item \textbf{Chatbot Meta:}
     the category contains functionalities related to the chatbot talking about itself.
     It has two functionality nodes, provide welcome message, that as its name says,
-    the chatbot will greet the user;
+    the chatbot will greet the user
     and state available information,
     in which the chatbot will give information such as
     the opening hours or its capabilities.
@@ -534,7 +535,7 @@ and the functionalities that it contains.
     which expects the pizza size and type,
     once this has been completed
     it will continue to ask the user for a confirmation
-    and then prompt the user for the type and number of drinks he wishes.
+    and then prompt the user for the type and number of drinks they wish.
 
   \item \textbf{Order Confirmation:}
     this last category,
@@ -549,6 +550,5 @@ This final model can be used for different purposes,
 such as reverse engineering, reengineering,
 migrating to a different framework
 or maintaining the chatbot.
-In the next section we will show
-how \ac{TRACER} uses this model
+The next section shows how \ac{TRACER} uses this model
 to generate user profiles for SENSEI.
