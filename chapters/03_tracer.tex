@@ -429,9 +429,11 @@ containing if they are merged or not.
 
 \subsection{Chatbot Classification}
 
-Next, based on the discovered functionalities
-and the conversation history
-the chatbot is classified into informational or transactional.
+Next, the chatbot is classified into informational or transactional.
+To do so, the list of functionality nodes along with conversation snippets
+and a prompt that descibes the two types of chatbots
+is sent to the \ac{LLM} which will respond with
+"transactional" or "informational" based on what it decides.
 
 \begin{itemize}
   \item \textbf{Informational:}
@@ -471,6 +473,9 @@ The prompt for the LLM depends on the chatbot classification:
     So, relationships are only established
     if there is strong evidence that
     a sequence of actions is needed to access the functionality.
+    The prompt for informational chatbots can be seen in
+    \autoref{code:prompt-transactional-workflow}
+    .
 
   \item \textbf{Transactional chatbots:}
     these other chatbots are more likely to have sequential workflows
@@ -478,6 +483,7 @@ The prompt for the LLM depends on the chatbot classification:
     if a previous action has been done.
     Also, the prompt will look for branches of optional choices,
     for example, ordering a custom pizza or a predefined pizza.
+    The prompt for transactional chatbots can be seen in \autoref{code:prompt-informational-workflow}.
 \end{itemize}
 
 \subsection{Example: Inferred Model of a Pizzeria Chatbot}
