@@ -1,0 +1,62 @@
+\begin{tikzpicture}[
+    node distance=1cm and 0.5cm,
+    % Style for the Functionality Nodes
+    raw_node/.style={
+        rectangle, draw, thick, rounded corners=5pt,
+        fill=yellow!20, draw=orange!60,
+        text width=4cm, align=left,
+        minimum height=3cm, font=\small
+    },
+    % Style for the Functionality Nodes
+    func_node/.style={
+        rectangle, draw, thick, rounded corners=5pt,
+        fill=green!20, draw=green!60,
+        text width=4cm, align=left,
+        minimum height=3cm, font=\small
+    },
+    % Style for the process box in the middle
+    process_box/.style={
+        rectangle, draw, thick, fill=cyan!20,
+        rounded corners=5pt, draw=cyan!60,
+        text centered, minimum height=1.5cm,
+        align=center, font=\small
+    },
+    % Style for arrows
+    arrow/.style={-Stealth, thick, color=darkgray!70},
+    % Style for labels
+    label/.style={font=\scriptsize, color=gray!60, above}
+]
+
+% Node A: The first discovered node (from a previous session)
+\node[raw_node] (nodeA) {
+    \textbf{\texttt{prompt for custom pizza ingredients}} \\
+    \textit{Asks the user to provide the ingredients that he wants on the custom pizza.} \\ \vspace{0.5em}
+    \textbf{Parameters:} (none)
+};
+
+% Node B: The newly discovered node (from the current session)
+\node[raw_node, below=of nodeA] (nodeB) {
+    \textbf{\texttt{prompt ingredients for custom pizza}} \\
+    \textit{Asks about ingredients for a custom pizza.} \\ \vspace{0.5em}
+   \textbf{Parameters:} pepperoni, ham, tuna, olives
+};
+
+% The Merge Process in the middle
+\node[process_box, right=of nodeA, yshift=-2cm] (merge_process) {
+    Global Merge \\
+    (LLM Semantic Comparison)
+};
+
+% Node C: The final, merged node
+\node[func_node, right=of merge_process] (nodeC) {
+    \textbf{\texttt{prompt for custom pizza ingredients}} \\
+    \textit{Asks the user to provide the ingredients for a custom pizza.} \\ \vspace{0.5em}
+    \textbf{Parameters:} pepperoni, ham, tuna, olives
+};
+
+% Arrows connecting the nodes
+\draw[arrow] (nodeA.east) -- (merge_process.west);
+\draw[arrow] (nodeB.east) -- (merge_process.west);
+\draw[arrow] (merge_process.east) -- (nodeC.west);
+
+\end{tikzpicture}

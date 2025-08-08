@@ -59,18 +59,28 @@ The chosen \texttt{model} will have an impact on the achieved results
 since each model has its own strengths and limitations
 and there will be models that will perform better than others,
 usually at the cost of being more expensive.
-In this field we will just input the name of the model (e.g. \texttt{gpt-4o-mini}).
-Then we have the \texttt{temperature},
+In this field (line 3 in the listings)
+we will just input the name of the model (e.g. \texttt{gpt-4o-mini}).
+Then we have the \texttt{temperature} (line 4),
 this parameter controls the randomness of the \ac{LLM},
 that is, when the model is going to choose the next word
 how randomly it does it.
 A value of 0 means that the model is deterministic
 while 1 means that it will be more creative.
+Lastly, in line 5 and 6 we have the format type,
+here it can be set to audio or text.
 
 \subsection{User Persona Definition (\texttt{user})}
 
-In the \texttt{user} section, we will define
-the persona, its role, context and goals.
+A key concept in these profiles is the persona,
+a detailed, fictional character that represents a primary user type
+\autocite{cooperFaceEssentialsInteraction2014}.
+Personas encapsulate the goals, motivations, and behaviors of real users.
+
+In the \texttt{user} section of a test profile
+(starting in line 7 in both listings),
+we define such a persona for the simulated user
+through a combination of several fields.
 We start with the \texttt{language} that the user will employ,
 followed by the \texttt{role} of the simulated user,
 that is, a sentence representing who the user is
@@ -88,7 +98,9 @@ Each of these parameters will have assigned a function:
 \begin{itemize}
   \item \texttt{random()}: A random value of the data below will be taken.
   \item \texttt{random(x)}: Takes $x$ different random values.
-  \item \texttt{forward()}: Selects one value sequentially from the data list.
+  \item \texttt{forward()}: Selects one value sequentially from the data list
+    (see \autoref{code:yaml-profile-pizza} lines 21 and 35
+    and \autoref{code:yaml-profile-drinks} lines 20 and 27).
   \item \texttt{forward(x)}: Instead of one by one, takes the $x$ next values.
   \item \texttt{forward(var)}:
     Allows to cycle through all the combinations of a pair (or more, depending on the nested combinations) of variables.
@@ -102,13 +114,27 @@ Right after that, we have the data field,
 where we will input a list of values
 or if it is a numeric value, a range with min and max
 and the step to go from the min to the max.
+For example, on both inputs in \autoref{code:yaml-profile-pizza}
+in lines 20 and 34 we have inputs with strings
+that right below define a list of values that
+the forward function will take.
+In \autoref{code:yaml-profile-drinks} in line 19
+we have a input variable with an integer,
+note how now instead of a list with all the values
+we have the min, max and step.
 
 \subsection{Chatbot Settings (\texttt{chatbot})}
 
 Here, expected behaviour of the system under test will be specified.
-The first field is the \texttt{fallback},
-this is the sentence given by the chatbot when it cannot understand what the user is saying,
+First we have the \texttt{is\_starter},
+which simply defines if the chatbot is the one who starts the conversation or not.
+The second field is the \texttt{fallback}
+(\autoref{code:yaml-profile-pizza} line 44
+and \autoref{code:yaml-profile-drinks} line 36),
+this is the default sentence given by the chatbot
+when it cannot understand what the user is saying,
 or what he is saying is outside of the chatbot's scope.
+
 Next we have the \texttt{outputs}, a field similar to the goals
 but in this case instead of being related to the inputs,
 it will be used to extract outputs from the chatbot.
@@ -117,6 +143,19 @@ then a \texttt{type} which can be string, money, int, float or date;
 then we have a short \texttt{description}.
 This information will be used by an \ac{LLM}
 to extract the information from the conversation with the chatbot.
+
+For example, in \autoref{code:yaml-profile-pizza} we have on line 46
+\texttt{pizza\_type\_list} which will extract from the conversation
+the list of available pizzas provided by the chatbot,
+since it is a list of pizzas it is defined as string.
+In the \autoref{code:yaml-profile-drinks} we have
+\texttt{drink\_option\_price} in line 44,
+which will extract the price a single drink,
+note how it uses the type money,
+and, lastly, in the same listing in line 47
+we have \texttt{drink\_quantity\_requested}
+which will extract the number of drinks
+and for this, the type is set to int.
 
 
 \subsection{Conversation Control (\texttt{conversation})}
@@ -127,7 +166,8 @@ the more conversations, the more combinations of the goals' items to be tested.
 This field allows an integer, that simply indicates the number of conversations;
 \texttt{all\_combinations} that will exhaustively test every combination,
 although it ensures good coverage of the inputs,
-it can also result in an enormous number of test cases, specially if we use nested forwards;
+it can also result in an enormous number of test cases,
+specially if we use nested forwards;
 \texttt{sample(x)}, where $x$ is a number between $0$ and $1$,
 will compute all the possible combinations
 and take a percentage of all of these.
@@ -141,8 +181,13 @@ making sure that the conversation finishes even if the chatbot is not able to fu
 
 Lastly, we have the \texttt{interaction\_style},
 which lets us set a list of styles that the simulated user will adopt for its conversations.
-This styles are predefined and include some like \textit{make spelling mistakes}, \textit{use short phrases}
+This styles are predefined and include some like
+\textit{make spelling mistakes}, \textit{use short phrases}
 or \textit{single question}.
+
+See the from line 76 onwards in \autoref{code:yaml-profile-pizza}
+and from line 59 onwards in \autoref{code:yaml-profile-drinks}
+to see a real example.
 
 \section{User Profiles Generation}\label{sec:profile-generation}
 

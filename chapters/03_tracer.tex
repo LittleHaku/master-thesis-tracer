@@ -11,7 +11,7 @@ by iteratively discovering functionalities
 to create a structured model.
 
 The chapter first provides a high-level overview
-of the tool's two-phase implementation in \autoref{sec:overview}.
+of the tool's methodology through a two-phase implementation in \autoref{sec:overview}.
 Then we will detail the exploration phase in \autoref{sec:exploration},
 followed by the refinement phase in \autoref{sec:refinement}.
 
@@ -145,6 +145,9 @@ Detected initial language(s): ['English']
   \item \textbf{Fallback Message Detection:}
     The fallback message is the response that chatbots give
     when they cannot understand the user's intent.
+    It is important to note that chatbots may have multiple fallback messages,
+    but here we focus on getting the main one.
+    The profiles used by SENSEI also expect only one fallback message.
     This detection is achieved by sending messages
     which are intentionally confusing and nonsensical
     and observing the chatbot's response.
@@ -372,7 +375,8 @@ This is achieved in two actions:
     and merges them into one.
 \end{enumerate}
 
-To better understand this, we will give an example.
+To better understand this process, we will give an example,
+which is also visualized in \autoref{fig:consolidation-example}.
 Imagine that throughout the last conversation,
 we extract a functionality that is called
 "prompt for custom pizza ingredients",
@@ -397,7 +401,12 @@ but having different lists of parameters they are combined into a more extensive
 or the descriptions are combined
 to more accurately define what the functionality does.
 
-
+\begin{figure}[htpb]
+    \centering
+    \input{figures/merge-example.tex}
+    \caption{Visual representation of the Functionality Consolidation process.}
+    \label{fig:consolidation-example}
+\end{figure}
 
 \section{Refinement Phase}\label{sec:refinement}
 
@@ -438,16 +447,20 @@ is sent to the \ac{LLM} which will respond with
 
 \begin{itemize}
   \item \textbf{Informational:}
-    these are chatbots that mainly answer questions and provide information.
-    Examples of these are university or bank chatbots that only give you information
-    or if you need to do any paperwork they will give you a link and redirect you
-    but they will not assist you with the transaction directly.
+    these conversational agents are primarily informational,
+    designed to respond to user inquiries and deliver relevant data.
+    Common applications include university and banking chatbots,
+    which are limited to providing information and
+    redirecting users to appropriate resources,
+    such as forms or specific web pages,
+    rather than directly facilitating transactions.
 
   \item \textbf{Transactional:}
     these are chatbots that do guide the user
-    through a task or workflow.
+    through a task or workflow,
+    often following a form and making a transaction.
     For example, the pizzeria example we have been using
-    or a hotel chatbot that helps you book a room.
+    or a hotel chatbot that helps users book a room.
 \end{itemize}
 
 \subsection{Workflow Structure Inference}
