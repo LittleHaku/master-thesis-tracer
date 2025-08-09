@@ -6,9 +6,9 @@
 To ensure that the previous methodology can be reproduced
 we have implemented \acf{TRACER} in an open-source Python package
 to allow users to execute it from a \ac{CLI}.
-On top of that, we have developed a web application
+In addition, we have developed a web application
 that allows users to execute both \ac{TRACER} and SENSEI
-without the need of knowing how to operate the command line.
+without requiring knowledge of how to operate the command line.
 
 
 \section{Implementation and Architecture}
@@ -17,23 +17,22 @@ without the need of knowing how to operate the command line.
 
 As explained during the \autoref{sec:profile-generation} (\nameref{sec:profile-generation})
 \ac{TRACER} relies on \acp{LLM},
-this is why used LangGraph \autocite{LangGraph} as our framework for development.
-The reason why we chose LangGraph
-was because it allows to manage and orchestrate
+this is why we used LangGraph \autocite{LangGraph} as our framework for development.
+We chose LangGraph because
+it allows to manage and orchestrate
 complex agentic workflows with states,
-it is also an industry standard and
-it has an extensive documentation.
+it is also an industry standard with extensive documentation.
 LangGraph allows us to orchestrate the different stages
 and to keep complex states where we store
 the inferred model and the fields generated for the profiles.
-Right now \ac{TRACER} allows OpenAI and Gemini models,
-but thanks to LangGraph it would be easy to add other \ac{LLM} providers.
+Currently, \ac{TRACER} allows OpenAI and Gemini models,
+but thanks to LangGraph it would be straightforward to add other \ac{LLM} providers.
 
 \subsection{Modular Architecture}
 
 \ac{TRACER} can infer a chatbot model as long as
-the chabots is accessible through an interface, typically a \acs{REST} \acs{API}.
-Right now it provides access to communicate with chatbots made with different technologies,
+the chatbots is accessible through an interface, typically a \acs{REST} \acs{API}.
+Currently, it provides access to communicate with chatbots made with different technologies,
 such as Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}, Rasa \autocite{Rasa2020} or 1MillionBot \autocite{1MillionBot}.
 In addition, new connectors could be added by extending the current implementation.
 
@@ -57,9 +56,9 @@ each corresponding to a phase of the methodology:
     taking the final chatbot model and generating the YAML user profiles.
 \end{itemize}
 
-\subsection{Generated Artifacts}
+\subsection{Generated Artefacts}
 
-Upon completion, \ac{TRACER} generates the following artifacts
+Upon completion, \ac{TRACER} generates the following artefacts
 containing the results from the full analysis performed on the target chatbot:
 
 \begin{itemize}
@@ -67,11 +66,12 @@ containing the results from the full analysis performed on the target chatbot:
     representing realistic users that would use the application
     and that will act as test cases
     (see \autoref{code:yaml-profile-pizza} and \autoref{code:yaml-profile-drinks})
-  \item A markdown report containing the inferred model information like
+  \item A markdown report containing the inferred model information such as
     the discovered functionalities, fallback message, language
-    and also other information like token usage, number of \ac{LLM} calls or estimated cost.
+    and other information such as token usage,
+    number of \ac{LLM} calls or estimated cost.
   \item A graph representing the inferred model's workflow (see \autoref{fig:pizzeria-workflow})
-  \item A JSON file containing the same workflow but in text.
+  \item A JSON file containing the same workflow but in a textual format.
 \end{itemize}
 
 
@@ -87,13 +87,13 @@ making it easy to install by running
 \texttt{pip install chatbot-tracer}.
 This not only makes it easy to use,
 but also makes it easy to implement into other projects
-such as the web application done,
+such as the web application that was developed,
 or other projects that could use \ac{TRACER}
-since it can just be added as another package requirement.
+since it can be added as another package requirement.
 
 To ensure code quality and automate the release process
 \ac{TRACER} makes use of GitHub Actions for the \ac{CI/CD} pipeline.
-For the \ac{CI} we made use of Ruff \autocite{Ruff}.
+For the \ac{CI} we used Ruff \autocite{Ruff}.
 Ruff is Python linter and formatter written in Rust
 that combines tools like Flake8 or Black into a single and faster tool.
 We made use of Ruff not only to enforce a consistent code style,
@@ -109,17 +109,17 @@ All the \ac{TRACER} source code can be accessed in \url{https://github.com/Chatb
 
 \section{The \acl{CLI}}
 
-The primary way of using \ac{TRACER} is through the \ac{CLI}.
+The primary method for using \ac{TRACER} is through the \ac{CLI}.
 We can execute the whole \ac{TRACER} pipeline,
 from chatbot exploration to profile generation,
 through a single command.
-This way enables users who prefer terminal-based workflows
+This approach enables users who prefer terminal-based workflows
 such as developers, to execute TRACER easily.
 It also allows \ac{TRACER} to be integrated within other projects.
 
 \ac{TRACER} is run by one main command: \texttt{tracer}.
 To see in more detail its options, users can run \texttt{tracer --help}.
-Some of the key arguments are the following ones:
+Some of the key arguments are as follows:
 
 \subsection{Conversation Control}
 
@@ -135,28 +135,33 @@ the chatbot technology along with the \ac{API} endpoint.
 
 \subsection{LLM Configuration}
 
-Using \texttt{--model} or \texttt{-m} lets one decide the \acl{LLM} used for the exploration and analysis,
+Using \texttt{--model} or \texttt{-m} allows the user to select the \acl{LLM}
+used for the exploration and analysis,
 then \texttt{--profile-model} or \texttt{-pm} is an optional argument
 that if set will make the generated user profiles' \ac{LLM} be the one specified,
-otherwise the \ac{LLM} that will appaer in the profiles will be the same one used for \ac{TRACER},
-it is recommended to use a better model for exploration and analysis
+otherwise the \ac{LLM} that will appear in the profiles
+will be the same one used for \ac{TRACER},
+it is recommended to use a more capable model for exploration and analysis
 since will infer a more comprehensive model with more realistic profiles,
-and then a more economic model to run the profiles
+and then a more economical model to run the profiles
 since there will be many more \ac{LLM} calls
-and the chosen model will not have that much impact.
+and the chosen model will not have as significant an impact.
 
 \subsection{Output and Logging}
 
-We also have the verbose levels which can be three levels:
-the basic one where we will just see things like the discovered functionalities,
-which session or phase are we in and warnings.
+There is also three verbose levels:
+the basic one where only key information, such as the discovered functionalities,
+which session or phase are we in and warnings are displayed.
 The verbose level, activated with \texttt{-v},
-which allows us to see the conversation too,
-and the debug \texttt{-vv} that will show what the verbose shows plus information like
-prompts sent to the \ac{LLM}, its responses,
-and other logs that may have been set during the development and debugging of the program.
-Lastly, we have \texttt{--output} or \texttt{-o},
-which simply controls where all the generated artifacts will be placed.
+which shows the conversations in addition to the previous information,
+and the debug \texttt{-vv}
+which displays the same information as the verbose level,
+in addition to details such as prompts
+sent to the \ac{LLM}, its responses,
+and other logs that may have been generated
+during the development and debugging of the program.
+Lastly, there is \texttt{--output} or \texttt{-o},
+which simply controls where all the generated artefacts will be placed.
 
 \begin{lstlisting}[
 language=tracer-examples,
@@ -173,14 +178,14 @@ For the exploration, analysis and profile generation, the smarter model Gemini 2
 then for the model that is defined in each user profile, Gemini 2.0 Flash will be used since it is faster and cheaper.
 We used the \texttt{-v} to be able to monitor the conversations that are happening
 between the explorer agent and the chatbot under testing.
-Finally, all the artifacts will be stored in a directory called \texttt{pizzeria\_results}.
+Finally, all the artefacts will be stored in a directory called \texttt{pizzeria\_results}.
 
 \section{The Web Application}
 
 To complement the \ac{CLI},
 we developed a web application
-to provide a user friendly interface that will allow to run the whole end-to-end pipeline,
-that it is, to run \ac{TRACER} to generate the user profiles,
+to provide a user-friendly interface that will allow to run the whole end-to-end pipeline,
+that is, to run \ac{TRACER} to generate the user profiles,
 and then to execute these with SENSEI.
 This, allows a broader audience to use both \ac{TRACER} and SENSEI
 without the need of knowing how to use the \ac{CLI}.
@@ -206,15 +211,15 @@ of the technologies and design patterns used within each of these layers.
 
 The backend of the application was developed in Django \autocite{Django},
 the reason why this framework was used is because it is made for Python
-so it suits both \ac{TRACER} and SENSEI,
+so it is compatible with \ac{TRACER} and SENSEI,
 and also it offers the Django REST Framework \autocite{DjangoRESTFramework}
 that will allow us to develop a \ac{REST} \ac{API} that will be consumed by our frontend.
 
-For the frontend we went with React \autocite{React},
+For the frontend we chose React \autocite{React},
 a JavaScript library to develop \acp{SPA}
 that will consume directly from our Django \ac{API}.
 
-Lastly, to ensure data persistance,
+Lastly, to ensure data persistence,
 we used PostgreSQL \autocite{PostgreSQL2025},
 we chose a \ac{SQL} database since Django's \ac{ORM} supports this type of databases out of the box,
 also, we preferred PostgreSQL over the default Django's SQLite
@@ -224,7 +229,7 @@ and stores everything in a single file which causes concurrency and performance 
 \subsection{Asynchronous Task Handling}
 
 \ac{TRACER} and SENSEI executions both take from a few minutes up to hours,
-thus, executing this tasks synchronously would leave the user's interface frozen
+thus, executing this tasks synchronously would leave the user's interface unresponsive
 for the duration of the whole process.
 To handle this we implemented asynchronous executions,
 we did this by using a distributed task queue called Celery \autocite{Celery},
@@ -233,7 +238,7 @@ Then, to communicate Django with Celery we need a broker,
 for this we used RabbitMQ \autocite{RabbitMQ}.
 These two tools in conjunction will allow the user to execute \ac{TRACER} or SENSEI
 and change to a different view, log out, or even turn off the computer
-and then come back to check the progress.
+and later return to check its progress.
 It will also help the server to not get saturated
 since we can limit the number of concurrent jobs
 and if there are requests to execute more than this number,
@@ -268,11 +273,12 @@ we need to collect and serve the Django static files,
 which is why calls made to \texttt{/static/} will get redirected to Django's static files.
 Lastly, the remaining calls will be redirected to React's build files.
 
-\subsection{Deployment and Containarization}
+\subsection{Deployment and Containarisation}
 
 
 
-To be able to deploy all of these services we containerized the whole web application using Docker \autocite{merkelDockerLightweightLinux2014} along Docker compose.
+To facilitate the deployment of these services
+we containerized the whole web application using Docker \autocite{merkelDockerLightweightLinux2014} along Docker compose.
 This was done not only to simplify the deployment process,
 but to ensure that no matter the machine and the dependencies it had installed,
 it would work if it had Docker.
@@ -293,7 +299,7 @@ then each cylinder is volume, where files are stored to ensure data persistance 
 Each blue arrow means that the volume is mounted in that container, i.e., the container can access the volume's files,
 and the red ones show dependencies for the Docker compose,
 which means that until the container that the arrow is pointing at is not working,
-the one that is pointing (has the start of the arrow) is not going to get started.
+the container at the start of the arrow will not be initiated.
 
 This ensures that until we don't have the \ac{DB} and message broker set
 the queue and backend won't start,
@@ -308,24 +314,25 @@ so that we would have hot reload (i.e., changes in the code were shown live in t
 To ensure the application's security we followed the Django Deployment Checklist \autocite{DeploymentChecklistDjango}.
 Related to the authentication we implemented a new user model,
 and to handle the authentication we used Django-Rest-Knox \autocite{DjangoRestKnox} tokens.
-This is a library that implements a improved token system over the default in the Django REST Framework \autocite{DjangoRESTFramework},
+This is a library that implements an improved token system over the default in the Django REST Framework \autocite{DjangoRESTFramework},
 the main improvements that it brings are:
 \begin{itemize}
   \item \textbf{One token per device:}
     instead of having one token per user
     which would mean that logging in from different devices
     would mean that they share the same token,
-    causing that for example closing session in one device would close it in all the others.
+    causing that for example
+    logging out on one device would terminate the session on all others.
     Knox solves this by creating one token per device.
 
   \item \textbf{Encrypted token in \ac{DB}:}
     this is a major security flaw from \ac{DRF}
     and it is that tokens are stored as plain text in the \ac{DB},
     meaning that if the \ac{DB} was compromised,
-    the attacker could use those tokens to act like he was logged in the account he wanted.
+    the attacker could use those tokens to impersonate the legitimate user.
 
   \item \textbf{Token expire time:}
-    in \ac{DRF} once you log in with an account that token is valid for ever.
+    in \ac{DRF} once you log in with an account that token is valid forever.
     Meanwhile, in Knox you can set a expiracy time which will cause that after that time,
     your session will be closed since the token won't be valid.
 \end{itemize}
@@ -334,11 +341,12 @@ To store the \ac{API} keys uploaded by the user to run \ac{TRACER} or SENSEI
 we used Fernet Symmetric Encryption \autocite{FernetSymmetricEncryption}
 to encrypt them before saving them to the \ac{DB}.
 Although the \ac{DB} has a user and password (not the default ones)
-we decided this was a good idea to have more layers of security,
-the same way that Knox encrypts, so that if someone managed to breach the \ac{DB}
+we determined this was a prudent measure to add further layers of security,
+the same way that Knox encrypts, so that
+if the database was compromised, these credentials would remain encrypted.
 those things would still be encrypted.
 
-These things combined with the fact that
+These measures combined with the fact that
 every time that a petition is made to the \ac{API} the token is validated,
 and that the models are configured so that they can only be
 read by the owner unless it is set to be public (one can set projects as public)
