@@ -189,12 +189,20 @@ See the from line 76 onwards in \autoref{code:yaml-profile-pizza}
 and from line 59 onwards in \autoref{code:yaml-profile-drinks}
 to see a real example.
 
-\section{User Profiles Generation}\label{sec:profile-generation}
+\section{User Profile Generation}\label{sec:profile-generation}
+
+\begin{figure}[htpb]
+    \centering
+    \input{figures/profile-generation-steps.tex}
+    \caption{Process to generate profiles from the model to the final user profiles.}
+    \label{fig:profile_generation_flowchart}
+\end{figure}
 
 The profile generation is an automated process
 that aims to convert the inferred model
 into a set of profiles that will thoroughly test the chatbot.
-The process is divided into seven steps that begins by
+The process is divided into seven steps that can be visualized in \autoref{fig:profile_generation_flowchart}.
+It begins by
 grouping functionalities into profiles,
 followed by the \ac{LLM}-driven generation of goals, variables, context, and outputs.
 Then, the definition of the conversation style and,

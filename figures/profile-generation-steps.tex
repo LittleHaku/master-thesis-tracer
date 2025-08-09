@@ -1,0 +1,113 @@
+\begin{tikzpicture}[
+  node distance=1cm and 1cm,
+  % --- STYLES ---
+  % Input/Output nodes (document shape)
+  io_node/.style={
+      draw, thick, trapezium, trapezium left angle=70, trapezium right angle=110,
+      minimum width=3.5cm, minimum height=1cm, align=center, fill=gray!20
+  },
+  % Process steps driven by an LLM
+  llm_step/.style={
+      rectangle, draw, thick, rounded corners=3pt, fill=blue!20,
+      minimum width=5cm, minimum height=1cm, align=center
+  },
+  % Process steps that are programmatic
+  prog_step/.style={
+      rectangle, draw, thick, rounded corners=3pt, fill=orange!20,
+      minimum width=5cm, minimum height=1cm, align=center
+  },
+  % The final assembly and validation step
+  final_step/.style={
+      rectangle, draw, thick, rounded corners=3pt, fill=green!20,
+      minimum width=5cm, minimum height=1cm, align=center
+  },
+  % YAML parts being generated
+  yaml_part/.style={
+      font=\small\ttfamily, align=left
+  },
+  % Arrows
+  arrow/.style={-Stealth, thick},
+  generates_arrow/.style={-Stealth, thick, blue!60!black},
+  assembly_arrow/.style={-Stealth, thick, dashed, gray},
+  % Legend styles
+  legend_box/.style={
+      draw, thick, rounded corners=3pt,
+      minimum width=0.4cm, minimum height=0.3cm
+  }
+]
+
+% --- NODES ---
+% Input
+\node[io_node] (model) {Inferred Chatbot Model};
+
+% Process Steps (in a vertical chain)
+\node[llm_step, below=of model] (grouping) {1. Grouping Functionalities};
+\node[llm_step, below=of grouping] (goal_gen) {2. Goal Generation};
+\node[llm_step, below=of goal_gen] (var_gen) {3. Variable Definition};
+\node[llm_step, below=of var_gen] (context_gen) {4. Context Generation};
+\node[llm_step, below=of context_gen] (output_gen) {5. Output Definition};
+\node[prog_step, below=of output_gen] (style_gen) {6. Conversation Style Definition};
+\node[final_step, below=of style_gen] (assembly) {7. Profile Assembly \& Validation};
+
+% Final Output
+\node[io_node, below=of assembly] (final_profile) {Validated Test User Profile};
+
+% Generated YAML parts (to the right)
+\node[yaml_part, right=of grouping, xshift=1.5cm] (p1) {test\_name:\\ role:};
+\node[yaml_part, right=of goal_gen, xshift=1.5cm] (p2) {goals:};
+\node[yaml_part, right=of var_gen, xshift=1.5cm] (p3) {variables:};
+\node[yaml_part, right=of context_gen, xshift=1.5cm] (p4) {context:};
+\node[yaml_part, right=of output_gen, xshift=1.5cm] (p5) {output:};
+\node[yaml_part, right=of style_gen, xshift=1.5cm] (p6) {conversation:};
+
+% --- LEGEND ---
+% Create a box around the entire legend
+\node[draw, thick, rounded corners=5pt, fill=gray!10, left=of var_gen, xshift=-0.5cm, yshift=0.5cm] (legend_box) {
+  \begin{minipage}{2.8cm}
+    \centering
+    \textbf{\small Legend}\\[0.1cm]
+    
+    % Legend items
+    \tikz{\node[llm_step, minimum width=2.6cm, minimum height=0.6cm] {\small LLM Driven};}\\[0.1cm]
+    \tikz{\node[prog_step, minimum width=2.6cm, minimum height=0.6cm] {\small Programmatic};}\\[0.1cm]
+    \tikz{\node[final_step, minimum width=2.6cm, minimum height=0.6cm] {\small Assembly \&\\Validation};}\\[0.3cm]
+    
+    % Arrow examples
+    \tikz{\draw[generates_arrow] (0,0) -- (1.5,0); \node[above, yshift=0.05cm] at (0.75,0) {\small Generates};}\\[0.2cm]
+    \tikz{\draw[assembly_arrow] (0,0) -- (1.5,0); \node[below, yshift=-0.05cm] at (0.75,0) {\small Assembled into};}
+  \end{minipage}
+};
+
+
+
+% --- ARROWS ---
+% Main process flow
+\draw[arrow] (model) -- (grouping);
+\draw[arrow] (grouping) -- (goal_gen);
+\draw[arrow] (goal_gen) -- (var_gen);
+\draw[arrow] (var_gen) -- (context_gen);
+\draw[arrow] (context_gen) -- (output_gen);
+\draw[arrow] (output_gen) -- (style_gen);
+\draw[arrow] (style_gen) -- (assembly);
+\draw[arrow] (assembly) -- (final_profile);
+
+% Direct generation arrows (blue)
+\draw[generates_arrow] (grouping.east) -- (p1.west);
+\draw[generates_arrow] (goal_gen.east) -- (p2.west);
+\draw[generates_arrow] (var_gen.east) -- (p3.west);
+\draw[generates_arrow] (context_gen.east) -- (p4.west);
+\draw[generates_arrow] (output_gen.east) -- (p5.west);
+\draw[generates_arrow] (style_gen.east) -- (p6.west);
+
+% Arrows showing parts being assembled
+\draw[assembly_arrow] (p1) -- (assembly.east);
+\draw[assembly_arrow] (p2) -- (assembly.east);
+\draw[assembly_arrow] (p3) -- (assembly.east);
+\draw[assembly_arrow] (p4) -- (assembly.east);
+\draw[assembly_arrow] (p5) -- (assembly.east);
+\draw[assembly_arrow] (p6) -- (assembly.east);
+
+% Self-correction loop
+\draw[arrow, red] (assembly.south west) to[bend left=45] node[left, font=\small, align=center] {On Error:\\Fix with LLM} (assembly.north west);
+
+\end{tikzpicture}
