@@ -7,7 +7,7 @@ Master's thesis on TRACER, a tool to explore, model and profile chatbots.
 The PDF is automatically compiled on every push to the main branch. You can access the latest version:
 
 - **Direct download**: Go to the [Releases](../../releases) page and download the PDF
-- **Build artifacts**: Check the [Actions](../../actions) tab for build artifacts
+- **Build artefacts**: Check the [Actions](../../actions) tab for build artifacts
 
 ## Requirements
 
