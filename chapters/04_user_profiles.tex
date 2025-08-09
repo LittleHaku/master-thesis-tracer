@@ -3,13 +3,13 @@
 
 \chapter{User Profile Structure and Generation}\label{chapter:user-profiles}
 
-Once the model has been finished,
+Once the model is complete,
 we use it to automatically generate user profiles for SENSEI.
 These serve as test cases designed to verify
 the discovered functionalities of the chatbot,
 its handling of different inputs,
-to check if the outputs match the expected value,
-and to find other errors such as timeouts.
+to check if the outputs match the expected values,
+and to identify other errors such as timeouts.
 
 First, \autoref{sec:profile-structure}
 will cover the structure of these profiles and how they work,
@@ -24,7 +24,7 @@ that characterises the user,
 the conversation goals,
 interaction style,
 and other information such as the \ac{LLM} that will be used,
-or the number of conversations and turn per conversations.
+or the number of conversations and turns per conversation.
 These profiles are structured in a YAML file,
 \autoref{code:yaml-profile-pizza} and \autoref{code:yaml-profile-drinks}
 show an example of the user profiles generated during a \ac{TRACER} execution
@@ -45,37 +45,35 @@ against a pizzeria chatbot made with Taskyto.
 
 
 To better understand how the profiles are generated,
-we must first understand the profiles and their structure
-made up of the \texttt{test\_name},
+we must first understand the profiles and their structure.
+Each profile consists of the \texttt{test\_name},
 a unique identifier for the profile,
 followed by four configuration blocks:
 \texttt{llm}, \texttt{user}, \texttt{chatbot} and \texttt{conversation}.
 
 \subsection{LLM Configuration (\texttt{llm})}
 
-In this section we can choose the \acl{LLM} that we are going to use
-along with its temperature.
-The chosen \texttt{model} will have an impact on the achieved results
-since each model has its own strengths and limitations
-and there will be models that will perform better than others,
-usually at the cost of being more expensive.
-In this field (line 3 in the listings)
-we will just input the name of the model (e.g. \texttt{gpt-4o-mini}).
-Then we have the \texttt{temperature} (line 4),
-this parameter controls the randomness of the \ac{LLM},
-that is, when the model is going to choose the next word
-how randomly it does it.
-A value of 0 means that the model is deterministic
-while 1 means that it will be more creative.
-Lastly, in line 5 and 6 we have the format type,
-here it can be set to audio or text.
+This section specifies the \acl{LLM} to be used and its temperature.
+The chosen \texttt{model} impacts the results,
+as each model has its own strengths and limitations,
+and some models will perform better than others,
+usually at a higher cost.
+This field (line 3 in the listings) takes the name of the model
+(e.g., \texttt{gpt-4o-mini}).
+Next is the \texttt{temperature} (line 4),
+a parameter that controls the randomness of the \ac{LLM};
+that is, how randomly the model selects the next word.
+A value of 0 makes the model's output deterministic,
+while a value of 1 encourages more creative responses.
+Lastly, lines 5 and 6 specify the format type,
+which can be set to audio or text.
 
 \subsection{User Persona Definition (\texttt{user})}
 
 A key concept in these profiles is the persona,
 a detailed, fictional character that represents a primary user type
 \autocite{cooperFaceEssentialsInteraction2014}.
-Personas encapsulate the goals, motivations, and behaviors of real users.
+Personas encapsulate the goals, motivations, and behaviours of real users.
 
 In the \texttt{user} section of a test profile
 (starting in line 7 in both listings),
@@ -83,35 +81,35 @@ we define such a persona for the simulated user
 through a combination of several fields.
 We start with the \texttt{language} that the user will employ,
 followed by the \texttt{role} of the simulated user,
-that is, a sentence representing who the user is
-and what he ought to do (e.g., A customer ordering a pizza).
+that is, a sentence representing the user's identity and objective
+(e.g., A customer ordering a pizza).
 The \texttt{context} field provides additional information to the chatbot,
 it can add more details or personality traits, such as,
 "You are in a hurry", to make the simulated user more realistic.
-The \texttt{goals} field is arguably the most important of the user's fields.
-In it, we will describe all the objectives for the conversation.
+The \texttt{goals} field is arguably the most important of the user's fields,
+as it describes all the objectives for the conversation.
 These objectives are written like templates with placeholders
 (e.g., Specify the pizza size as {{pizza\_size}}).
 Below the list with all the objectives
-we have the list of parameters, which is the placeholders we left in goals.
-Each of these parameters will have assigned a function:
+is the list of parameters, which is the placeholders defined in the goals.
+Each of these parameters is assigned a function:
 \begin{itemize}
-  \item \texttt{random()}: A random value of the data below will be taken.
+  \item \texttt{random()}: A random value from the data below is selected.
   \item \texttt{random(x)}: Takes $x$ different random values.
   \item \texttt{forward()}: Selects one value sequentially from the data list
     (see \autoref{code:yaml-profile-pizza} lines 21 and 35
     and \autoref{code:yaml-profile-drinks} lines 20 and 27).
-  \item \texttt{forward(x)}: Instead of one by one, takes the $x$ next values.
+  \item \texttt{forward(x)}: Takes the $x$ next values sequentially.
   \item \texttt{forward(var)}:
     Allows to cycle through all the combinations of a pair (or more, depending on the nested combinations) of variables.
     For example, one could nest pizza sizes with pizza types,
     that means that all combinations of pizza sizes with pizza types would be tested,
-    that is, small pepperoni, small four chesee, ..., medium pepperoni, medium four chesee, ..., large pepperoni, large four chesee...
+    that is, small pepperoni, small four cheese, ..., medium pepperoni, medium four cheese, ..., large pepperoni, large four cheese...
 \end{itemize}
 After the function, we can specify its \texttt{type},
 with values like int, float, string or date.
-Right after that, we have the data field,
-where we will input a list of values
+Next, there is the data field,
+where a list of values is provided
 or if it is a numeric value, a range with min and max
 and the step to go from the min to the max.
 For example, on both inputs in \autoref{code:yaml-profile-pizza}
@@ -119,26 +117,26 @@ in lines 20 and 34 we have inputs with strings
 that right below define a list of values that
 the forward function will take.
 In \autoref{code:yaml-profile-drinks} in line 19
-we have a input variable with an integer,
+we have an input variable with an integer,
 note how now instead of a list with all the values
 we have the min, max and step.
 
 \subsection{Chatbot Settings (\texttt{chatbot})}
 
-Here, expected behaviour of the system under test will be specified.
+This section specifies the expected behaviour of the system under test.
 First we have the \texttt{is\_starter},
-which simply defines if the chatbot is the one who starts the conversation or not.
+which defines whether the chatbot initiates the conversation.
 The second field is the \texttt{fallback}
 (\autoref{code:yaml-profile-pizza} line 44
 and \autoref{code:yaml-profile-drinks} line 36),
 this is the default sentence given by the chatbot
-when it cannot understand what the user is saying,
-or what he is saying is outside of the chatbot's scope.
+when it cannot understand the user's statement,
+or the user's input is outside of the chatbot's scope.
 
-Next we have the \texttt{outputs}, a field similar to the goals
+Next is the \texttt{outputs}, a field similar to the goals
 but in this case instead of being related to the inputs,
 it will be used to extract outputs from the chatbot.
-For each output we will give a name
+For each output a name is provided
 then a \texttt{type} which can be string, money, int, float or date;
 then we have a short \texttt{description}.
 This information will be used by an \ac{LLM}
@@ -167,7 +165,7 @@ This field allows an integer, that simply indicates the number of conversations;
 \texttt{all\_combinations} that will exhaustively test every combination,
 although it ensures good coverage of the inputs,
 it can also result in an enormous number of test cases,
-specially if we use nested forwards;
+especially if we use nested forwards;
 \texttt{sample(x)}, where $x$ is a number between $0$ and $1$,
 will compute all the possible combinations
 and take a percentage of all of these.
@@ -177,15 +175,15 @@ It can be the number of steps taken in the conversation
 (let a step be a user message followed by a chatbot's one),
 or \texttt{all\_answered} which will stop once the user has completed all of its goals,
 this parameter is also accompanied by a \texttt{limit} field which sets a hard limit
-making sure that the conversation finishes even if the chatbot is not able to fulfil the user's goals.
+ensuring that the conversation finishes even if the chatbot is not able to fulfil the user's goals.
 
 Lastly, we have the \texttt{interaction\_style},
 which lets us set a list of styles that the simulated user will adopt for its conversations.
-This styles are predefined and include some like
+These styles are predefined and include some like
 \textit{make spelling mistakes}, \textit{use short phrases}
 or \textit{single question}.
 
-See the from line 76 onwards in \autoref{code:yaml-profile-pizza}
+See from line 76 onwards in \autoref{code:yaml-profile-pizza}
 and from line 59 onwards in \autoref{code:yaml-profile-drinks}
 to see a real example.
 
@@ -201,7 +199,7 @@ to see a real example.
 The profile generation is an automated process
 that aims to convert the inferred model
 into a set of profiles that will thoroughly test the chatbot.
-The process is divided into seven steps that can be visualized in \autoref{fig:profile_generation_flowchart}.
+The process is divided into seven steps that can be visualised in \autoref{fig:profile_generation_flowchart}.
 It begins by
 grouping functionalities into profiles,
 followed by the \ac{LLM}-driven generation of goals, variables, context, and outputs.
@@ -211,35 +209,36 @@ Each of these steps is detailed in the following subsections.
 
 \subsection{Grouping Functionalities into Profiles}
 
-The inferred model is send to an \ac{LLM} along with conversation fragments,
+The inferred model is sent to an \ac{LLM} along with conversation fragments,
 with this information the \ac{LLM} is prompted to
 group the functionalities into realistic and logical user scenarios.
 Each group will gather functionalities that are semantically related,
 frequently used together or performed sequentially.
 Ideally, each functionality is only assigned to one group
-to ensure that all functionalities are used but avoiding redundancy;
+to ensure that all functionalities are used while avoiding redundancy;
 this is not always achieved since in cases where a functionality branches into others
 it is required to go through it at least twice.
-From this functionality groups, the \ac{LLM} will generate
+From these functionality groups, the \ac{LLM} will generate
 the \texttt{test\_name} along with its \texttt{role}.
 
 \subsection{Goal Generation}
 
-After the grouping has been done,
+Once the functionalities are grouped,
 the group of functionalities is sent to a new \ac{LLM} call
 that will create a set of functionalities that when fulfilled
 will ensure that the functionalities have been activated.
 The goals may or may not have variables,
 it will depend on the nature of the goal,
-for example if asking about the opening hours it will not have variables,
+for example, a query about opening hours will not require variables
 but if the goal is about asking for a pizza,
 then the goal will likely have variables.
 
 \subsection{Variable Generation}
 
 This step is only needed when variable \texttt{\{\{placeholders\}\}} have been defined.
-To understand how the variables are generated first we need to see waht a data source is.
-A data source are the values of either a parameter or an output from a functionality node,
+To understand how the variables are generated
+first we need to define what a data source is.
+A data source comprises the values of either a parameter or an output from a functionality node,
 we decided to use both outputs and parameters since there are occasions
 where the extracted functionality is for example "list available pizza types"
 and the values that we can use for the variables
@@ -247,18 +246,18 @@ are in the outputs instead of the more obvious parameters.
 So the data sources are the combinations of all the values
 from all outputs and parameters.
 
-Now that we now this, the procedure is as follows for each individual variable.
+With this defined, the procedure is as follows for each individual variable.
 First, we pass all these data sources to the \ac{LLM}
 and prompt it to match the variable to one of the data sources
-emphasizing that it is not necessary to force a match
-just for the sake of making one.
+emphasizing that it is not necessary to force a match unnecessarily.
 Then, if one match is given,
 we request the \ac{LLM} to generate another extra value
-based on what the returned data source
+based on the content of the returned data source
 to test the chatbot on values outside of the ones that it suggests.
 For example, with the pizza sizes small, medium, large,
 it tends to generate extra large as the extra value,
-or in the toppings pineapple was generated in this case (see \autoref{code:yaml-profile-pizza})
+or instance, \texttt{pineapple} was generated as a topping in this case
+(see \autoref{code:yaml-profile-pizza})
 
 In the case that no data source is matched,
 either because the chatbot didn't provide values
@@ -268,12 +267,12 @@ the \ac{LLM} will generate the data for the variable given
 the goals, functionalities, role and conversations.
 It is important to note that variables are not only restricted to be strings,
 in the \autoref{code:yaml-profile-drinks} the drink quantity
-are a great example of variables generated
+is a great example of variables generated
 with numeric values instead of being strings or matched data sources.
 
 The generated variables always use the \texttt{forward()} function
 since it allows us to test every option.
-We chose this over the nested one
+We chose this over the nested approach
 since it has a great balance between completeness and number of conversations.
 For example, having $8$ pizza types with $3$ different pizza sizes
 with nested forwards would require $8 \cdot 3 = 24$ conversations,
@@ -284,22 +283,22 @@ to go through all the options.
 
 A simple context of two or three sentences
 is generated by the \ac{LLM} based on
-the functionalities, the content generated before and the conversations.
+the functionalities, the previously generated content and the conversations.
 The idea of the generated context is to create a more realistic scenario
 where the user is not simply testing the chatbot
 but in a realistic case where for example
-the user is in a get together is looking to order pizzas,
+the user is at a get-together and is looking to order pizzas,
 or is an Erasmus student requesting help to a university chatbot.
 
 \subsection{Output Definition}
 
 The output definition along with the goal and variables is one of the key steps.
-It will let us test the chatbot
+This allows the chatbot to be tested
 and see if the chatbot is returning the information that it should
 and thus completing its functionalities.
 The outputs are generated by the \ac{LLM}
 taking into account the functionality and the goals,
-trying to look for things that will ensure that they have been achieved,
+seeking to identify elements that confirm their achievement,
 like for example the order ID or the order price;
 and by also looking at the outputs from the functionality nodes.
 The \autoref{code:yaml-profile-drinks} contains great examples
@@ -321,31 +320,32 @@ and pizza type, with $8$ options, is the one with the larger set of options,
 the number of conversations will be $8$ to ensure that all the variables are tested.
 
 For the length of the conversation,
-we went for a limit that is set based
-on a linear combination of the number of goals and outputs,
+a limit is set on a linear combination
+of the number of goals and outputs,
 so that the greater the number of goals and outputs,
 the longer the conversation will be,
 but still with a hard limit of $30$.
 
 Lastly, the interaction style always is set to \texttt{single\_question}
-since if not the uer simulator tries to fulfil all the goals at the same time
-and ends up making weird complicated sentences.
+since otherwise the user simulator tries to
+fulfil all the goals at the same time
+and results in awkwardly complex sentences.
 
 \subsection{Profile Assembly and Validation}
 
 Once all the fields have been generated
-the profile is turned into a YAML profile.
+the profile is assembled into a YAML file.
 This profile is then passed through a validation script
-that will check things like that all the required fields are complete,
+that will check that all the required fields are complete,
 that every placeholder has a variable defined,
-and that this one is correctly defined
-amongst other things,
+and that each variable is correctly defined
+amongst other checks,
 and if any error appears it will return a verbose description of the issue.
-Then, if any error arises, the description along with the YAML file
+Then, the description of these errors along with the YAML file
 are sent to the \ac{LLM} with a prompt to fix the issue.
 
 
-This seven steps allow us to turn the inferred model
+These seven steps allow us to turn the inferred model
 from the deployed chatbot under test,
 into a set of realistic and comprehensive user profiles
 that will act as test cases when combined with the user simulator SENSEI.
