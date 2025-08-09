@@ -31,7 +31,7 @@ but thanks to LangGraph it would be straightforward to add other \ac{LLM} provid
 \subsection{Modular Architecture}
 
 \ac{TRACER} can infer a chatbot model as long as
-the chatbots is accessible through an interface, typically a \acs{REST} \acs{API}.
+the chatbot is accessible through an interface, typically a \acs{REST} \acs{API}.
 Currently, it provides access to communicate with chatbots made with different technologies,
 such as Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}, Rasa \autocite{Rasa2020} or 1MillionBot \autocite{1MillionBot}.
 In addition, new connectors could be added by extending the current implementation.
@@ -83,10 +83,10 @@ this section will describe \ac{TRACER}'s packaging, distribution,
 and the software engineering practices used to maintain its quality.
 \ac{TRACER} is packaged and distributed as a package on the \acf{PyPI} repository
 (\url{https://pypi.org/project/chatbot-tracer/}),
-making it easy to install by running
+facilitating its installation by running
 \texttt{pip install chatbot-tracer}.
-This not only makes it easy to use,
-but also makes it easy to implement into other projects
+This approach not only simplifies its use,
+but also its implementation into other projects
 such as the web application that was developed,
 or other projects that could use \ac{TRACER}
 since it can be added as another package requirement.
@@ -96,7 +96,7 @@ To ensure code quality and automate the release process
 For the \ac{CI} we used Ruff \autocite{Ruff}.
 Ruff is Python linter and formatter written in Rust
 that combines tools like Flake8 or Black into a single and faster tool.
-We made use of Ruff not only to enforce a consistent code style,
+We used of Ruff not only to enforce a consistent code style,
 but also to enforce code quality standards,
 such as ensuring proper documentation
 and managing code complexity by setting thresholds for metrics like McCabe's cyclomatic complexity.
@@ -110,12 +110,12 @@ All the \ac{TRACER} source code can be accessed in \url{https://github.com/Chatb
 \section{The \acl{CLI}}
 
 The primary method for using \ac{TRACER} is through the \ac{CLI}.
-We can execute the whole \ac{TRACER} pipeline,
+The entire \ac{TRACER} pipeline can be executed,
 from chatbot exploration to profile generation,
 through a single command.
 This approach enables users who prefer terminal-based workflows
 such as developers, to execute TRACER easily.
-It also allows \ac{TRACER} to be integrated within other projects.
+It also enables the integration of \ac{TRACER} within other projects.
 
 \ac{TRACER} is run by one main command: \texttt{tracer}.
 To see in more detail its options, users can run \texttt{tracer --help}.
@@ -149,19 +149,19 @@ and the chosen model will not have as significant an impact.
 
 \subsection{Output and Logging}
 
-There is also three verbose levels:
+Three verbose levels are also available:
 the basic one where only key information, such as the discovered functionalities,
-which session or phase are we in and warnings are displayed.
+the current session or phase, and any warnings.
 The verbose level, activated with \texttt{-v},
-which shows the conversations in addition to the previous information,
+which displays the conversations in addition to the previous information,
 and the debug \texttt{-vv}
 which displays the same information as the verbose level,
 in addition to details such as prompts
 sent to the \ac{LLM}, its responses,
 and other logs that may have been generated
 during the development and debugging of the program.
-Lastly, there is \texttt{--output} or \texttt{-o},
-which simply controls where all the generated artefacts will be placed.
+Lastly, the \texttt{--output} or \texttt{-o},
+which controls where all the generated artefacts will be placed.
 
 \begin{lstlisting}[
 language=tracer-examples,
@@ -174,9 +174,10 @@ $ tracer -t taskyto -u http://localhost:5000 -s 12 -n 8 -m gemini-2.5-flash -pm 
 The command in \autoref{code:tracer-command-example}
 demonstrates a typical execution of \ac{TRACER} against a Taskyto-based pizzeria chatbot.
 It is configured to run 12 exploration sessions of 8 turns each.
-For the exploration, analysis and profile generation, the smarter model Gemini 2.5 Flash will be used,
+For the exploration, analysis and profile generation,
+the more advanced model Gemini 2.5 Flash will be used,
 then for the model that is defined in each user profile, Gemini 2.0 Flash will be used since it is faster and cheaper.
-We used the \texttt{-v} to be able to monitor the conversations that are happening
+We used the \texttt{-v} to monitor the conversations occurring
 between the explorer agent and the chatbot under testing.
 Finally, all the artefacts will be stored in a directory called \texttt{pizzeria\_results}.
 
@@ -184,10 +185,10 @@ Finally, all the artefacts will be stored in a directory called \texttt{pizzeria
 
 To complement the \ac{CLI},
 we developed a web application
-to provide a user-friendly interface that will allow to run the whole end-to-end pipeline,
+to provide a user-friendly interface for running the whole end-to-end pipeline,
 that is, to run \ac{TRACER} to generate the user profiles,
 and then to execute these with SENSEI.
-This, allows a broader audience to use both \ac{TRACER} and SENSEI
+This, enables a broader audience to use both \ac{TRACER} and SENSEI
 without the need of knowing how to use the \ac{CLI}.
 
 \subsection{System Architecture}
@@ -210,14 +211,15 @@ of the technologies and design patterns used within each of these layers.
 \subsection{Core Technology Stack}
 
 The backend of the application was developed in Django \autocite{Django},
-the reason why this framework was used is because it is made for Python
-so it is compatible with \ac{TRACER} and SENSEI,
+This framework was chosen because it is Python-based
+and therefore compatible with \ac{TRACER} and SENSEI,
 and also it offers the Django REST Framework \autocite{DjangoRESTFramework}
-that will allow us to develop a \ac{REST} \ac{API} that will be consumed by our frontend.
+which enables the development of a \ac{REST} \ac{API}
+that will be consumed by our frontend.
 
 For the frontend we chose React \autocite{React},
 a JavaScript library to develop \acp{SPA}
-that will consume directly from our Django \ac{API}.
+which consumes data directly from our Django \ac{API}.
 
 Lastly, to ensure data persistence,
 we used PostgreSQL \autocite{PostgreSQL2025},
@@ -233,13 +235,13 @@ thus, executing this tasks synchronously would leave the user's interface unresp
 for the duration of the whole process.
 To handle this we implemented asynchronous executions,
 we did this by using a distributed task queue called Celery \autocite{Celery},
-which lets us handle these jobs asynchronously.
+which enables these jobs to be handled asynchronously.
 Then, to communicate Django with Celery we need a broker,
 for this we used RabbitMQ \autocite{RabbitMQ}.
 These two tools in conjunction will allow the user to execute \ac{TRACER} or SENSEI
 and change to a different view, log out, or even turn off the computer
 and later return to check its progress.
-It will also help the server to not get saturated
+It will also prevent server overload
 since we can limit the number of concurrent jobs
 and if there are requests to execute more than this number,
 the jobs will be waiting on the queue instead of saturating the server.
@@ -258,22 +260,23 @@ A reverse proxy is essential for managing the communication between
 the user, the React frontend, and the Django backend.
 For this role, we used Nginx \autocite{Nginx}.
 Its primary responsibility is to route incoming HTTP requests to the appropriate service based on the URL path.
-This also solves the issue of accessing each service in a different port,
+This also addresses the challenge of accessing each service in a different port,
 although they are running in a different port
-we can just access always the same URL and Nginx will redirect the call.
+we can always access the same URL and Nginx will redirect the call.
 
 In the \autoref{fig:nginx-routing}
 we can see the configuration of the reverse proxy.
 It recieves all the calls from the users and routes them to the correct service.
 We have that all calls made to \texttt{/api/}, \texttt{/admin/} and \texttt{/filevault/}
-get redirected to Django's backend since it is who will process \ac{API} calls,
-return the different files and show the admin dashboard,
-although to show the admin dashboard's CSS
-we need to collect and serve the Django static files,
-which is why calls made to \texttt{/static/} will get redirected to Django's static files.
+get redirected to Django's backend since as it processes \ac{API} calls,
+return the different files and show the admin dashboard.
+The Django admin dashboard requires its CSS to be rendered correctly,
+which in turn necessitates serving the Django static files.
+For this reason, any request made to the \texttt{/static/} path
+is redirected to the location of these files.
 Lastly, the remaining calls will be redirected to React's build files.
 
-\subsection{Deployment and Containarisation}
+\subsection{Deployment and Containerisation}
 
 
 
@@ -283,7 +286,8 @@ This was done not only to simplify the deployment process,
 but to ensure that no matter the machine and the dependencies it had installed,
 it would work if it had Docker.
 We made two different Docker compose versions, one for development and one for production,
-each with their own \ac{DB}, message broker, etc. So that production data was not affected during development.
+each with their own \ac{DB}, message broker, and so on.
+So that production data was not affected during development.
 The complete production architecture is shown in \autoref{fig:docker-architecture}.
 
 \begin{figure}[!htbp]
@@ -301,9 +305,9 @@ and the red ones show dependencies for the Docker compose,
 which means that until the container that the arrow is pointing at is not working,
 the container at the start of the arrow will not be initiated.
 
-This ensures that until we don't have the \ac{DB} and message broker set
-the queue and backend won't start,
-and only then the frontend will get build
+This ensures that until we do not have the \ac{DB} and message broker set
+the queue and backend will not start,
+and only then the frontend will be built
 and lastly the Nginx reverse proxy.
 In the development version the setup was mostly the same
 but we had another volume that had the frontend and backend code
@@ -315,7 +319,7 @@ To ensure the application's security we followed the Django Deployment Checklist
 Related to the authentication we implemented a new user model,
 and to handle the authentication we used Django-Rest-Knox \autocite{DjangoRestKnox} tokens.
 This is a library that implements an improved token system over the default in the Django REST Framework \autocite{DjangoRESTFramework},
-the main improvements that it brings are:
+the main improvements include:
 \begin{itemize}
   \item \textbf{One token per device:}
     instead of having one token per user
@@ -332,9 +336,9 @@ the main improvements that it brings are:
     the attacker could use those tokens to impersonate the legitimate user.
 
   \item \textbf{Token expire time:}
-    in \ac{DRF} once you log in with an account that token is valid forever.
-    Meanwhile, in Knox you can set a expiracy time which will cause that after that time,
-    your session will be closed since the token won't be valid.
+    in \ac{DRF}, once an account is authenticated, the generated token remains valid indefinitely.
+    Knox, in contrast, allows an expiry time to be set.
+    After this period, the session is terminated as the token becomes invalid.
 \end{itemize}
 
 To store the \ac{API} keys uploaded by the user to run \ac{TRACER} or SENSEI
@@ -344,11 +348,10 @@ Although the \ac{DB} has a user and password (not the default ones)
 we determined this was a prudent measure to add further layers of security,
 the same way that Knox encrypts, so that
 if the database was compromised, these credentials would remain encrypted.
-those things would still be encrypted.
 
-These measures combined with the fact that
-every time that a petition is made to the \ac{API} the token is validated,
-and that the models are configured so that they can only be
-read by the owner unless it is set to be public (one can set projects as public)
-but that even if it is public it can only be written by the owner,
-ensure that the application follows good security practices.
+These measures, combined with strict access controls,
+ensure the application adheres to robust security practices.
+Every request to the \ac{API} requires token validation.
+Furthermore, models are configured to be readable only by their owner,
+unless explicitly set to public.
+Even when a project is public, write access remains restricted to the owner.
