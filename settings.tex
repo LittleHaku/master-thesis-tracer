@@ -161,10 +161,20 @@
   sensitive=false
 }
 
+\lstdefinelanguage{connector-examples}{
+  comment=[l]{\#},
+  commentstyle=\color{TUMGray}\itshape,
+  string=[s]{"}{"},
+  stringstyle=\color{UAMGreen},
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+}
+
 \lstdefinelanguage{tracer-examples}{
-  sensitive=true,
+  sensitive=false,
   morekeywords={
-    tracer, curl, grep, cat, echo, sudo, export, alias, cd, ls, pwd, mkdir, rm, mv, cp, ps, kill
+    tracer
   },
   keywordstyle=\color{UAMBlue}\bfseries,
   morestring=[b]",
@@ -174,14 +184,20 @@
   commentstyle=\color{EPS}\itshape,
   literate=
     {\$}{{\textcolor{EPS}{\textbf{\$}\ }}}1
-    {-t}{{\textcolor{UAMGreen}{\textbf{-t}\ }}}2
-    {-u}{{\textcolor{UAMGreen}{\textbf{-u}\ }}}2
-    {-n}{{\textcolor{UAMGreen}{\textbf{-n}\ }}}2
-    {-m}{{\textcolor{UAMGreen}{\textbf{-m}\ }}}2
-    {-pm}{{\textcolor{UAMGreen}{\textbf{-pm}\ }}}3
-    {-s}{{\textcolor{UAMGreen}{\textbf{-s}\ }}}2
-    {-o}{{\textcolor{UAMGreen}{\textbf{-o}\ }}}2
-    {-v}{{\textcolor{UAMGreen}{\textbf{-v}\ }}}2
+    {--list-connectors}{{\textcolor{UAMGreen}{\textbf{--list-connectors}\ }}}{16}
+    {--list-connector-params}{{\textcolor{UAMGreen}{\textbf{--list-connector-params}\ }}}{21}
+    {--technology}{{\textcolor{UAMGreen}{\textbf{--technology}\ }}}{12}
+    {--connector-params}{{\textcolor{UAMGreen}{\textbf{--connector-params}\ }}}{17}
+    {--output}{{\textcolor{UAMGreen}{\textbf{--output}\ }}}{9}
+    {--sessions}{{\textcolor{UAMGreen}{\textbf{--sessions}\ }}}{10}
+    {--turns}{{\textcolor{UAMGreen}{\textbf{--turns}\ }}}{7}
+    {--model}{{\textcolor{UAMGreen}{\textbf{--model}\ }}}{7}
+    {--profile-model}{{\textcolor{UAMGreen}{\textbf{--profile-model}\ }}}{14}
+    {-v}{{\textcolor{UAMGreen}{\textbf{-v}\ }}}{3}
+    {millionbot}{{\textcolor{UAMBlue}{\textbf{millionbot }}}}{11}
+    {custom}{{\textcolor{UAMBlue}{\textbf{custom }}}}{7}
+    {taskyto}{{\textcolor{UAMBlue}{\textbf{taskyto }}}}{8}
+    {rasa}{{\textcolor{UAMBlue}{\textbf{rasa }}}}{5}
 }
 
 \lstdefinelanguage{bash}{

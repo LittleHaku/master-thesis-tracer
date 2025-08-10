@@ -107,6 +107,174 @@ publishes it to \ac{PyPI},
 and creates the corresponding GitHub release.
 All the \ac{TRACER} source code can be accessed in \url{https://github.com/Chatbot-TRACER/TRACER}.
 
+\section{Chatbot Connectors}
+
+A key component of \ac{TRACER} is its connector system,
+developed as part of this work and
+packaged as the \texttt{chatbot-connectors} library.
+The \texttt{chatbot-connectors} library is available on PyPI
+(\url{https://pypi.org/project/chatbot-connectors/})
+and its source code can be accessed at
+\url{https://github.com/Chatbot-TRACER/chatbot-connectors}.
+
+The purpose of this package is to provide a unified interface
+to interact with different chatbots,
+having the same method for sending messages
+but different implementations for each chatbot technology.
+For this we have an abstract base class
+from which every implementation inherits.
+This base class standardizes the core methods
+for sending messages and receiving responses.
+
+\subsection{Available Connector Technologies}
+
+\ac{TRACER} currently supports four connector technologies,
+each designed to interface with specific chatbot platforms:
+Custom (a flexible YAML-configured connector for any chatbot \ac{API}),
+MillionBot (specialized for the MillionBot platform),
+Rasa (interfacing with Rasa chatbots through \ac{REST} webhooks),
+and Taskyto (dedicated connector for Taskyto chatbot servers).
+
+The Custom connector deserves special attention due to its flexibility,
+providing a solution for integrating with any chatbot \ac{API}
+without requiring custom code development.
+This connector uses YAML configuration files
+to define how to communicate with a chatbot's \ac{API},
+specifying the \ac{API} endpoint, request structure,
+authentication requirements, and response parsing instructions.
+
+\subsection{Connector Discovery and Configuration}
+
+The \ac{CLI} provides built-in commands to discover available connectors
+and their configuration requirements:
+
+\begin{lstlisting}[
+language=tracer-examples,
+caption={Listing available connectors.},
+label={code:list-connectors}
+]
+$ tracer --list-connectors
+Available Chatbot Connector Technologies:
+==================================================
+  
+  - custom
+    Description: Custom chatbot connector configured by a YAML file
+    Use: --technology custom
+    Parameters: --list-connector-params custom
+
+  - millionbot
+    Description: MillionBot chatbot connector
+    Use: --technology millionbot
+    Parameters: --list-connector-params millionbot
+
+  - rasa
+    Description: RASA chatbot connector using REST webhook
+    Use: --technology rasa
+    Parameters: --list-connector-params rasa
+
+  - taskyto
+    Description: Taskyto chatbot connector
+    Use: --technology taskyto
+    Parameters: --list-connector-params taskyto
+
+Total: 4 connector(s) available
+\end{lstlisting}
+
+For detailed parameter information for a specific connector,
+users can query the requirements:
+
+\begin{lstlisting}[
+language=tracer-examples,
+caption={Listing connector parameters for Taskyto.},
+label={code:list-connector-params}
+]
+$ tracer --list-connector-params taskyto
+Parameters for 'taskyto' chatbot:
+--------------------------------------------------
+  - Name: base_url
+    Type: string
+    Required: True
+    Description: The base URL of the Taskyto server.
+
+  - Name: port
+    Type: integer
+    Required: False
+    Default: 5000
+    Description: The port of the Taskyto server.
+
+Example usage:
+  JSON format: --connector-params '{"base_url": "http://localhost"}'
+  Key=Value format: --connector-params "base_url=http://localhost"
+\end{lstlisting}
+
+\subsection{Custom YAML Connector Configuration}
+
+The Custom connector deserves special attention due to its flexibility.
+It allows users to integrate with any chatbot \ac{API}
+by creating a YAML configuration file that describes
+the \ac{API} communication protocol.
+
+A Custom connector configuration file contains the following key fields:
+
+\begin{itemize}
+    \item \texttt{name}: A friendly name for the chatbot (optional)
+    \item \texttt{base\_url}: The base \acs{URL} of the chatbot \ac{API} (required)
+    \item \texttt{send\_message.path}: \ac{API} endpoint path appended to base\_url (required)
+    \item \texttt{send\_message.method}: \acs{HTTP} method (POST, GET, PUT, DELETE; default: POST)
+    \item \texttt{send\_message.headers}: Custom headers including authentication (optional)
+    \item \texttt{send\_message.payload\_template}: \acs{JSON} structure with \texttt{\{user\_msg\}} placeholder (required)
+    \item \texttt{response\_path}: Dot-separated path to extract the bot's reply from the \acs{JSON} response (required)
+\end{itemize}
+
+\subsubsection{Configuration Examples}
+
+A simple echo bot configuration demonstrates the basic structure:
+
+\begin{lstlisting}[
+language=connector-examples,
+caption={Simple Custom connector configuration.},
+label={code:simple-yaml-config}
+]
+name: "Echo Bot"
+base_url: "https://postman-echo.com"
+send_message:
+  path: "/post"
+  method: "POST"
+  payload_template:
+    message: "{user_msg}"
+response_path: "json.message"
+\end{lstlisting}
+
+A more complex configuration with authentication:
+
+\begin{lstlisting}[
+language=connector-examples,
+caption={Custom connector configuration with authentication.},
+label={code:auth-yaml-config}
+]
+name: "Secure Bot"
+base_url: "https://api.mychatbot.com"
+send_message:
+  path: "/chat/send"
+  method: "POST"
+  headers:
+    Authorization: "Bearer your-api-key"
+    Content-Type: "application/json"
+  payload_template:
+    query: "{user_msg}"
+    session_id: "user123"
+response_path: "response.text"
+\end{lstlisting}
+
+The \texttt{response\_path} field uses dot notation to navigate through \ac{JSON} responses:
+\begin{itemize}
+  \item \texttt{"message"} accesses \texttt{response["message"]}
+  \item \texttt{"data.text"} accesses \texttt{response["data"]["text"]}
+  \item \texttt{"results.0.content"} accesses
+\texttt{response["results"][0]["content"]}
+\end{itemize}
+
+
 \section{The \acl{CLI}}
 
 The primary method for using \ac{TRACER} is through the \ac{CLI}.
@@ -129,9 +297,12 @@ and \texttt{--turns} or \texttt{-n} for the number of turns or steps per convers
 
 \subsection{Connector Configuration}
 
-The arguments \texttt{--technology} or \texttt{-t} along with \texttt{--url} or \texttt{-u}
-allow to configure the connector by choosing
-the chatbot technology along with the \ac{API} endpoint.
+The arguments \texttt{--technology} or \texttt{-t} allow users to select
+from the available connector technologies (custom, millionbot, rasa, taskyto).
+Additional connector-specific parameters can be provided using
+\texttt{--connector-params} or \texttt{-cp} in either \ac{JSON} format or key=value pairs
+separated by commas.
+For the Custom connector, users specify the YAML configuration file path.
 
 \subsection{LLM Configuration}
 
@@ -165,10 +336,10 @@ which controls where all the generated artefacts will be placed.
 
 \begin{lstlisting}[
 language=tracer-examples,
-caption={Tracer command example.},
+caption={TRACER command example with Taskyto connector.},
 label={code:tracer-command-example}
 ]
-$ tracer -t taskyto -u http://localhost:5000 -s 12 -n 8 -m gemini-2.5-flash -pm gemini-2.0-flash -o ./pizzeria_results -v
+$ tracer --technology taskyto --connector-params "base_url=http://localhost" --sessions 12 --turns 8 --model gemini-2.5-flash --profile-model gemini-2.0-flash --output ./pizzeria_results -v
 \end{lstlisting}
 
 The command in \autoref{code:tracer-command-example}
@@ -180,6 +351,19 @@ then for the model that is defined in each user profile, Gemini 2.0 Flash will b
 We used the \texttt{-v} to monitor the conversations occurring
 between the explorer agent and the chatbot under testing.
 Finally, all the artefacts will be stored in a directory called \texttt{pizzeria\_results}.
+
+\begin{lstlisting}[
+language=tracer-examples,
+caption={TRACER command example with Custom YAML connector.},
+label={code:tracer-yaml-example}
+]
+$ tracer --technology custom --connector-params "config_path=./my-bot-config.yml" --sessions 10 --turns 6 --model gpt-4o --output ./yaml_bot_results
+\end{lstlisting}
+
+\autoref{code:tracer-yaml-example} shows how to use \ac{TRACER}
+with a custom chatbot through the YAML connector,
+demonstrating the flexibility of the connector system
+in accommodating various chatbot technologies.
 
 \section{The Web Application}
 
