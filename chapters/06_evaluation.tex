@@ -3,4 +3,72 @@
 
 \chapter{Evaluation}\label{chapter:evaluation}
 
+In this section we aim to
+evaluate how \ac{TRACER} perfoms at
+modelling and synthesising user profiles
+from a chatbot under testing.
+To do so we will answer the following research questions:
 
+\begin{itemize}
+\item \textbf{RQ1: How effective is TRACER in modeling chatbot functionality?}
+  This question evaluates the capability of our model discovery method to attain high functional coverage in a controlled environment where the ground truth is available.
+\item \textbf{RQ2: How effective are the synthesised profiles at detecting faults in controlled environments?}
+  This question tests the accuracy of our method by applying mutation testing \autocite{gomez-abajoMutationTestingTaskOriented2024} to estimate the capacity of the created profiles to detect specific, injected faults.
+\item \textbf{RQ3: How accurately does TRACER model the functionalities of real-world, deployed chatbots?}
+  This question addresses the practical, real-world applicability of \ac{TRACER}.
+  To answer it, we will compare the inferred model against a handmade one
+  of deployed chatbots
+  and measure the precission, recall and F1-score.
+\end{itemize}
+
+RQ1 evaluates the coverage of our approach
+in terms of activating chatbot functionalities.
+To measure the coverage, \ac{TRACER} will be executed
+against the chatbot under testing
+and the generated synthesised profiles
+will be executed with SENSEI against the same chatbot.
+We will perform this with chatbots created with the Taskyto framework
+because this framework offers the possibility
+of reporting the activated modules.
+With these reports we will be able to measure
+the coverage obtained during the \ac{TRACER} and SENSEI executions independently.
+
+We anticipate higher coverage during SENSEI profile execution,
+as profiles are designed to systematically test all discovered parameters
+and their valid combinations.
+For instance, \ac{TRACER} may find that a pizzeria chatbot
+offers six pizza types, but does not try them all during exploration;
+instead, the generated profiles are designed to test all options.
+
+Evaluating RQ1 is crucial for understanding
+how thoroughly \ac{TRACER} exercises the chatbot’s functionality.
+High coverage does not guarantee high quality,
+but it implies that a significant part of a system has been tested,
+increasing the confidence in its reliability
+\autocite{ammannIntroductionSoftwareTesting2017}.
+
+
+RQ2 assesses the practical effectiveness
+of our approach in detecting chatbot errors.
+To this aim, we employ mutation testing
+\autocite{demilloHintsTestData1978}
+by introducing defects into correct chatbots to create mutants,
+and testing whether the generated profiles detect these defects.
+A profile successfully detects a mutation (i.e., a fault)
+when the simulated user fails to complete a goal
+(e.g., ordering a pizza type that was removed in the mutant)
+or when an expected output is missing or incorrect
+This way, assessing RQ2 is important
+to provide evidence that our approach produces
+profiles that are sufficiently comprehensive
+to reveal real-world chatbot errors.
+
+RQ3 assesses \ac{TRACER}'s ability at modeling and synthesising
+real-world deployed chatbots.
+Contrary to RQ1 and RQ2 that work with chatbots developed with \ac{TRACER} framework
+specifically for this evaluation,
+RQ3 evaluates chatbots deployed for real-world applications
+such as, universities, townhalls or transportation companies.
+To evaluate this, we will craft a hand-made model
+by interacting with the chatbot
+and then compare it with the one inferred by \ac{TRACER}.
