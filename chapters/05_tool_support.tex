@@ -334,36 +334,58 @@ during the development and debugging of the program.
 Lastly, the \texttt{--output} or \texttt{-o},
 which controls where all the generated artefacts will be placed.
 
+\subsection{TRACER execution commands examples}
+
 \begin{lstlisting}[
 language=tracer-examples,
 caption={TRACER command example with Taskyto connector.},
 label={code:tracer-command-example}
 ]
-$ tracer --technology taskyto --connector-params "base_url=http://localhost" --sessions 12 --turns 8 --model gemini-2.5-flash --profile-model gemini-2.0-flash --output ./pizzeria_results -v
+$ tracer \
+    --technology taskyto \
+    --connector-params "base_url=http://localhost" \
+    --sessions 12 \
+    --turns 8 \
+    --model gemini-2.5-flash \
+    --profile-model gemini-2.0-flash \
+    --output ./pizzeria_results \
+    -v
 \end{lstlisting}
 
 The command in \autoref{code:tracer-command-example}
 demonstrates a typical execution of \ac{TRACER} against a Taskyto-based pizzeria chatbot.
-It is configured to run 12 exploration sessions of 8 turns each.
-For the exploration, analysis and profile generation,
-the more advanced model Gemini 2.5 Flash will be used,
-then for the model that is defined in each user profile, Gemini 2.0 Flash will be used since it is faster and cheaper.
-We used the \texttt{-v} to monitor the conversations occurring
+Line 2 specifies the connector technology as Taskyto,
+line 3 provides the connector parameters with the chatbot server's base URL,
+lines 4 and 5 configure the exploration to run 12 sessions of 8 turns each,
+line 6 sets the exploration and analysis model to the more advanced Gemini 2.5 Flash,
+line 7 defines the profile model as Gemini 2.0 Flash for cost optimization,
+line 8 specifies the output directory for all generated artefacts,
+and line 9 enables verbose mode to monitor conversations
 between the explorer agent and the chatbot under testing.
-Finally, all the artefacts will be stored in a directory called \texttt{pizzeria\_results}.
 
 \begin{lstlisting}[
 language=tracer-examples,
 caption={TRACER command example with Custom YAML connector.},
 label={code:tracer-yaml-example}
 ]
-$ tracer --technology custom --connector-params "config_path=./my-bot-config.yml" --sessions 10 --turns 6 --model gpt-4o --output ./yaml_bot_results
+$ tracer \
+    --technology custom \
+    --connector-params "config_path=./my-bot-config.yml" \
+    --sessions 10 \
+    --turns 6 \
+    --model gpt-4o \
+    --output ./yaml_bot_results
 \end{lstlisting}
 
 \autoref{code:tracer-yaml-example} shows how to use \ac{TRACER}
 with a custom chatbot through the YAML connector,
 demonstrating the flexibility of the connector system
 in accommodating various chatbot technologies.
+Line 2 selects the custom connector technology,
+line 3 specifies the path to the YAML configuration file,
+lines 4 and 5 set up 10 exploration sessions with 6 turns each,
+line 6 configures GPT-4o as the model for both exploration and profile generation,
+and line 7 defines the output directory for results.
 
 \section{The Web Application}
 
