@@ -1,0 +1,226 @@
+\section{RQ1: Coverage of Chatbot Functionality}
+
+The primary goal of this first experiment
+is to quantitatively measure the coverage
+of \ac{TRACER} during its execution and
+the subsequent execution of the generated user profiles with SENSEI.
+To achieve this white-box evaluation
+we ran the experiment in a controlled environment
+using a chatbot whose source code is known,
+which allowed us to measure the number of modules activated
+during each conversation.
+
+\subsection{Experiment Setup}
+
+To assess the effectiveness of the proposed approach in discovering chatbot functionality,
+we applied \ac{TRACER} to four deployed Taskyto chatbots
+\autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}.
+We chose chatbots built this technology because their code is open-source
+\autocite{SatorichatbotsTaskyto2025},
+which allowed us to instrument them
+to trace the modules activated during conversations,
+as required to assess RQ1.
+Moreover, the declarative structure of the chatbots
+facilitated injecting faults into them, as required to assess RQ2.
+
+Taskyto is a declarative framework
+to develop LLM-based task-oriented chatbots using a YAML-like DSL.
+Chatbot definitions consist of any number of modules of five possible types:
+
+\begin{itemize}
+  \item 
+    \textbf{Menu:} to define conversation alternatives.
+\item
+  \textbf{Sequence:} to define a sequence of conversation steps.
+\item
+  \textbf{Action:} to execute Python code and produce a
+verbatim or rephrased response upon receiving some input data.
+\item
+  \textbf{Data gathering:} to request user input data.
+\item
+  \textbf{Question answering:} to declare a FAQ.
+\end{itemize}
+
+
+\autoref{tab:rq1_chatbots} displays size metrics
+of the chatbots used for this experiment.
+We show the number of modules, lines of code (YAML lines),
+input fields or parameters,
+the number of possible values for these inputs in case that they are an enumeration,
+and the number of question-answer pairs for the FAQ.
+
+\textit{Bike-shop} schedules bike repair appointments
+and answers bike maintenance questions.
+\textit{Photography} is a chatbot for a photography shop,
+which answers questions about the shop,
+gathers contact details of clients, and gives price estimates.
+\textit{Pizza-order} handles pizza orders,
+including their size, toppings and drinks.
+\textit{Veterinary} sets appointments and answers questions about a veterinary clinic.
+
+\begin{table}[htpb]
+\centering
+\caption{Size metrics of the four Taskyto chatbots used in the evaluation.}
+\label{tab:rq1_chatbots}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Chatbot} & \textbf{Modules} & \textbf{YAML lines} & \textbf{Inputs} & \textbf{Values} & \textbf{Q\&A Pairs} \\ \midrule
+Bike-shop & 3 & 65 & 3 & 2 & 4 \\
+Photography & 5 & 140 & 9 & 12 & 5 \\
+Pizza-order & 10 & 282 & 22 & 78 & 6 \\
+Veterinary & 3 & 71 & 3 & 4 & 5 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+We modified Taskyto to generate logs
+for each conversation containing
+each activated module,
+expected input data from the user (e.g., pizza type),
+values provided for the input data with a limited set of options (e.g., Carbonara),
+and performed questions from the chatbot FAQ.
+Subsequently, a Python script was used to unify these logs,
+first by merging them into a unified log,
+and then by generating a Markdown report
+with the coverage percentage obtained for each chatbot.
+
+To account for the non-deterministic nature of \acp{LLM},
+we repeated the experiment three times.
+To ensure that \ac{TRACER} finds as many functionalities as possible
+we ran TRACER for 20 conversations with 12 turns each
+to allow sufficient time for functionalities to branch out.
+These parameters provide a balance between discovery and time.
+The \ac{LLM} used by \ac{TRACER} was Google's Gemini 2.0 Flash
+with the default model's parameters (1.0 tempereature),
+which we did not modify since it allowed creativity in the conversations
+while still following \ac{TRACER}'s instructions.
+
+SENSEI and Taskyto used OpenAI's GPT-4o-mini,
+we used an OpenAI model
+since these programs did not yet support a different provider
+For Taskyto, the temperature was set to 0
+to ensure the chatbot's behaviour was deterministic.
+SENSEI used the temperatures defined in the generated profiles,
+which as explained during the profile generation in \autoref{sec:profile-generation}
+is set randomly.
+
+The overall procedure then, is as follows.
+First, we executed TRACER three times with the aforementioned settings
+measuring the Taskyto coverage during each execution.
+Using TRACER's generated profiles, we then ran SENSEI.
+Since TRACER was run three times,
+this resulted in three different sets of profiles.
+Consequently, we measured the coverage for each of these three executions
+and also reported an aggregated coverage.
+
+
+
+\subsection{Results and Discussion}
+
+\autoref{tab:rq1_coverage_results}
+summarizes the results obtained throughout this experiment.
+It contains the median and aggregated coverage obtained
+during TRACER's exploration alone
+and during the execution of the generated profiles within SENSEI.
+The coverages are split into
+modules, input parameters, values of these inputs and FAQ questions.
+The table highlights in green the highest median and aggregate coverage
+obtained per chatbot and metric
+(i.e., module, input, value or question).
+
+\begin{table}[htpb]
+\centering
+\caption{Coverage of TRACER (chatbot exploration) and SENSEI (profile execution).
+In green there is the greatest coverage obtained
+median and aggregate coverage per chatbot and metric
+(i.e., module, input, value or question).
+}
+\label{tab:rq1_coverage_results}
+
+% Define a custom color for the green highlight
+\definecolor{lightgreen}{HTML}{C9FBC9}
+\definecolor{stronggreen}{HTML}{53E753}
+
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Stat.} & \textbf{Tool} & \textbf{Module (\%)} & \textbf{Input (\%)} & \textbf{Value (\%)} & \textbf{Question (\%)} \\ \midrule
+
+% --- Bike-shop Data ---
+\rowcolor{gray!10} \multicolumn{6}{c}{\textbf{Bike-shop}} \\
+\raisebox{-0.5\normalbaselineskip}[0pt][0pt]{Median} & TRACER & \cellcolor{lightgreen}100 & \cellcolor{stronggreen}85.71 & \cellcolor{stronggreen}83.33 & \cellcolor{stronggreen}75.00 \\
+& SENSEI & \cellcolor{lightgreen}100 & 71.43 & 50.00 & 50.00 \\ \addlinespace
+\raisebox{-0.5\normalbaselineskip}[0pt][0pt]{Aggregate} & TRACER & \cellcolor{lightgreen}100 & \cellcolor{lightgreen}85.71 & \cellcolor{lightgreen}83.33 & \cellcolor{stronggreen}75.00 \\
+& SENSEI & \cellcolor{lightgreen}100 & \cellcolor{lightgreen}85.71 & \cellcolor{lightgreen}83.33 & 50.00 \\ \midrule
+
+% --- Photography Data ---
+\rowcolor{gray!10} \multicolumn{6}{c}{\textbf{Photography}} \\
+\raisebox{-0.5\normalbaselineskip}[0pt][0pt]{Median} & TRACER & \cellcolor{lightgreen}100 & 73.33 & \cellcolor{stronggreen}64.71 & 20.00 \\
+& SENSEI & \cellcolor{lightgreen}100 & \cellcolor{stronggreen}80.00 & 58.82 & \cellcolor{stronggreen}40.00 \\ \addlinespace
+\raisebox{-0.5\normalbaselineskip}[0pt][0pt]{Aggregate} & TRACER & \cellcolor{lightgreen}100 & 73.33 & 76.47 & 20.00 \\
+& SENSEI & \cellcolor{lightgreen}100 & \cellcolor{stronggreen}93.33 & \cellcolor{stronggreen}94.12 & \cellcolor{stronggreen}80.00 \\ \midrule
+
+% --- Pizza-order Data ---
+\rowcolor{gray!10} \multicolumn{6}{c}{\textbf{Pizza-order}} \\
+\raisebox{-0.5\normalbaselineskip}[0pt][0pt]{Median} & TRACER & 83.33 & 67.86 & 27.38 & \cellcolor{lightgreen}100 \\
+& SENSEI & \cellcolor{lightgreen}100 & \cellcolor{stronggreen}96.43 & \cellcolor{stronggreen}69.05 & \cellcolor{lightgreen}100 \\ \addlinespace
+\raisebox{-0.5\normalbaselineskip}[0pt][0pt]{Aggregate} & TRACER & \cellcolor{lightgreen}100 & \cellcolor{lightgreen}100 & 48.81 & \cellcolor{lightgreen}100 \\
+& SENSEI & \cellcolor{lightgreen}100 & \cellcolor{lightgreen}100 & \cellcolor{stronggreen}90.48 & \cellcolor{lightgreen}100 \\ \midrule
+
+% --- Veterinary Data ---
+\rowcolor{gray!10} \multicolumn{6}{c}{\textbf{Veterinary}} \\
+\raisebox{-0.5\normalbaselineskip}[0pt][0pt]{Median} & TRACER & \cellcolor{lightgreen}100 & 50.00 & \cellcolor{lightgreen}44.44 & 20.00 \\
+& SENSEI & \cellcolor{lightgreen}100 & \cellcolor{stronggreen}62.50 & \cellcolor{lightgreen}44.44 & \cellcolor{stronggreen}40.00 \\ \addlinespace
+\raisebox{-0.5\normalbaselineskip}[0pt][0pt]{Aggregate} & TRACER & \cellcolor{lightgreen}100 & 62.50 & 55.56 & 40.00 \\
+& SENSEI & \cellcolor{lightgreen}100 & \cellcolor{stronggreen}87.50 & \cellcolor{stronggreen}77.78 & \cellcolor{stronggreen}80.00 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+Regarding activated modules
+both \ac{TRACER} and SENSEI achieved a 100\% aggregate coverage
+across all chatbots,
+and similarly for the median coverage, except for one case where
+\ac{TRACER} achieved an 83.33\%.
+This shows that the core functionalities of all chatbots
+were successfully discovered during the exploration
+and exercised during the profile execution.
+
+In terms of the input parameters and
+the values that these input fields allow,
+we also obtained high values,
+with a minimum value of 62.50\% aggregated value for TRACER
+and a 85.71\% for SENSEI,
+with both reaching a 100\% for the \textit{Pizza-order} chatbot.
+For the values that these fields can take, we obtained
+coverages as low as 48.81\% or 55.56\% in the aggregate \ac{TRACER} coverage,
+but then for SENSEI we obtained higher values between 77.78\% and 94.12\%.
+This was expected since during the exploration
+TRACER might find values or options and not explore them further
+but they are subsequently used in the profiles,
+which means that SENSEI will use these values.
+A clear example of this is the aggregate coverage in in the \textit{pizza-order} values,
+with only a 48.81\% during exploration but a 90.48\% for the profiles,
+This example shows a greater jump since as shown in \autoref{tab:rq1_chatbots}
+this chatbot has the highest number of values
+(78 values, while the other chatbots have 2, 12 and 4).
+This shows that the profile creation is comprehensive.
+
+Lastly, aggregate question coverage was somewhat lower,
+with SENSEI oscillating between a 50 and a 100\%.
+This is the only metric where the aggregate coverage of TRACER
+was higher than SENSEI's, which is contrary to the expected outcome.
+This occurred because Taskyto sometimes struggles with FAQs;
+if the question is not asked exactly as it is written,
+Taskyto often fails to identify it.
+\ac{TRACER} asked it as it was written in the FAQ
+"Which is the price of a new tire?"
+while SENSEI used "What is the price of a new tire?"
+and Taskyto did not proceed with the answer, thus,
+not adding it to the coverage logs.
+
+\subsection{Answer to RQ1}
+
+We conclude that \ac{TRACER} is able to effectively identify
+most of a chatbot's functionalities, input parameters and values for these inputs.
+Furthermore, we can conclude that TRACER effectively models the chatbot
+since the inferred model used to generate the user profiles for SENSEI
+managed to achieve aggregated coverages in the 77.78\% to the 100\% range
+except for the outlier in the \textit{Bike-shop} FAQ.
