@@ -1,0 +1,141 @@
+\section{RQ2: Effectiveness in Detecting Faults}
+
+After establishing \ac{TRACER}'s effectiveness at
+discovering chatbot functionalities (RQ1),
+this second experiment aims to assess
+the practical fault detection capability
+of the synthesised user profiles.
+To this end, we will use mutation testing
+\autocite{demilloHintsTestData1978}
+to create faulty versions of the chatbots (mutants)
+and measure the percentage of these faults
+that are detected when executing the generated user profiles with SENSEI.
+
+\subsection{Experiment Setup}
+
+We applied mutations (i.e., injected errors)
+to the four chatbots used in the previous RQ.
+To choose the user profiles,
+we selected the set that achieved the highest coverage
+out of the three sets generated during RQ1.
+
+To create the mutants we used a Python script
+that generates as many mutant chatbots as possible from a given original,
+introducing a single error in each mutant.
+It achieves this by systematically injecting
+single faults into the chatbot's YAML definition.
+The following mutation operators are based on previous work
+on mutation testing for task-oriented chatbots
+\autocite{gomez-abajoMutationTestingTaskOriented2024, urricoMutaBotMutationTesting2024}:
+
+\begin{itemize}
+  \item \textbf{Delete Enum Value:}
+    deleting a possible value from an input parameter
+    (e.g., removing \texttt{small} from \texttt{pizza\_size}).
+  \item \textbf{Change Optionality:}
+    making an optional parameter required, or vice-versa.
+  \item \textbf{Delete QA Pair:}
+    removing a question from a FAQ module.
+  \item \textbf{Swap QA Answer:}
+    swapping the answers of two questions.
+  \item \textbf{Delete Menu Alternative:}
+    removing a conversational choice from a menu module.
+  \item \textbf{Delete Fallback:}
+    removing the fallback response.
+  \item \textbf{Delete Sequence Step:}
+    removing a necessary step from a workflow.
+  \item \textbf{Swap Sequence Steps:}
+    swapping the order of two steps in a sequence.
+  \item \textbf{Delete Output Data:}
+    omitting a piece of data from a chatbot's response (e.g., the price).
+  \item \textbf{Change Rephrase Behavior:}
+    altering the LLM's rephrasing mode.
+  \item \textbf{Change Memory Scope:}
+    changing the chatbot's ability to access data from previous turns.
+\end{itemize}
+
+The script systematically injects faults in every possible location of the chatbots.
+However, due to the time and cost of running SENSEI,
+we randomly selected two mutants of each type for each chatbot.
+If only one or zero mutants of a type existed, all were selected.
+
+A mutant is considered "killed"
+if, during the execution of the SENSEI profiles,
+at least one of the following conditions is met:
+\begin{itemize}
+  \item The simulation results in a crash, timeout, or conversation loop.
+  \item A specified conversation \texttt{goal} is not achieved
+    (e.g., the user fails to order the pizza).
+  \item An expected \texttt{output} is missing or incorrect.
+\end{itemize}
+
+
+\subsection{Results and Discussion}
+
+\begin{table}[htpb]
+\centering
+\caption{Summary of the mutation analysis results for each chatbot.}
+\label{tab:rq2_mutation_results}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+\textbf{Chatbot} & \makecell[c]{\textbf{\# Mutants}} & \makecell[c]{\textbf{\# Profiles}} & \makecell[c]{\textbf{\# Convs.}\\\textbf{Per Chatbot}} & \makecell[c]{\textbf{Total}\\\textbf{Convs.}} & \makecell[c]{\textbf{Mutation}\\\textbf{Score (\%)}} & \makecell[c]{\textbf{\# Live}\\\textbf{Mutants}} \\ \midrule
+Bike-shop & 13 & 3 & 9 & 117 & 91.0 & 1 \\
+Photography & 18 & 3 & 12 & 216 & 76.9 & 3 \\
+Pizza-order & 20 & 4 & 22 & 440 & 75.0 & 3 \\
+Veterinary & 13 & 5 & 21 & 273 & 91.7 & 1 \\ \midrule
+\textbf{TOTAL} & \textbf{64} & \textbf{15} & \textbf{64} & \textbf{1046} & \textbf{84.6} & \textbf{8} \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\autoref{tab:rq2_mutation_results}
+shows the results for each chatbot.
+The column \texttt{\# Mutants} represents
+the total number of mutants generated
+following the rule of selecting a maximum of 2 per mutation type.
+\texttt{\# Profiles} shows the amount of profiles used
+followed by \texttt{\# Convs. Per Chatbot},
+which represents the total number of conversations
+that occur by using the set of profiles from the previous column.
+\texttt{Total Convs.} is the product of
+\texttt{\# Mutants} and \texttt{\# Convs. Per Chatbot}
+since each mutant is a new chatbot.
+Finally, \texttt{Mutation Score (\%)} and \texttt{\# Live Mutants}
+show the results from the executions.
+\ac{MS} is the percentage of the mutants that were killed,
+while the number of live mutants
+represents the number of errors that were not found.
+
+We observe a high overall \acl{MS}
+with an average \ac{MS} of 84.6\%.
+All chatbots achieved at least 75.0\%,
+and peaking at 91.0\%.
+The cases with the lowest \ac{MS}
+(75.0\% and 76.9\%)
+correspond to the most complex chatbots
+(see \autoref{tab:rq1_chatbots}).
+
+Although most of the errors were detected automatically (58\%),
+some cases required manually inspecting the conversation,
+e.g., when the chatbot omitted a specific piece of data
+(such as the location of the photography shop)
+but included other requested information.
+For instance, the Photography chatbot outputs a summary of the shop information,
+and some but not all information is set in this output,
+therefore, there is no error of an unachieved goal,
+even if the response is incomplete.
+To detect such errors automatically,
+detecting such errors automatically
+would require testing rules that set oracles
+and analyse the expected chatbot output values,
+as explained in \autocite{delaraSensei}.
+
+\subsection{Answer to RQ2}
+
+The high mutation scores achieved (84.6\% on average)
+provide strong evidence
+that the profiles synthesised by TRACER are effective
+at detecting faults in controlled environments.
+However, full automation would require
+complementing the profiles with (manually created) testing rules
+that search for specific data in the profile outputs.
+
