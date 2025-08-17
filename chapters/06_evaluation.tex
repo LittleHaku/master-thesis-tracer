@@ -16,7 +16,10 @@ To achieve this, the following research questions are addressed:
   This question tests the accuracy of the proposed method by applying mutation testing \autocite{gomez-abajoMutationTestingTaskOriented2024} to estimate the capacity of the created profiles to detect specific, injected faults.
 \item \textbf{RQ3: How accurately does TRACER model the functionalities of real-world, deployed chatbots?}
   This question addresses the practical, real-world applicability of \ac{TRACER}.
-  To answer this question, the inferred model will be compared against a manually created model of deployed chatbots and measured for precision, recall and F1-score.
+  To answer it, we run \ac{TRACER} against a set of deployed chatbots,
+  and then perform a manual verification of every functionality inferred.
+  This allows us to measure the precision of the model,
+  that is, the percentage of discovered functionalities that are correct and valid.
 \end{itemize}
 
 RQ1 evaluates the coverage of the proposed approach
@@ -66,9 +69,9 @@ Unlike RQ1 and RQ2, which involves chatbots developed with the Taskyto framework
 specifically for this evaluation,
 RQ3 evaluates chatbots deployed for real-world applications
 such as, universities, town halls or transportation companies.
-To evaluate this, a manual model will be crafted
-by interacting with the chatbot
-and then compared with the one inferred by \ac{TRACER}.
+To evaluate this, the model inferred by \ac{TRACER}
+will be manually validated to measure the precision
+of the discovered functionalities.
 
 The experiment data is available at:
 \url{https://github.com/Chatbot-TRACER/TRACER-evaluation}.
