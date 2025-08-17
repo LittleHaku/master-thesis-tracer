@@ -1,0 +1,179 @@
+\section{The Web Application}
+
+To complement the \ac{CLI},
+we developed a web application
+to provide a user-friendly interface for running the whole end-to-end pipeline,
+that is, to run \ac{TRACER} to generate the user profiles,
+and then to execute these with SENSEI.
+This, enables a broader audience to use both \ac{TRACER} and SENSEI
+without the need of knowing how to use the \ac{CLI}.
+
+\subsection{System Architecture}
+
+The web application is built on a modern,
+multi-tiered architecture designed for scalability, security, and asynchronous processing.
+\autoref{fig:app-architecture} provides an overview of this architecture,
+illustrating the relationships between the five key layers:
+the Client, Presentation, Application, Task Processing, and Data layers.
+The following subsections will provide a detailed explanation
+of the technologies and design patterns used within each of these layers.
+
+\begin{figure}[!htbp]
+    \centering
+    \input{figures/web_architecture.tex}
+    \caption{Web Application Architecture and Connections.}
+    \label{fig:app-architecture}
+\end{figure}
+
+\subsection{Core Technology Stack}
+
+The backend of the application was developed in Django \autocite{Django},
+This framework was chosen because it is Python-based
+and therefore compatible with \ac{TRACER} and SENSEI,
+and also it offers the Django REST Framework \autocite{DjangoRESTFramework}
+which enables the development of a \ac{REST} \ac{API}
+that will be consumed by our frontend.
+
+For the frontend we chose React \autocite{React},
+a JavaScript library to develop \acp{SPA}
+which consumes data directly from our Django \ac{API}.
+
+Lastly, to ensure data persistence,
+we used PostgreSQL \autocite{PostgreSQL2025},
+we chose a \ac{SQL} database since Django's \ac{ORM} supports this type of databases out of the box,
+also, we preferred PostgreSQL over the default Django's SQLite
+since the latter is more oriented to development and testing
+and stores everything in a single file which causes concurrency and performance issues when used in production.
+
+\subsection{Asynchronous Task Handling}
+
+\ac{TRACER} and SENSEI executions both take from a few minutes up to hours,
+thus, executing this tasks synchronously would leave the user's interface unresponsive
+for the duration of the whole process.
+To handle this we implemented asynchronous executions,
+we did this by using a distributed task queue called Celery \autocite{Celery},
+which enables these jobs to be handled asynchronously.
+Then, to communicate Django with Celery we need a broker,
+for this we used RabbitMQ \autocite{RabbitMQ}.
+These two tools in conjunction will allow the user to execute \ac{TRACER} or SENSEI
+and change to a different view, log out, or even turn off the computer
+and later return to check its progress.
+It will also prevent server overload
+since we can limit the number of concurrent jobs
+and if there are requests to execute more than this number,
+the jobs will be waiting on the queue instead of saturating the server.
+
+
+\subsection{The Nginx Reverse Proxy}
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/nginx_routing.tex}
+    \caption{Nginx routing to serve React, Django's static files and Django API.}
+    \label{fig:nginx-routing}
+\end{figure}
+
+A reverse proxy is essential for managing the communication between
+the user, the React frontend, and the Django backend.
+For this role, we used Nginx \autocite{Nginx}.
+Its primary responsibility is to route incoming HTTP requests to the appropriate service based on the URL path.
+This also addresses the challenge of accessing each service in a different port,
+although they are running in a different port
+we can always access the same URL and Nginx will redirect the call.
+
+In the \autoref{fig:nginx-routing}
+we can see the configuration of the reverse proxy.
+It recieves all the calls from the users and routes them to the correct service.
+We have that all calls made to \texttt{/api/}, \texttt{/admin/} and \texttt{/filevault/}
+get redirected to Django's backend since as it processes \ac{API} calls,
+return the different files and show the admin dashboard.
+The Django admin dashboard requires its CSS to be rendered correctly,
+which in turn necessitates serving the Django static files.
+For this reason, any request made to the \texttt{/static/} path
+is redirected to the location of these files.
+Lastly, the remaining calls will be redirected to React's build files.
+
+\subsection{Deployment and Containerisation}
+
+
+
+To facilitate the deployment of these services
+we containerized the whole web application using Docker \autocite{merkelDockerLightweightLinux2014} along Docker compose.
+This was done not only to simplify the deployment process,
+but to ensure that no matter the machine and the dependencies it had installed,
+it would work if it had Docker.
+We made two different Docker compose versions, one for development and one for production,
+each with their own \ac{DB}, message broker, and so on.
+So that production data was not affected during development.
+The complete production architecture is shown in \autoref{fig:docker-architecture}.
+
+\begin{figure}[!htbp]
+    \centering
+    \input{figures/docker_setup.tex}
+    \caption{Docker Container Architecture.}
+    \label{fig:docker-architecture}
+\end{figure}
+
+In the \autoref{fig:docker-architecture} we show how the production containers and volumes are organized.
+Each square is a container running said service,
+then each cylinder is volume, where files are stored to ensure data persistance when containers are taken down.
+Each blue arrow means that the volume is mounted in that container, i.e., the container can access the volume's files,
+and the red ones show dependencies for the Docker compose,
+which means that until the container that the arrow is pointing at is not working,
+the container at the start of the arrow will not be initiated.
+
+This ensures that until we do not have the \ac{DB} and message broker set
+the queue and backend will not start,
+and only then the frontend will be built
+and lastly the Nginx reverse proxy.
+In the development version the setup was mostly the same
+but we had another volume that had the frontend and backend code
+so that we would have hot reload (i.e., changes in the code were shown live in the web).
+
+\subsection{Security Measures}
+
+To ensure the application's security we followed the Django Deployment Checklist \autocite{DeploymentChecklistDjango}.
+Related to the authentication we implemented a new user model,
+and to handle the authentication we used Django-Rest-Knox \autocite{DjangoRestKnox} tokens.
+This is a library that implements an improved token system over the default in the Django REST Framework \autocite{DjangoRESTFramework},
+the main improvements include:
+\begin{itemize}
+  \item \textbf{One token per device:}
+    instead of having one token per user
+    which would mean that logging in from different devices
+    would mean that they share the same token,
+    causing that for example
+    logging out on one device would terminate the session on all others.
+    Knox solves this by creating one token per device.
+
+  \item \textbf{Encrypted token in \ac{DB}:}
+    this is a major security flaw from \ac{DRF}
+    and it is that tokens are stored as plain text in the \ac{DB},
+    meaning that if the \ac{DB} was compromised,
+    the attacker could use those tokens to impersonate the legitimate user.
+
+  \item \textbf{Token expire time:}
+    in \ac{DRF}, once an account is authenticated, the generated token remains valid indefinitely.
+    Knox, in contrast, allows an expiry time to be set.
+    After this period, the session is terminated as the token becomes invalid.
+\end{itemize}
+
+To store the \ac{API} keys uploaded by the user to run \ac{TRACER} or SENSEI
+we used Fernet Symmetric Encryption \autocite{FernetSymmetricEncryption}
+to encrypt them before saving them to the \ac{DB}.
+Although the \ac{DB} has a user and password (not the default ones)
+we determined this was a prudent measure to add further layers of security,
+the same way that Knox encrypts, so that
+if the database was compromised, these credentials would remain encrypted.
+
+These measures, combined with strict access controls,
+ensure the application adheres to robust security practices.
+Every request to the \ac{API} requires token validation.
+Furthermore, models are configured to be readable only by their owner,
+unless explicitly set to public.
+Even when a project is public, write access remains restricted to the owner.
+
+
+\subsection{Web Application Demonstration}
+
+TBD

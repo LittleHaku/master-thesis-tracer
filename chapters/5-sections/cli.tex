@@ -1,0 +1,111 @@
+\section{The \acl{CLI}}
+
+The primary method for using \ac{TRACER} is through the \ac{CLI}.
+The entire \ac{TRACER} pipeline can be executed,
+from chatbot exploration to profile generation,
+through a single command.
+This approach enables users who prefer terminal-based workflows
+such as developers, to execute TRACER easily.
+It also enables the integration of \ac{TRACER} within other projects.
+
+\ac{TRACER} is run by one main command: \texttt{tracer}.
+To see in more detail its options, users can run \texttt{tracer --help}.
+Some of the key arguments are as follows:
+
+\subsection{Conversation Control}
+
+\texttt{--sessions} or \texttt{-s} that controls the number of conversations
+that \ac{TRACER} will have with the chatbot under testing
+and \texttt{--turns} or \texttt{-n} for the number of turns or steps per conversation.
+
+\subsection{Connector Configuration}
+
+The arguments \texttt{--technology} or \texttt{-t} allow users to select
+from the available connector technologies (custom, millionbot, rasa, taskyto).
+Additional connector-specific parameters can be provided using
+\texttt{--connector-params} or \texttt{-cp} in either \ac{JSON} format or key=value pairs
+separated by commas.
+For the Custom connector, users specify the YAML configuration file path.
+
+\subsection{LLM Configuration}
+
+Using \texttt{--model} or \texttt{-m} allows the user to select the \acl{LLM}
+used for the exploration and analysis,
+then \texttt{--profile-model} or \texttt{-pm} is an optional argument
+that if set will make the generated user profiles' \ac{LLM} be the one specified,
+otherwise the \ac{LLM} that will appear in the profiles
+will be the same one used for \ac{TRACER},
+it is recommended to use a more capable model for exploration and analysis
+since will infer a more comprehensive model with more realistic profiles,
+and then a more economical model to run the profiles
+since there will be many more \ac{LLM} calls
+and the chosen model will not have as significant an impact.
+
+\subsection{Output and Logging}
+
+Three verbose levels are also available:
+the basic one where only key information, such as the discovered functionalities,
+the current session or phase, and any warnings.
+The verbose level, activated with \texttt{-v},
+which displays the conversations in addition to the previous information,
+and the debug \texttt{-vv}
+which displays the same information as the verbose level,
+in addition to details such as prompts
+sent to the \ac{LLM}, its responses,
+and other logs that may have been generated
+during the development and debugging of the program.
+Lastly, the \texttt{--output} or \texttt{-o},
+which controls where all the generated artefacts will be placed.
+
+\subsection{TRACER execution commands examples}
+
+\begin{lstlisting}[
+language=tracer-examples,
+caption={TRACER command example with Taskyto connector.},
+label={code:tracer-command-example}
+]
+$ tracer \
+    --technology taskyto \
+    --connector-params "base_url=http://localhost" \
+    --sessions 12 \
+    --turns 8 \
+    --model gemini-2.5-flash \
+    --profile-model gemini-2.0-flash \
+    --output ./pizzeria_results \
+    -v
+\end{lstlisting}
+
+The command in \autoref{code:tracer-command-example}
+demonstrates a typical execution of \ac{TRACER} against a Taskyto-based pizzeria chatbot.
+Line 2 specifies the connector technology as Taskyto,
+line 3 provides the connector parameters with the chatbot server's base URL,
+lines 4 and 5 configure the exploration to run 12 sessions of 8 turns each,
+line 6 sets the exploration and analysis model to the more advanced Gemini 2.5 Flash,
+line 7 defines the profile model as Gemini 2.0 Flash for cost optimization,
+line 8 specifies the output directory for all generated artefacts,
+and line 9 enables verbose mode to monitor conversations
+between the explorer agent and the chatbot under testing.
+
+\begin{lstlisting}[
+language=tracer-examples,
+caption={TRACER command example with Custom YAML connector.},
+label={code:tracer-yaml-example}
+]
+$ tracer \
+    --technology custom \
+    --connector-params "config_path=./my-bot-config.yml" \
+    --sessions 10 \
+    --turns 6 \
+    --model gpt-4o \
+    --output ./yaml_bot_results
+\end{lstlisting}
+
+\autoref{code:tracer-yaml-example} shows how to use \ac{TRACER}
+with a custom chatbot through the YAML connector,
+demonstrating the flexibility of the connector system
+in accommodating various chatbot technologies.
+Line 2 selects the custom connector technology,
+line 3 specifies the path to the YAML configuration file,
+lines 4 and 5 set up 10 exploration sessions with 6 turns each,
+line 6 configures GPT-4o as the model for both exploration and profile generation,
+and line 7 defines the output directory for results.

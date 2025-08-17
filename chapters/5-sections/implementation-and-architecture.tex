@@ -1,0 +1,62 @@
+\section{Implementation and Architecture}
+
+\subsection{Core Framework: LangGraph}
+
+As explained during the \autoref{sec:profile-generation} (\nameref{sec:profile-generation})
+\ac{TRACER} relies on \acp{LLM},
+this is why we used LangGraph \autocite{LangGraph} as our framework for development.
+We chose LangGraph because
+it allows to manage and orchestrate
+complex agentic workflows with states,
+it is also an industry standard with extensive documentation.
+LangGraph allows us to orchestrate the different stages
+and to keep complex states where we store
+the inferred model and the fields generated for the profiles.
+Currently, \ac{TRACER} allows OpenAI and Gemini models,
+but thanks to LangGraph it would be straightforward to add other \ac{LLM} providers.
+
+\subsection{Modular Architecture}
+
+\ac{TRACER} can infer a chatbot model as long as
+the chatbot is accessible through an interface, typically a \acs{REST} \acs{API}.
+Currently, it provides access to communicate with chatbots made with different technologies,
+such as Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}, Rasa \autocite{Rasa2020} or 1MillionBot \autocite{1MillionBot}.
+In addition, new connectors could be added by extending the current implementation.
+
+Apart from these connectors,
+\ac{TRACER} is divided into three modules,
+each corresponding to a phase of the methodology:
+
+\begin{itemize}
+  \item \textbf{Explorer Module:}
+    Contains the Explorer Agent
+    and implements the logic for the Exploration Phase (see \autoref{sec:exploration}),
+    managing the conversational sessions and the initial extraction of Functionality Nodes.
+
+  \item \textbf{Refinement Module:}
+    Implements the logic for the Refinement Phase (see \autoref{sec:refinement}),
+    responsible for consolidating functionalities,
+    classifying the chatbot, and inferring the final workflow structure.
+
+  \item \textbf{Profile Generation Module:}
+    Implements the seven-step synthesis process (see \autoref{sec:profile-generation}),
+    taking the final chatbot model and generating the YAML user profiles.
+\end{itemize}
+
+\subsection{Generated Artefacts}
+
+Upon completion, \ac{TRACER} generates the following artefacts
+containing the results from the full analysis performed on the target chatbot:
+
+\begin{itemize}
+  \item A set of user profiles
+    representing realistic users that would use the application
+    and that will act as test cases
+    (see \autoref{code:yaml-profile-pizza} and \autoref{code:yaml-profile-drinks})
+  \item A markdown report containing the inferred model information such as
+    the discovered functionalities, fallback message, language
+    and other information such as token usage,
+    number of \ac{LLM} calls or estimated cost.
+  \item A graph representing the inferred model's workflow (see \autoref{fig:pizzeria-workflow})
+  \item A JSON file containing the same workflow but in a textual format.
+\end{itemize}

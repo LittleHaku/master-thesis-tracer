@@ -1,0 +1,30 @@
+\section{Distribution and Development Workflow}
+
+Before detailing the \ac{CLI}'s functioning,
+this section will describe \ac{TRACER}'s packaging, distribution,
+and the software engineering practices used to maintain its quality.
+\ac{TRACER} is packaged and distributed as a package on the \acf{PyPI} repository
+(\url{https://pypi.org/project/chatbot-tracer/}),
+facilitating its installation by running
+\texttt{pip install chatbot-tracer}.
+This approach not only simplifies its use,
+but also its implementation into other projects
+such as the web application that was developed,
+or other projects that could use \ac{TRACER}
+since it can be added as another package requirement.
+
+To ensure code quality and automate the release process
+\ac{TRACER} makes use of GitHub Actions for the \ac{CI/CD} pipeline.
+For the \ac{CI} we used Ruff \autocite{Ruff}.
+Ruff is Python linter and formatter written in Rust
+that combines tools like Flake8 or Black into a single and faster tool.
+We used of Ruff not only to enforce a consistent code style,
+but also to enforce code quality standards,
+such as ensuring proper documentation
+and managing code complexity by setting thresholds for metrics like McCabe's cyclomatic complexity.
+For the \ac{CD} side,
+we implemented a pipeline that whenever a tag with the format \texttt{v*.*.*} is published
+automatically builds the package,
+publishes it to \ac{PyPI},
+and creates the corresponding GitHub release.
+All the \ac{TRACER} source code can be accessed in \url{https://github.com/Chatbot-TRACER/TRACER}.
