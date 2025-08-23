@@ -107,7 +107,7 @@ each with their own \ac{DB}, message broker, and so on.
 So that production data was not affected during development.
 The complete production architecture is shown in \autoref{fig:docker-architecture}.
 
-\begin{figure}[!htbp]
+\begin{figure}[htpb]
     \centering
     \input{figures/docker_setup.tex}
     \caption{Docker Container Architecture.}
@@ -206,7 +206,7 @@ The setup guide can also be closed,
 and if needed there is a section in the navbar called setup guide
 where the user can open it again or read in detail.
 
-\begin{figure}[htpb]
+\begin{figure}[!htb]
   \centering
   \makebox[\textwidth][c]{
     \includegraphics[width=1.1\textwidth]{figures/web-screenshots/profile.png}
@@ -229,10 +229,21 @@ These will be used both by \ac{TRACER} and SENSEI.
 \begin{figure}[htpb]
   \centering
   \makebox[\textwidth][c]{
-    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/create-new-connector.png}
+    \begin{subfigure}{0.52\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/web-screenshots/create-new-connector.png}
+      \caption{Create new connector modal with the connectors dashboard behind it.}
+      \label{fig:ss-new-connector}
+    \end{subfigure}
+    \begin{subfigure}{0.52\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/web-screenshots/create-project-modal.png}
+      \caption{Create new project modal with the project dashboard behind it.}
+      \label{fig:ss-new-project}
+    \end{subfigure}
   }
-  \caption{Screenshot of the create new connector modal with the connectors dashboard behind it.}
-  \label{fig:ss-new-connector}
+  \caption{Screenshots of the create new connector and create new project modals.}
+  \label{fig:ss-modals}
 \end{figure}
 
 The next step is to define the chatbot connectors.
@@ -260,14 +271,6 @@ There are two main methods for creating a connector:
     such as, documentation and examples.
 \end{itemize}
 
-\begin{figure}[htpb]
-  \centering
-  \makebox[\textwidth][c]{
-    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/create-project-modal.png}
-  }
-  \caption{Screenshot of the create new project modal with project dashboard behind it.}
-  \label{fig:ss-new-project}
-\end{figure}
 
 Once the \ac{API} keys and connectors are configured
 the user is ready is to create a project.
@@ -283,7 +286,7 @@ If a project is public others will be able to freely see the results
 in the SENSEI and \ac{TRACER} dashboards.
 This menu is show in \autoref{fig:ss-new-project}.
 
-\begin{figure}[htpb]
+\begin{figure}[!htb]
   \centering
   \makebox[\textwidth][c]{
     \includegraphics[width=1.1\textwidth]{figures/web-screenshots/test-center-view.png}
@@ -329,12 +332,22 @@ we can explore their results in their respective dashboards.
 \begin{figure}[htpb]
   \centering
   \makebox[\textwidth][c]{
-    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/tracer-dashboard.png}
+      \centering
+      \begin{subfigure}{0.52\textwidth}
+      \includegraphics[width=\linewidth]{figures/web-screenshots/tracer-dashboard.png}
+      \caption{TRACER dashboard.}
+      \label{fig:ss-tracer-dashboard}
+    \end{subfigure}
+    \begin{subfigure}{0.52\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/web-screenshots/sensei-dashboard.png}
+      \caption{SENSEI dashboard.}
+      \label{fig:ss-sensei-dashboard}
+    \end{subfigure}
   }
-  \caption{Screenshot of the TRACER dashboard.}
-  \label{fig:ss-tracer-dashboard}
+  \caption{Screenshots of the TRACER and SENSEI dashboards.}
+  \label{fig:ss-dashboards}
 \end{figure}
-
 
 
 The \ac{TRACER} dashboard,
@@ -350,14 +363,7 @@ view the original user profiles generated
 the users can modify the profiles to their liking),
 and to see the logs, to debug in case of failure, or to read the conversations.
 
-\begin{figure}[htpb]
-  \centering
-  \makebox[\textwidth][c]{
-    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/sensei-dashboard.png}
-  }
-  \caption{Screenshot of the SENSEI dashboard.}
-  \label{fig:ss-sensei-dashboard}
-\end{figure}
+
 
 The SENSEI dashboard is show in \autoref{fig:ss-sensei-dashboard}.
 For the SENSEI dashboard the users have a similar interface
