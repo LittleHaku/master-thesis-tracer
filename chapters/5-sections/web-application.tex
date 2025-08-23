@@ -181,10 +181,20 @@ describing the typical end-to-end workflow
 a user follows within the web application.
 The web application is available at \url{http://miso.ii.uam.es:8081/}.
 
+\begin{figure}[htpb]
+  \centering
+  \makebox[\textwidth][c]{
+    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/setup-guide.png}
+  }
+  \caption{Screenshot of the setup guide.}
+  \label{fig:ss-setup-guide}
+\end{figure}
+
 When users enter the web page
 they are presented with an authentication page
 that allows them to log in or register.
 Once they have logged in they are shown
+as shown in \autoref{fig:ss-setup-guide}
 a setup guide that will guide the user
 through the setup process designed to configure the environment
 before they are able to run \ac{TRACER} or SENSEI.
@@ -196,14 +206,34 @@ The setup guide can also be closed,
 and if needed there is a section in the navbar called setup guide
 where the user can open it again or read in detail.
 
+\begin{figure}[htpb]
+  \centering
+  \makebox[\textwidth][c]{
+    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/profile.png}
+  }
+  \caption{Screenshot of the user profile view where users can set up their API key.}
+  \label{fig:ss-profile}
+\end{figure}
+
 The first step in the guided setup
 is to configure the necessary \ac{LLM} credentials.
+As seen in \autoref{fig:ss-profile}
+this is done from the profile view.
 We opted for a \ac{BYOK} approach,
 that is, instead of charging per usage
 each user brings their own \ac{API} key
 so they only pay for what they use.
 The user can save OpenAI and Gemini \ac{API} keys.
 These will be used both by \ac{TRACER} and SENSEI.
+
+\begin{figure}[htpb]
+  \centering
+  \makebox[\textwidth][c]{
+    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/create-new-connector.png}
+  }
+  \caption{Screenshot of the create new connector modal with the connectors dashboard behind it.}
+  \label{fig:ss-new-connector}
+\end{figure}
 
 The next step is to define the chatbot connectors.
 As explained in \autoref{sec:chatbot-connectors},
@@ -230,6 +260,15 @@ There are two main methods for creating a connector:
     such as, documentation and examples.
 \end{itemize}
 
+\begin{figure}[htpb]
+  \centering
+  \makebox[\textwidth][c]{
+    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/create-project-modal.png}
+  }
+  \caption{Screenshot of the create new project modal with project dashboard behind it.}
+  \label{fig:ss-new-project}
+\end{figure}
+
 Once the \ac{API} keys and connectors are configured
 the user is ready is to create a project.
 A project is the central workspace when working on a chatbot,
@@ -239,12 +278,23 @@ To create a project the user will have to fill a form,
 giving it a name, selecting one of the connectors and \ac{API} keys
 and also two \acp{LLM}, one for the exploration and another for the generated profiles,
 the list of \acp{LLM} is dynamically updated based on the provider of the \ac{API} key.
-Lastly, the users select if they want the proejct public or not.
+Lastly, the users select if they want the project public or not.
 If a project is public others will be able to freely see the results
 in the SENSEI and \ac{TRACER} dashboards.
+This menu is show in \autoref{fig:ss-new-project}.
+
+\begin{figure}[htpb]
+  \centering
+  \makebox[\textwidth][c]{
+    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/test-center-view.png}
+  }
+  \caption{Screenshot of the test center.}
+  \label{fig:ss-test-center}
+\end{figure}
 
 After a project is created,
-the user can access the test center,
+the user can access the test center
+(shown in \autoref{fig:ss-test-center}),
 this is the main view to handle \ac{TRACER} and SENSEI executions.
 Here the user can create and manage the user profiles,
 there are two ways to create them:
@@ -275,7 +325,21 @@ the task gets sent to the queue.
 
 Once \ac{TRACER} and SENSEI have been executed
 we can explore their results in their respective dashboards.
-\ac{TRACER} dashboard contains a list the executions
+
+\begin{figure}[htpb]
+  \centering
+  \makebox[\textwidth][c]{
+    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/tracer-dashboard.png}
+  }
+  \caption{Screenshot of the TRACER dashboard.}
+  \label{fig:ss-tracer-dashboard}
+\end{figure}
+
+
+
+The \ac{TRACER} dashboard,
+shown in \autoref{fig:ss-tracer-dashboard},
+contains a list the executions
 where the users can filter by project and status (running, success, failure...).
 Each of these executions has a dropdown arrow to see more information,
 the users can also click to see the generated report
@@ -286,6 +350,16 @@ view the original user profiles generated
 the users can modify the profiles to their liking),
 and to see the logs, to debug in case of failure, or to read the conversations.
 
+\begin{figure}[htpb]
+  \centering
+  \makebox[\textwidth][c]{
+    \includegraphics[width=1.1\textwidth]{figures/web-screenshots/sensei-dashboard.png}
+  }
+  \caption{Screenshot of the SENSEI dashboard.}
+  \label{fig:ss-sensei-dashboard}
+\end{figure}
+
+The SENSEI dashboard is show in \autoref{fig:ss-sensei-dashboard}.
 For the SENSEI dashboard the users have a similar interface
 where they can filter SENSEI executions
 and then click on one of them to see the results
