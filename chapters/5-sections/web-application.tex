@@ -180,3 +180,114 @@ This section aims to display the web application,
 describing the typical end-to-end workflow
 a user follows within the web application.
 The web application is available at \url{http://miso.ii.uam.es:8081/}.
+
+When users enter the web page
+they are presented with an authentication page
+that allows them to log in or register.
+Once they have logged in they are shown
+a setup guide that will guide the user
+through the setup process designed to configure the environment
+before they are able to run \ac{TRACER} or SENSEI.
+This guided tour is dynamic,
+meaning that as the user completes steps
+it automatically advances to the next step
+and shows a button to take the user directly there.
+The setup guide can also be closed,
+and if needed there is a section in the navbar called setup guide
+where the user can open it again or read in detail.
+
+The first step in the guided setup
+is to configure the necessary \ac{LLM} credentials.
+We opted for a \ac{BYOK} approach,
+that is, instead of charging per usage
+each user brings their own \ac{API} key
+so they only pay for what they use.
+The user can save OpenAI and Gemini \ac{API} keys.
+These will be used both by \ac{TRACER} and SENSEI.
+
+The next step is to define the chatbot connectors.
+As explained in \autoref{sec:chatbot-connectors},
+these are reusable configurations
+that allow us to connect to chatbots via an \ac{API}.
+There are two main methods for creating a connector:
+\begin{itemize}
+  \item \textbf{Built-in connectors:}
+    for technologies that are already configured
+    in the \texttt{chatbot-connectors} library,
+    such as Taskyto, Rasa or MillionBot,
+    the interface presents a dynamic form
+    that prompts the user for the specific parameters
+    required for that platform
+    (e.g., a \texttt{bot\_id} for MillionBot,
+    or \texttt{url} and \texttt{port} for Taskyto).
+  \item \textbf{Custom YAML Connector:}
+    for other chatbots that are not available in the list of options,
+    but that offer a \ac{REST} \ac{API},
+    the user can select the custom option.
+    This option opens a YAML editor
+    where the users declaratively define the connection.
+    To make this easier we added a set of helpful features to the editor,
+    such as, documentation and examples.
+\end{itemize}
+
+Once the \ac{API} keys and connectors are configured
+the user is ready is to create a project.
+A project is the central workspace when working on a chatbot,
+it will contain apart from the already mentioned \ac{API} key and connector,
+the \ac{TRACER} and SENSEI executions.
+To create a project the user will have to fill a form,
+giving it a name, selecting one of the connectors and \ac{API} keys
+and also two \acp{LLM}, one for the exploration and another for the generated profiles,
+the list of \acp{LLM} is dynamically updated based on the provider of the \ac{API} key.
+Lastly, the users select if they want the proejct public or not.
+If a project is public others will be able to freely see the results
+in the SENSEI and \ac{TRACER} dashboards.
+
+After a project is created,
+the user can access the test center,
+this is the main view to handle \ac{TRACER} and SENSEI executions.
+Here the user can create and manage the user profiles,
+there are two ways to create them:
+\begin{itemize}
+  \item \textbf{Automated Generation with \ac{TRACER}:}
+    the main way for creating user profiles is employing \ac{TRACER}.
+    To do so, the users must click the Auto-Generate Profiles button
+    and there choose the number of sessions and turns per session,
+    and also the level of verbosity for the logs
+    since the user will be able to review them.
+    Once the button is clicked, the task gets sent to the queue
+    and will be executed as soon as it is possible.
+  \item \textbf{Manual Creation:}
+    users can also upload their profiles,
+    or create them from scratch using an advanced YAML editor.
+    This editor contains documentation, autocompletion
+    and real-time validation to check that the YAML syntax is correct
+    and that the user profile matches the expected profile schema.
+\end{itemize}
+
+With these profiles created,
+the users can execute them with SENSEI
+by checking the boxes of the profiles they would like to execute
+and hitting the \texttt{Execute Test} button.
+No further configuration is required.
+Once the button is hit, like with \ac{TRACER}
+the task gets sent to the queue.
+
+Once \ac{TRACER} and SENSEI have been executed
+we can explore their results in their respective dashboards.
+\ac{TRACER} dashboard contains a list the executions
+where the users can filter by project and status (running, success, failure...).
+Each of these executions has a dropdown arrow to see more information,
+the users can also click to see the generated report
+containing all the functionalities plus other information in text format,
+see the graph where the users can see the inferred workflow model,
+view the original user profiles generated
+(note that these are the originals since in the Test Center
+the users can modify the profiles to their liking),
+and to see the logs, to debug in case of failure, or to read the conversations.
+
+For the SENSEI dashboard the users have a similar interface
+where they can filter SENSEI executions
+and then click on one of them to see the results
+including the execution times,
+errors, cost, and other information.
