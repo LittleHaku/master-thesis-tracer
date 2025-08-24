@@ -1,3 +1,38 @@
 \chapter{\abstractname}
 
-%TODO: Abstract
+Conversational agents, or chatbots,
+have become a key component of modern software ecosystems,
+yet their complex, non-deterministic, and heterogeneous nature
+presents significant challenges for quality assurance.
+Existing testing methodologies
+often require source code access,
+depend on manually created test scripts or pre-existing conversational corpora,
+or are tied to specific development frameworks.
+These limitations create a significant bottleneck
+for the automated, black-box testing of deployed systems.
+
+This thesis presents \acf{TRACER},
+a methodology and open-source framework
+for the automated exploration, modelling, and profiling of conversational agents.
+\ac{TRACER} employs an \ac{LLM}-powered agent
+to systematically interact with a deployed chatbot in a black-box manner,
+automatically inferring a structured functional model of its capabilities.
+This model captures the chatbot's
+conversational workflows, supported parameters, and expected outputs.
+From this inferred model,
+\ac{TRACER} then automatically synthesises
+comprehensive set of detailed test user profiles,
+designed for execution by a user simulator.
+The entire methodology is supported by a full-stack web application
+that provides easy access to the end-to-end workflow
+from model inference with \ac{TRACER} to test execution with the SENSEI user simulator.
+
+We validate the effectiveness of the approach through three research questions.
+In a controlled, white-box environment using four open-source chatbots,
+the first experiment demonstrated that \ac{TRACER} achieves high functional coverage.
+In the second experiment,
+the synthesised profiles successfully detected 84.6\% of injected faults in a mutation testing analysis.
+In a black-box evaluation against five real-world, deployed chatbots,
+the models inferred by \ac{TRACER} achieved an average precision of 96.0\% upon manual verification.
+The results demonstrate that \ac{TRACER} provides a robust, practical, and effective solution
+that significantly advances the state of the art in automated, black-box testing for modern conversational agents.
