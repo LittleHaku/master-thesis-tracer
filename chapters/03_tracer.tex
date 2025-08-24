@@ -3,12 +3,11 @@
 
 \chapter{TRACER: Automated Chatbot Exploration}\label{chapter:tracer}
 
-In this chapter we present \ac{TRACER},
-a tool designed to fill the gaps that we have seen
+In this chapter, we present \ac{TRACER},
+a tool designed to fill the gaps identified
 during our State of the Art review in \autoref{sec:sota}.
-This tool addresses the black-box testing challenge mentioned
-by iteratively discovering functionalities
-to create a structured model.
+This tool addresses the aforementioned black-box testing challenge
+by iteratively discovering functionalities to create a structured model.
 
 The chapter first provides a high-level overview
 of the tool's methodology through a two-phase implementation in \autoref{sec:overview}.
@@ -19,9 +18,9 @@ followed by the refinement phase in \autoref{sec:refinement}.
 
 \ac{TRACER} - \acl{TRACER} - the tool developed for this thesis,
 whose source code can be found at \url{https://github.com/Chatbot-TRACER/TRACER},
-is a tool that using the power of \acp{LLM}
+is a tool that, by using the power of \acp{LLM}
 is able to extract a model from a chatbot,
-and then turn this model into a set of profiles
+and then transform this model into a set of profiles
 that can be used for the SENSEI
 \autocite{delaraSensei, delaraAutomatedEndtoEndTesting2025} user simulator
 to test the chatbot.
@@ -92,8 +91,8 @@ can be seen in \autoref{fig:approach}.
     \label{fig:flowchart-tracer}
 \end{figure}
 
-The \ac{TRACER} methodology for extracting a model is two-phase approach
-to first extract some functionalities and then merge them into a final model.
+The \ac{TRACER} methodology for extracting a model is a two-phase approach
+that first extracts functionalities and then merges them into a final model.
 The entire workflow from the initial probing up until the final inferred model
 can be visualized in \autoref{fig:flowchart-tracer}.
 The first stage, the Exploration Phase, is an iterative discovery process,
@@ -105,7 +104,7 @@ Once we have the final model then we can start synthesising the profiles.
 
 The exploration phase is the core of \ac{TRACER}'s modeling.
 In this phase, an \ac{LLM} agent interacts with the chatbot under testing
-to find its functionalities, language, and fallback
+to identify its functionalities, language, and fallback, and to build a preliminary model.
 and build a preliminary model.
 This is done purely from a black-box perspective
 and does not rely on the source code at all.
@@ -121,7 +120,7 @@ thanks to the use of \acp{LLM}.
 
 Before engaging in a conversation
 \ac{TRACER} performs an initial probing
-the goal of this is to obtain some basic information
+its goal is to obtain basic information
 about the chatbot before proceeding with a full conversation.
 It focuses on two elements:
 
@@ -129,7 +128,7 @@ It focuses on two elements:
   \item \textbf{Language Detection:}
     The agent determines the main language by sending
     a simple "Hello" and checking the language in which the chatbot responds.
-    Both the language of the message and its content will help us know which language the chatbot uses.
+    Both the language of the message and its content will help to determine which language the chatbot uses.
 
 \begin{lstlisting}[
 language=bash,
@@ -186,7 +185,7 @@ when the chatbot does not understand it.
 After the initial probing,
 the explorer agent will have $s$ conversations of $n$ turns each,
 where both $s$ and $n$ are configurable parameters.
-During these conversations functionalities will be discovered
+During these conversations, functionalities will be discovered
 (see \autoref{subsec:functionality_extraction})
 and added to a queue,
 this queue will determine what is the goal of the explorer
@@ -254,8 +253,8 @@ Session processing resulted in 5 additions/merges:
     \texttt{inform\_available\_pizza\_and\_drink\_ordering},
     we can see here the new functionalities that were discovered
     like "\texttt{ADDED\_NEW}", then "\texttt{CONSIDERED\_MERGE}" shows
-    merges that were considred but then the \ac{LLM}
-    didn't end up merging, contrary to "\texttt{MERGED}",
+    merges that were considered but then the \ac{LLM}
+    did not end up merging, contrary to "\texttt{MERGED}",
     these are functionality nodes that the \ac{LLM} considered for merging
     and then in another function that executes the merge,
     the \ac{LLM} ended up merging them.
@@ -328,7 +327,7 @@ a Functionality Node contains the following fields:
     and optionally can have options.
     This parameter is optional,
     since there are functionalities that don't necessarily need inputs.
-    An example of a parameter for the pizza could be this:
+    An example of a parameter for the pizza is as follows: 
     \begin{itemize}
       \item \textbf{Name:} pizza size.
       \item \textbf{Description:} size of the pizza the user wants.
@@ -336,7 +335,7 @@ a Functionality Node contains the following fields:
     \end{itemize}
   \item \textbf{Output:} as the parameters, outputs are optional.
     It represents pieces of data that we expect the chatbot to output.
-    For example when ordering the pizza it could be the price or the order id.
+    For example, when ordering the pizza, this could be the price or the order ID.
   \item \textbf{Followers and Previous:}
     Since the nodes are arranged as a \ac{DAG},
     the nodes have children and parents that mimic the chatbot's workflow.
@@ -397,7 +396,8 @@ into a unified version with the parameters.
 This was a simple example,
 but more complex ones occur where
 not only the parameters are added,
-but having different lists of parameters they are combined into a more extensive ones,
+but having different lists of parameters,
+they are combined into more extensive ones,
 or the descriptions are combined
 to more accurately define what the functionality does.
 
@@ -423,7 +423,7 @@ and to create a coherent model.
 While during the exploration phase we have a consolidation phase
 (see \autoref{subsec:functionality-consolidation}),
 variations of the same functionalities may still appear.
-For this we have a more in-depth consolidation phase.
+To address this, a more in-depth consolidation phase is employed.
 The step in the explorer phase groups all the nodes
 and sends them to the \ac{LLM},
 meanwhile, in this step every possible pair of functionality nodes
@@ -471,8 +471,8 @@ During the exploration phase,
 parent-child relationships are set
 when a functionality is discovered as a branch or variation from another one,
 but most of the nodes are still designated as root nodes.
-So, we manage to structure this by asking the \ac{LLM}
-identify likely sequences, branches, and joins
+Therefore, we structure this by asking the \ac{LLM}
+to identify likely sequences, branches, and joins
 based on conversational evidence and the dependencies between functionalities.
 The prompt for the LLM depends on the chatbot classification:
 
@@ -533,7 +533,7 @@ and the functionalities that it contains.
 
 \begin{itemize}
   \item \textbf{Chatbot Meta:}
-    the category contains functionalities related to the chatbot talking about itself.
+    the category contains functionalities related to the chatbot's self-description.
     It has two functionality nodes, provide welcome message, that as its name says,
     the chatbot will greet the user
     and state available information,

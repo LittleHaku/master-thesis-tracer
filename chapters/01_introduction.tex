@@ -7,15 +7,16 @@
 
 The growth of conversational agents, popularly known as chatbots,
 has changed the way humans interact with computers across a range of domains.
-From general-purpose assistants like OpenAI's ChatGPT \autocite{ChatGPT} or Google's Gemini \autocite{GoogleGemini} to task-oriented agents that help users in particular tasks such as shopping or customer service.
+From general-purpose assistants like OpenAI's ChatGPT \autocite{ChatGPT} or Google's Gemini \autocite{GoogleGemini} to task-oriented agents that assist users in particular tasks such as shopping or customer service.
 Such systems provide natural language interaction with services from customer service and e-commerce websites to educational materials.
-The spread of these agents has also been boosted by developments in generative \ac{AI}, particularly \acp{LLM} \autocite{minaeeLargeLanguageModels2025}, which have dramatically improved chatbot functionality, enabling them to both generate and comprehend natural language without explicitly programmed rules.
+The spread of these agents has also been accelerated by developments in generative \ac{AI}, particularly \acp{LLM} \autocite{minaeeLargeLanguageModels2025}, which have dramatically improved chatbot functionality, enabling them to both generate and comprehend natural language without explicitly programmed rules.
 
 \section{Motivation}
 
 The increasing prevalence of these systems has heightened concerns about their correctness, reliability, and quality assurance.
-As these systems become ubiquitous in areas like healthcare or finance, which demand levels of trust that are high, the requirement for validation and testing becomes paramount.
-Nevertheless, the heterogeneity of chatbot building, with intent-based platforms such as Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020}, multi-agent programming environments based on \acp{LLM} like LangGraph \autocite{LangGraph} and Microsoft's AutoGen \autocite{AutoGen}, and \acp{DSL} such as Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}, imposes great difficulties in seeking an overarching methodology to test these systems.
+As these systems become ubiquitous in areas like healthcare or finance, which demand high levels of trust, the requirement for validation and testing becomes paramount.
+Nevertheless, the heterogeneity of chatbot building, with intent-based platforms such as Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020}, multi-agent programming environments based on \acp{LLM} like LangGraph \autocite{LangGraph} and Microsoft's AutoGen \autocite{AutoGen}, and \acp{DSL} such as Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024},
+presents significant challenges in seeking an overarching methodology to test these systems.
 
 
 Conventional software testing methods are hardly applicable to chatbot systems.
@@ -30,7 +31,7 @@ This black-box strategy facilitates automated generation of comprehensive chatbo
 
 
 The extracted chatbot model serves as the foundation for the automated synthesis of test cases.
-In particular, \ac{TRACER} produces user profiles that model varied users that interacts with the chatbot through SENSEI \autocite{delaraAutomatedEndtoEndTesting2025, delaraSensei}, yet alternate implementations of \ac{TRACER} could be used to produce various kinds of test cases from the extracted model.
+In particular, \ac{TRACER} produces user profiles that model varied users that interact with the chatbot through SENSEI \autocite{delaraAutomatedEndtoEndTesting2025, delaraSensei}, yet alternate implementations of \ac{TRACER} could be used to produce various kinds of test cases from the extracted model.
 The combination of \ac{TRACER} and SENSEI results in a test approach that requires only a connector for the chatbot’s API.
 
 In order to make this research accessible and reproducible, \ac{TRACER} has been developed as a full, open-source tool.
@@ -70,10 +71,10 @@ This research has been partially funded by the SATORI project, supported by the 
 
 \section{Thesis Organization}
 
-The remainder of thesis is organized as follows:
+The remainder of the thesis is organized as follows:
 \autoref{chapter:state_of_the_art} sets up the context and state of the art of chatbot testing.
-\autoref{chapter:tracer} lays out the primary methodoly of how \ac{TRACER} extracts models from chatbots.
+\autoref{chapter:tracer} lays out the primary methodology of how \ac{TRACER} extracts models from chatbots.
 \autoref{chapter:user-profiles} explains the user profile structure, and the way \ac{TRACER} creates them.
-\autoref{chapter:tool_support} illustrates \ac{TRACER} Command Line Interface (CLI) and web application to utilize both SENSEI and \ac{TRACER}.
+\autoref{chapter:tool_support} illustrates \ac{TRACER} Command Line Interface (CLI) and web application for utilising both SENSEI and \ac{TRACER}.
 \autoref{chapter:evaluation} provides the comparison of \ac{TRACER} with the research questions.
 \autoref{chapter:conclusion} summarizes the thesis and addresses future work.

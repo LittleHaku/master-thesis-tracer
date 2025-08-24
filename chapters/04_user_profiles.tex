@@ -12,9 +12,9 @@ to check if the outputs match the expected values,
 and to identify other errors such as timeouts.
 
 First, \autoref{sec:profile-structure}
-will cover the structure of these profiles and how they work,
+covers the structure of these profiles and how they work;
 then \autoref{sec:profile-generation}
-will detail how these profiles are synthesised from the inferred model.
+details how these profiles are synthesised from the inferred model.
 
 
 \section{User Profiles Structure}\label{sec:profile-structure}
@@ -107,7 +107,7 @@ Each of these parameters is assigned a function:
     that is, small pepperoni, small four cheese, ..., medium pepperoni, medium four cheese, ..., large pepperoni, large four cheese...
 \end{itemize}
 After the function, we can specify its \texttt{type},
-with values like int, float, string or date.
+with values such as int, float, string or date.
 Next, there is the data field,
 where a list of values is provided
 or if it is a numeric value, a range with min and max
@@ -118,8 +118,8 @@ that right below define a list of values that
 the forward function will take.
 In \autoref{code:yaml-profile-drinks} in line 19
 we have an input variable with an integer,
-note how now instead of a list with all the values
-we have the min, max and step.
+note that instead of a list of values,
+the parameters now include a minimum, maximum, and step.
 
 \subsection{Chatbot Settings (\texttt{chatbot})}
 
@@ -133,9 +133,8 @@ this is the default sentence given by the chatbot
 when it cannot understand the user's statement,
 or the user's input is outside of the chatbot's scope.
 
-Next is the \texttt{outputs}, a field similar to the goals
-but in this case instead of being related to the inputs,
-it will be used to extract outputs from the chatbot.
+Next is the \texttt{outputs} field, which is similar to the \texttt{goals} field
+but is used to extract outputs from the chatbot rather than define user inputs.
 For each output a name is provided
 then a \texttt{type} which can be string, money, int, float or date;
 then we have a short \texttt{description}.
@@ -203,7 +202,7 @@ The process is divided into seven steps that can be visualised in \autoref{fig:p
 It begins by
 grouping functionalities into profiles,
 followed by the \ac{LLM}-driven generation of goals, variables, context, and outputs.
-Then, the definition of the conversation style and,
+This is followed by the definition of the conversation style and,
 finally, the profile assembly and validation step.
 Each of these steps is detailed in the following subsections.
 
@@ -235,12 +234,13 @@ then the goal will likely have variables.
 
 \subsection{Variable Generation}
 
-This step is only needed when variable \texttt{\{\{placeholders\}\}} have been defined.
+This step is only required when variable \texttt{\{\{placeholders\}\}} have been defined.
 To understand how the variables are generated
 first we need to define what a data source is.
 A data source comprises the values of either a parameter or an output from a functionality node,
-we decided to use both outputs and parameters since there are occasions
-where the extracted functionality is for example "list available pizza types"
+we decided to use both outputs and parameters,
+as there are occasions where the extracted functionality is,
+for example, "list available pizza types"
 and the values that we can use for the variables
 are in the outputs instead of the more obvious parameters.
 So the data sources are the combinations of all the values
@@ -345,7 +345,7 @@ Then, the description of these errors along with the YAML file
 are sent to the \ac{LLM} with a prompt to fix the issue.
 
 
-These seven steps allow us to turn the inferred model
+These seven steps allow us to transform the inferred model
 from the deployed chatbot under test,
 into a set of realistic and comprehensive user profiles
 that will act as test cases when combined with the user simulator SENSEI.

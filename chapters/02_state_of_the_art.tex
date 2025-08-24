@@ -31,7 +31,7 @@ These systems have evolved from simple rule-based programs that followed predefi
 to sophisticated AI-powered agents capable of understanding context,
 maintaining conversational state, and generating diverse human-like responses.
 
-Modern conversational agents can be categorized into two main types
+Modern conversational agents can be categorised into two main types
 given the domain and range of their capabilities.
 \begin{itemize}
   \item \textbf{Task-oriented:}
@@ -64,16 +64,16 @@ has been facilitated by various frameworks and platforms.
 
   \item \textbf{Multi-agent programming environments:}
     these systems like LangGraph \autocite{LangGraph} or Microsoft's AutoGen \autocite{AutoGen},
-    allow for the creating of complex conversational systems
+    allow for the creation of complex conversational systems
     where multiple \ac{AI} agents collaborate to process the user's request.
     These frameworks make use of the capabilities of \acp{LLM}.
     While they are less rigid than the previous ones,
     they can suffer from hallucinations,
     higher latency, and since they are not deterministic,
-    going out of the scope, and thus, making it harder to test it.
+    going out of scope, and thus, making it harder to test it.
 
   \item \textbf{\ac{DSL} frameworks:}
-    \acp{DSL} are a languages specialized for a particular domain.
+    \acp{DSL} are languages specialized for a particular domain.
     In this case, they provide a high-level abstraction
     that enables developers to create chatbots
     without focusing on how, but rather on what.
@@ -110,7 +110,7 @@ Reinforcement Learning from Human Feedback (RLHF)
 which helps the model to give responses
 that align better with human preferences
 \autocite{zieglerFineTuningLanguageModels2020}.
-This process has made possible models like
+This process has enabled models like
 OpenAI's GPT series (e.g., GPT-4) \autocite{OpenAI2025},
 Google's Gemini series \autocite{GoogleGemini},
 Meta's open-source Llama Series \autocite{touvronLLaMAOpenEfficient2023},
@@ -122,9 +122,9 @@ has transformed the way humans interact with computers.
 Unlike traditional rule-based systems that rely on predefined patterns and responses,
 \ac{LLM}-powered chatbots can engage in natural conversations,
 even keeping context about what the user said before.
-However, this flexibility comes with challenges
+However, this flexibility presents challenges
 \autocite{zamfirescu-pereiraHerdingAICats2023},
-specially for testing and validation.
+especially for testing and validation.
 The non-deterministic nature of \acp{LLM} means that
 identical inputs may produce different outputs across multiple interactions.
 This complicates traditional assertion-based testing,
@@ -195,7 +195,7 @@ When it comes to building conversational agents
 there exists a diverse way of building them.
 In this section we are going to cover three paradigms,
 intent-based frameworks, that rely on predefined conversation patterns;
-multi-agent programming frameworks, that use the power \acp{LLM};
+multi-agent programming frameworks, that use the power of \acp{LLM};
 and \aclp{DSL} that provide a declarative approach.
 
 \subsubsection{Intent-Based Frameworks}
@@ -224,7 +224,7 @@ this makes it very difficult to scale
 as the more intents we have,
 the more training examples we need to create.
 
-Rasa \autocite{Rasa2020} offers and open-source \autocite{RasaHQRasa2025} alternative.
+Rasa \autocite{Rasa2020} offers an open-source \autocite{RasaHQRasa2025} alternative.
 The architecture is divided into two sections:
 the \ac{NLU} and the Core.
 It utilizes machine learning to train a pipeline
@@ -323,7 +323,7 @@ detailed in Chapter \ref{chapter:evaluation}.
 Taskyto utilizes a YAML-based \ac{DSL}
 to define the structure and logic of task-oriented chatbots.
 A chatbot's definition is composed of a collection of modules which,
-can be broadly categorized into two types:
+can be broadly categorised into two types:
 
 
 \begin{itemize}
@@ -361,7 +361,7 @@ Furthermore, the declarative YAML structure
 simplifies the systematic introduction of faults,
 facilitating the creation of a large set of mutants
 (mutants are small errors that are introduced on purpose into the system
-and aim to evaluate how good the are the tests at capturing these mutations,
+and aim to evaluate how effective the tests are at capturing these mutations,
 it will be further explained in
 \autoref{subsub:static-analysis})
 for our mutation testing analysis,
@@ -524,7 +524,7 @@ User simulation has emerged as a key strategy to
 address the scalability challenges of chatbot testing
 by automatically generating realistic user interactions.
 The most recent approaches employ generative \acl{AI},
-especially \acp {LLM}.
+especially \acp{LLM}.
 
 \subsubsection{Traditional and Corpus-Driven Simulation}
 
