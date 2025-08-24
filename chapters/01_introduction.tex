@@ -13,9 +13,9 @@ The spread of these agents has also been boosted by developments in generative \
 
 \section{Motivation}
 
-The fact that they appear in so many uses has increased the concern about their correctness, reliability, and quality assurance.
+The increasing prevalence of these systems has heightened concerns about their correctness, reliability, and quality assurance.
 As these systems become ubiquitous in areas like healthcare or finance, which demand levels of trust that are high, the requirement for validation and testing becomes paramount.
-Nevertheless, the heterogeneousness of chatbot building, with intent-based platforms such as Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020}, multi-agent programming environments based on \acp{LLM} like LangGraph \autocite{LangGraph} and Microsoft's AutoGen \autocite{AutoGen}, and \acp{DSL} such as Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}, imposes great difficulties in seeking an overarching methodology to test these systems.
+Nevertheless, the heterogeneity of chatbot building, with intent-based platforms such as Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020}, multi-agent programming environments based on \acp{LLM} like LangGraph \autocite{LangGraph} and Microsoft's AutoGen \autocite{AutoGen}, and \acp{DSL} such as Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}, imposes great difficulties in seeking an overarching methodology to test these systems.
 
 
 Conventional software testing methods are hardly applicable to chatbot systems.
@@ -31,7 +31,7 @@ This black-box strategy facilitates automated generation of comprehensive chatbo
 
 The extracted chatbot model serves as the foundation for the automated synthesis of test cases.
 In particular, \ac{TRACER} produces user profiles that model varied users that interacts with the chatbot through SENSEI \autocite{delaraAutomatedEndtoEndTesting2025, delaraSensei}, yet alternate implementations of \ac{TRACER} could be used to produce various kinds of test cases from the extracted model.
-The combination of \ac{TRACER} and SENSEI results in a test approach that requires just a connector for the chatbot’s API.
+The combination of \ac{TRACER} and SENSEI results in a test approach that requires only a connector for the chatbot’s API.
 
 In order to make this research accessible and reproducible, \ac{TRACER} has been developed as a full, open-source tool.
 It is available publicly as a \ac{PyPI} package \autocite{sotillodelhornoChatbottracerToolModel} and can be installed using \texttt{pip install chatbot-tracer}.
@@ -59,7 +59,7 @@ a framework for the automated black-box testing of conversational agents.
 \ac{TRACER} addresses the limitations by introducing a two-stage process:
 it first automatically infers a model of a deployed chatbot through natural language interaction,
 and then synthesises this model into a set of user profiles
-that will executed with SENSEI \autocite{delaraSensei} finish evaluating the chatbot.
+that will executed with SENSEI \autocite{delaraSensei} to complete the evaluation of the chatbot.
 All of this is supported by a web application that will enable users to easily execute TRACER and SENSEI intuitively.
 
 The proposed \ac{TRACER}'s methodology and its experimental results presented in this thesis
