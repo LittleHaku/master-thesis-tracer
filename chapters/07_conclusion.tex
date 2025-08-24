@@ -3,4 +3,93 @@
 
 \chapter{Conclusions and Future Work}\label{chapter:conclusion}
 
+This final chapter synthesises the contributions of the thesis,
+summarises the key findings from the experimental evaluation,
+and outlines promising directions for future research.
+
+\section{Conclusions}
+
+The proliferation of complex, heterogeneous, and often black-box conversational agents
+has created a pressing need for advanced, automated testing methodologies.
+As established in this thesis, existing approaches to chatbot quality assurance
+are frequently limited by their reliance on manual effort,
+access to source code, or pre-existing conversation corpora,
+hindering their applicability in real-world scenarios.
+
+This thesis presented \ac{TRACER}, a two-phase methodology
+for the automated exploration and profiling of conversational agents.
+The approach begins with an Exploration Phase,
+where an \ac{LLM}-powered agent systematically interacts with a chatbot
+to automatically infer a functional model of its capabilities.
+This is followed by a Profile Generation process
+that synthesizes a comprehensive suite of detailed, executable test user profiles
+directly from the inferred model.
+The entire methodology is implemented as an open-source tool,
+available via a \ac{CLI} or through a web application.
+
+The effectiveness of this approach
+was rigorously validated through three research questions.
+The evaluation first demonstrated that in a controlled, white-box environment,
+\ac{TRACER} is highly effective
+at achieving high functional coverage of a chatbot's capabilities (RQ1).
+Furthermore, the synthesised profiles proved capable of detecting faults,
+successfully identifying an average of 84.6\% of injected errors
+in a comprehensive mutation testing analysis (RQ2).
+Finally, in a practical, black-box setting against five real-world deployed chatbots,
+the models inferred by \ac{TRACER} were shown to be highly accurate,
+achieving an average precision of 96.0\% upon manual verification (RQ3).
+
+Taken together, these findings confirm
+that the methodology presented in this thesis
+provides a practical and effective solution
+that significantly advances the state of the art.
+By successfully bridging the gap
+between automated model inference and test case synthesis,
+\ac{TRACER} offers a fully automated, framework-agnostic, and black-box approach
+to the quality assurance of modern conversational agents.
+
+\section{Future Work}
+
+While this thesis presents a complete and validated methodology,
+this research opens up several promising avenues for future work.
+The following directions could build upon the foundation established by \ac{TRACER}:
+
+\begin{itemize}
+    \item \textbf{Improving the Consolidation Logic:}
+      The evaluation of RQ3 revealed that while TRACER's discovery process is robust,
+      the automated consolidation of semantically similar functionalities remains a challenge,
+      especially for highly complex chatbots.
+      Future work could explore more sophisticated semantic clustering algorithms. 
+
+    \item \textbf{Enhancing Profile Synthesis with Advanced Testing Strategies:}
+      The current profile generation process creates comprehensive tests for discovered functionalities.
+      A promising extension would be to incorporate more advanced and adversarial testing strategies.
+      This could include synthesizing profiles that specifically test for security vulnerabilities like prompt injection,
+      check for social biases in the chatbot's responses,
+      or simulate users who are deliberately uncooperative or attempt to derail the conversation.
+
+    \item \textbf{Extending to Multimodal and Voice-Based Agents:}
+      The current implementation of \ac{TRACER} focuses on text-based conversational agents.
+      A significant future direction would be
+      to extend the methodology to support multimodal chatbots that interact using images, interactive buttons, and voice.
+      This would require extending the `chatbot-connectors` library
+      to handle different input/output formats
+      and leveraging multimodal \acp{LLM} for both the Explorer Agent and the user simulator.
+
+    \item \textbf{Quantitative Measurement of Recall in Black-Box Settings:}
+      As identified in the threats to validity for RQ3,
+      a major open challenge in the field is the quantitative measurement of recall (completeness) for black-box systems.
+      Future research could investigate the application of statistical methods,
+      such as capture-recapture models from ecology,
+      to estimate the total number of functionalities in a system.
+      This could provide a quantitative estimate of recall,
+      even without access to the source code,
+      further strengthening the evaluation of black-box discovery tools.
+\end{itemize}
+
+These future directions highlight the potential for the \ac{TRACER} methodology
+to serve as a foundational platform
+for a new generation of intelligent, automated quality assurance tools
+for the rapidly evolving landscape of conversational AI.
+
 
