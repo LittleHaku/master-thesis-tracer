@@ -15,7 +15,7 @@ during each conversation.
 To assess the effectiveness of the proposed approach in discovering chatbot functionality,
 we applied \ac{TRACER} to four deployed Taskyto chatbots
 \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}.
-We chose chatbots built this technology because their code is open-source
+We chose chatbots built with this technology because their code is open-source
 \autocite{SatorichatbotsTaskyto2025},
 which allowed us to instrument them
 to trace the modules activated during conversations,
@@ -53,8 +53,8 @@ and the number of question-answer pairs for the FAQ.
 and answers bike maintenance questions.
 \textit{Photography} is a chatbot for a photography shop,
 which answers questions about the shop,
-gathers contact details of clients, and gives price estimates.
-\textit{Pizza-order} handles pizza orders,
+gathers contact details of clients, and provides price estimates.
+\textit{Pizza-Order} handles pizza orders,
 including their size, toppings and drinks.
 \textit{Veterinary} sets appointments and answers questions about a veterinary clinic.
 
@@ -196,7 +196,7 @@ This was expected since during the exploration
 TRACER might find values or options and not explore them further
 but they are subsequently used in the profiles,
 which means that SENSEI will use these values.
-A clear example of this is the aggregate coverage in in the \textit{pizza-order} values,
+A clear example of this is the aggregate coverage in the \textit{pizza-order} values,
 with only a 48.81\% during exploration but a 90.48\% for the profiles,
 This example shows a greater jump since as shown in \autoref{tab:rq1_chatbots}
 this chatbot has the highest number of values
@@ -215,6 +215,20 @@ Taskyto often fails to identify it.
 while SENSEI used "What is the price of a new tire?"
 and Taskyto did not proceed with the answer, thus,
 not adding it to the coverage logs.
+
+\subsection{Threats to Validity}
+The primary threat to this experiment
+is related to external validity.
+The evaluation was conducted exclusively
+on four chatbots built with the Taskyto framework.
+While this choice was necessary
+to enable white-box coverage analysis,
+it limits the generalisability of the findings.
+The high coverage results
+may not be representative of TRACER's performance
+on chatbots built with different architectures,
+such as intent-based systems like Rasa
+or complex multi-agent frameworks.
 
 \subsection{Answer to RQ1}
 

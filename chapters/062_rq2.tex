@@ -108,7 +108,7 @@ represents the number of errors that were not found.
 We observe a high overall \acl{MS}
 with an average \ac{MS} of 84.6\%.
 All chatbots achieved at least 75.0\%,
-and peaking at 91.0\%.
+and peaking at 91.7\%.
 The cases with the lowest \ac{MS}
 (75.0\% and 76.9\%)
 correspond to the most complex chatbots
@@ -127,6 +127,25 @@ Detecting such errors automatically
 would require testing rules that set oracles
 and analyse the expected chatbot output values,
 as explained in \autocite{delaraSensei}.
+
+\subsection{Threats to Validity}
+A threat to construct validity
+concerns the set of mutation operators used.
+While based on previous work
+and designed to cover Taskyto's declarative elements,
+they may not represent
+all possible types of real-world faults.
+Consequently, the mutation score
+is a strong indicator
+but not an exhaustive measure
+of the profiles' fault-detection capabilities on other platforms.
+
+Furthermore,
+a potential threat to internal validity
+lies in the manual inspection process required
+to identify false negatives and equivalent mutants.
+Although necessary for accuracy,
+this step introduces the possibility of human error.
 
 \subsection{Answer to RQ2}
 
