@@ -15,11 +15,13 @@ The spread of these agents has also been accelerated by developments in generati
 
 The increasing prevalence of these systems has heightened concerns about their correctness, reliability, and quality assurance.
 As these systems become ubiquitous in areas like healthcare or finance, which demand high levels of trust, the requirement for validation and testing becomes paramount.
-Nevertheless, the heterogeneity of chatbot building, with intent-based platforms such as Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020}, multi-agent programming environments based on \acp{LLM} like LangGraph \autocite{LangGraph} and Microsoft's AutoGen \autocite{AutoGen}, and \acp{DSL} such as Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024},
+Nevertheless, the heterogeneity of chatbot building approaches,
+with intent-based platforms such as Google's Dialogflow \autocite{Dialogflow} or Rasa \autocite{Rasa2020}, multi-agent programming environments based on \acp{LLM} like LangGraph \autocite{LangGraph} and Microsoft's AutoGen \autocite{AutoGen}, and \acp{DSL} such as Taskyto \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024},
 presents significant challenges in seeking an overarching methodology to test these systems.
 
 
-Conventional software testing methods are hardly applicable to chatbot systems.
+Conventional software testing methods \autocite{ammannIntroductionSoftwareTesting2017}
+are hardly applicable to chatbot systems.
 The intricacy of \ac{NLP}, the non-deterministic nature of \acp{LLM} and the dynamic flow of a real conversation make traditional testing insufficient for dialogue agents.
 Although there have been some methods for developing testing methods for chatbots \cite{cuadradoIntegratingStaticQuality2024, canizaresMeasuringClusteringHeterogeneous2024}, they often focus on particular chatbot technologies \autocite{RasaTest2025}, require substantial manual effort including the provision of test conversations \autocite{CyaraBotium, RasaTest2025} or synchronous human interaction \autocite{renEvaluationTechniquesChatbot2019}, rely on available conversation corpus \autocite{vasconcelosBottesterTestingConversational2017}, or require access to the source code of the chatbot \autocite{canizaresCoveragebasedStrategiesAutomated2024, gomez-abajoMutationTestingTaskOriented2024, urricoMutaBotMutationTesting2024}, thus restricting their applicability to deployed systems as black boxes.
 
@@ -65,7 +67,8 @@ All of this is supported by a web application that will enable users to easily e
 
 The proposed \ac{TRACER}'s methodology and its experimental results presented in this thesis
 have been peer-reviewed and accepted for a publication at the
-37th International Conference on Testing Software and Systems (ICTSS).
+37th International Conference on Testing Software and Systems (ICTSS)
+\autocite{sotillodelhornoAutomatedExplorationConversational2025}.
 
 This research has been partially funded by the SATORI project, supported by the Spanish Ministry of Science and Innovation.
 
@@ -76,5 +79,7 @@ The remainder of the thesis is organized as follows:
 \autoref{chapter:tracer} lays out the primary methodology of how \ac{TRACER} extracts models from chatbots.
 \autoref{chapter:user-profiles} explains the user profile structure, and the way \ac{TRACER} creates them.
 \autoref{chapter:tool_support} illustrates \ac{TRACER} Command Line Interface (CLI) and web application for utilising both SENSEI and \ac{TRACER}.
-\autoref{chapter:evaluation} provides the comparison of \ac{TRACER} with the research questions.
-\autoref{chapter:conclusion} summarizes the thesis and addresses future work.
+\autoref{chapter:evaluation}
+evaluates \ac{TRACER} to answer the research questions.
+\autoref{chapter:conclusion}
+summarizes the thesis and proposes lines for future work.

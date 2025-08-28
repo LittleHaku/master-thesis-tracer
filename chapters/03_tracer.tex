@@ -174,7 +174,7 @@ Detected fallback message: 'I'm sorry, I did not get what ...'
 
 \end{itemize}
 
-These two things will not only be useful for the user profiles,
+These two elements will not only be useful for the user profiles,
 but also allow the future conversations to be more fluent
 since the explorer agent will know which language to speak
 and to detect the fallback and rephrase its input
@@ -245,7 +245,7 @@ Session processing resulted in 5 additions/merges:
     Then the explorer will have a conversation
     where it will try to find branches and variations of this functionality.
     For example, if there is a functionality about serving pizzas,
-    the explorer will continue asking about that and finding things
+    the explorer will continue asking about that and finding functionalities 
     such as custom pizzas, or drinks.
     \autoref{code:functionality-branch-example}
     shows an example of one of these explorations
@@ -340,7 +340,7 @@ a Functionality Node contains the following fields:
     Since the nodes are arranged as a \ac{DAG},
     the nodes have children and parents that mimic the chatbot's workflow.
     The idea of this workflow graph,
-    is to order functionalities in the order that one will encounter them,
+    is to arrange functionalities in the order that one will encounter them,
     for example,
     the chatbot will always ask for drinks after asking for pizzas.
     Therefore, the drink functionality should be a child of the pizza functionality.
@@ -447,8 +447,8 @@ is sent to the \ac{LLM} which will respond with
 
 \begin{itemize}
   \item \textbf{Informational:}
-    these conversational agents are primarily informational,
-    designed to respond to user inquiries and deliver relevant data.
+    The primary function of these conversational agents is to provide information;
+    they are designed to respond to user inquiries and deliver relevant data.
     Common applications include university and banking chatbots,
     which are limited to providing information and
     redirecting users to appropriate resources,
@@ -500,14 +500,11 @@ The prompt for the LLM depends on the chatbot classification:
     The prompt for transactional chatbots can be seen in \autoref{code:prompt-transactional-workflow}.
 \end{itemize}
 
-During this workflow inferrence step,
-as can be seen in the prompt,
-the \ac{LLM} also groups the functionality nodes into categories
+During this workflow inference step,
+the prompt also instructs the \ac{LLM}
+to group the functionality nodes into categories
 and is instructed to reuse them
 to avoid creating a different category for each functionality.
-
-
-%\subsection{Example: Inferred Model of a Pizzeria Chatbot}
 
 \autoref{fig:pizzeria-workflow}
 shows the workflow graph resulting from a \ac{TRACER} execution
@@ -515,12 +512,14 @@ against a pizzeria chatbot built with Taskyto taken from
 \autocite{sanchezcuadradoAutomatingDevelopmentTaskoriented2024}.
 The entry point, represented as a black dot,
 is the starting point of a new conversation.
-From there, you can go to four different root functionalities
+From the entry point,
+the workflow branches into
+four different root functionalities
 grouped into two categories.
-From one of the functionalities,
-you can continue the workflow to make your order.
-We will now break down each category
-and the functionalities that it contains.
+From one of these functionalities,
+the workflow can be continued to make an order.
+The categories and their constituent functionalities
+are detailed below.
 
 \begin{figure}[!htb]
   \centering
@@ -534,8 +533,9 @@ and the functionalities that it contains.
 \begin{itemize}
   \item \textbf{Chatbot Meta:}
     the category contains functionalities related to the chatbot's self-description.
-    It has two functionality nodes, provide welcome message, that as its name says,
-    the chatbot will greet the user
+    It has two functionality nodes,
+    such as 'provide welcome message',
+    which greets the user
     and state available information,
     in which the chatbot will give information such as
     the opening hours or its capabilities.
@@ -543,7 +543,7 @@ and the functionalities that it contains.
   \item \textbf{Order Placement:}
     contains two root functionalities,
     list available pizza types,
-    which gives you the flavours of the different pizzas;
+    which lists the available flavours of the different pizzas;
     and prompt for pizza details,
     which expects the pizza size and type,
     once this has been completed
@@ -553,10 +553,9 @@ and the functionalities that it contains.
   \item \textbf{Order Confirmation:}
     this last category,
     once the user has gone through all the order placement steps,
-    we have the last functionality of the workflow which is
-    provide order total,
-    here the chatbot will give the price of the total order
-    and finalize the workflow.
+    the final functionality of the workflow is 'provide order total',
+    in which the chatbot provides
+    the price of the total order and finalises the workflow.
 \end{itemize}
 
 This final model can be used for different purposes,

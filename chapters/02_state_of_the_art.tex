@@ -12,7 +12,7 @@ introduces the core concepts essential to this work,
 including conversational agents, \aclp{LLM}, black-box testing,
 and the diverse development frameworks used to build them.
 The next section, the \textbf{State of the Art},
-provides a review of this literature,
+provides research works related to the thesis topics,
 focusing on chatbot testing methodologies,
 user simulation techniques, and black-box model inference.
 
@@ -68,9 +68,10 @@ has been facilitated by various frameworks and platforms.
     where multiple \ac{AI} agents collaborate to process the user's request.
     These frameworks make use of the capabilities of \acp{LLM}.
     While they are less rigid than the previous ones,
-    they can suffer from hallucinations,
-    higher latency, and since they are not deterministic,
-    going out of scope, and thus, making it harder to test it.
+    they can suffer from hallucinations and higher latency
+    Furthermore, their non-deterministic nature
+    complicates testing, as it can cause
+    conversations to deviate from their intended scope.
 
   \item \textbf{\ac{DSL} frameworks:}
     \acp{DSL} are languages specialized for a particular domain.
@@ -189,7 +190,7 @@ while the validation challenge requires
 determining if responses are correct
 without access to internal specifications.
 
-\subsection{Development Frameworks}
+\subsection{Development Frameworks for Conversational Agents}
 
 When it comes to building conversational agents
 there exists a diverse way of building them.
@@ -250,9 +251,9 @@ making them accessible but also potentially leading to vendor lock-in \autocite{
 \subsubsection{Multi-Agent Programming Environments}
 
 The multi-agent programming environments are a new way
-of creating chatbots employing \acp{LLM}.
+of writing software employing \acp{LLM}.
 What differentiates these environments is that
-there are multiple specialized \ac{AI} agents
+there are multiple specialised \ac{AI} agents
 that collaborate to solve complex tasks.
 These frameworks represent a significant evolution from
 simple, linear \ac{LLM} chains, as they are designed to
@@ -263,8 +264,14 @@ LangGraph \autocite{LangGraph} is one of the main exponents
 of this new frameworks that leverage the use of \ac{LLM}
 to create complex conversational systems.
 As the name says, LangGraph is made up by a state graph
-where nodes are \ac{AI} agents or tools (e.g., an \ac{LLM} call or a tool)
+where nodes are \ac{AI} agents or tools (e.g., a \ac{LLM} call or a tool)
 and edges control the flow of information between the nodes.
+
+A tool is a way of extending the capabilities of a \ac{LLM}
+by enabling it to interact with external functions or \acp{API}.
+Common examples include web searches, database access or
+booking appointments.
+
 The framework's power lies on the use of conditional edges,
 which can dynamically route the process to different paths
 depending on a node's output.
